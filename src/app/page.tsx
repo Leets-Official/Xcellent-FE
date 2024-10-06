@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex flex-row justify-around items-center mt-40">
-      <div>
+    <div className="flex flex-row h-dvh w-dvw">
+      <div className="flex flex-1 justify-center items-center">
         <svg
           width="400"
           height="400"
@@ -16,28 +16,28 @@ export default function Home() {
           </g>
         </svg>
       </div>
-      <div className="flex flex-col justify-end gap-y-7 font-bold ">
-        <p className="text-6xl font-bold text-white mb-50px">
+      <div className="flex flex-1 flex-col justify-center font-bold ">
+        <h1 className="text-6xl font-bold text-white  mb-12">
           지금 일어나고 있는 일
-        </p>
-        <p className="text-4xl font-bold text-white">지금 가입하세요.</p>
-        <p className="font-bold text-white">
+        </h1>
+        <h2 className="text-4xl font-bold text-white mb-8">지금 가입하세요.</h2>
+        <p className="font-bold text-white mb-3">
           ㅡㅡㅡㅡㅡㅡㅡ 또는 ㅡㅡㅡㅡㅡㅡㅡ
         </p>
         <Link
           href="/i/flow/signup"
-          className="bg-sky-500 rounded-3xl text-center text-white px-5 py-2.5 font-bold w-1/2 h-10 me-5"
+          className="bg-sky-500 rounded-3xl text-center text-white px-4 py-2.5 font-bold w-64 h-10 me-5 mb-4"
         >
           계정 만들기
         </Link>
-        <p className="text-zinc-400 font-sm">
+        <p className="text-zinc-400 text-xs mb-20">
           가입하시려면 쿠키 사용을 포함해 이용약관과 개인정보 처리
           <br /> 방침에 동의해야 합니다.
         </p>
-        <h3 className="text-white">이미 트위터에 가입하셨나요?</h3>
+        <h3 className="text-white mb-5">이미 트위터에 가입하셨나요?</h3>
         <Link
           href="/login"
-          className="border-solid border-2 border-sky-500 rounded-3xl text-sky-500 text-center font-bold  px-5 py-2 w-1/2 h-10 me-5"
+          className="border-solid border-2 border-sky-500 rounded-3xl text-sky-500 text-center font-bold  px-5 py-2 w-64 h-10 me-5"
         >
           로그인
         </Link>
