@@ -1,3 +1,5 @@
-export default function home() {
-  return <div>login</div>;
+import { redirect } from 'next/navigation';
+
+export default function Login() {
+  redirect('/i/flow/login');
 }
