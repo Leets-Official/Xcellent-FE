@@ -11,5 +11,5 @@ export default function LoginModal() {
   //   const onChangeId = () => {};
   //   const onChangePassword = () => {};
 
-  return <div>로그인 모달</div>;
+  return <div className="text-white">로그인 모달</div>;
 }
