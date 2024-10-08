@@ -13,7 +13,7 @@ export const {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
-      //로그인 form 내용
+      // 로그인 form 내용
       credentials: {
         email: { label: 'email', type: 'text', placeholder: '이메일입력' },
         password: { label: 'password', type: 'password' },

@@ -12,16 +12,20 @@ export default async (prevState: any, formData: FormData) => {
       {
         method: 'POST',
         body: formData,
-        credentials: 'include',
+        credentials: 'include', // 쿠키 저장
       },
     );
-    console.log(res.status);
-    console.log(res);
-    if (res.status === 403) {
-      return { message: 'user_exists' };
-    }
 
-    console.log(await res.json());
+    console.log(res.status);
+    // console.log(res);
+    if (res.ok) {
+      // 회원가입 성공 시 처리
+      console.log('유저 등록 완료');
+    } else {
+      // 회원가입 실패 시 처리
+      console.error('유저 등록 에러');
+    }
+    // console.log(await res.json());
     shouldRedirect = true;
 
     // 회원가입 후 로그인 처리
