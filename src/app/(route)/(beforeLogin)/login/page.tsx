@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
+import RedirectToLogin from './_component/RedirectToLogin';
 
 export default function Login() {
-  redirect('/i/flow/login');
+  return <RedirectToLogin />;
 }
