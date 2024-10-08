@@ -77,56 +77,62 @@ export default function SignupModal() {
         <div>
           <label className="text-white" htmlFor="birth">
             생년월일
+            <div className="flex">
+              <select
+                id="month"
+                name="month"
+                value={month}
+                onChange={e => setMonth(e.target.value)}
+                required
+              >
+                <option value="">월</option>
+                {months.map(m => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+
+              {/* 일 */}
+              <select
+                id="day"
+                name="day"
+                value={day}
+                onChange={e => setDay(e.target.value)}
+                required
+              >
+                <option value="">일</option>
+                {months.map(d => (
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
+                ))}
+              </select>
+
+              {/*연도 */}
+              <select
+                id="year"
+                name="year"
+                value={year}
+                onChange={e => setYear(e.target.value)}
+                required
+              >
+                <option value="">연도</option>
+                {months.map(y => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <input
+              id="userBirthDay"
+              name="userBirthDay"
+              required
+              type="hidden"
+              value={handleBirthDateChange()}
+            />
           </label>
-          <div className="flex">
-            <select
-              id="month"
-              name="month"
-              value={month}
-              onChange={e => setMonth(e.target.value)}
-              required
-            >
-              <option value="">월</option>
-              {months.map(m => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-
-            {/* 일 */}
-            <select
-              id="day"
-              name="day"
-              value={day}
-              onChange={e => setDay(e.target.value)}
-              required
-            >
-              <option value="">일</option>
-              {months.map(d => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-
-            {/*연도 */}
-            <select
-              id="year"
-              name="year"
-              value={year}
-              onChange={e => setYear(e.target.value)}
-              required
-            >
-              <option value="">연도</option>
-              {months.map(y => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </div>
-          <input id="birth" name="birth" required type="text" />
         </div>
       </div>
       <div>
