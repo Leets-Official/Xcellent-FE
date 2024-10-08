@@ -102,7 +102,7 @@ export default function SignupModal() {
                 required
               >
                 <option value="">일</option>
-                {months.map(d => (
+                {days.map(d => (
                   <option key={d} value={d}>
                     {d}
                   </option>
@@ -118,7 +118,7 @@ export default function SignupModal() {
                 required
               >
                 <option value="">연도</option>
-                {months.map(y => (
+                {years.map(y => (
                   <option key={y} value={y}>
                     {y}
                   </option>
