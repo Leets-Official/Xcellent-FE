@@ -13,6 +13,16 @@ export default function SignupModal() {
   const [month, setMonth] = useState('');
   const [day, setDay] = useState('');
 
+  const years = Array.from(
+    { length: 100 },
+    (_, i) => new Date().getFullYear() - i,
+  );
+  const months = Array.from({ length: 12 }, (_, i) => i + 1);
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+
+  const handleBirthDateChange = () => {
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  };
   return (
     <form action={formAction}>
       <div>
@@ -69,8 +79,51 @@ export default function SignupModal() {
             생년월일
           </label>
           <div className="flex">
-            <select name="year" required id="">
-              <option value=""></option>
+            <select
+              id="month"
+              name="month"
+              value={month}
+              onChange={e => setMonth(e.target.value)}
+              required
+            >
+              <option value="">월</option>
+              {months.map(m => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+
+            {/* 일 */}
+            <select
+              id="day"
+              name="day"
+              value={day}
+              onChange={e => setDay(e.target.value)}
+              required
+            >
+              <option value="">일</option>
+              {months.map(d => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+
+            {/*연도 */}
+            <select
+              id="year"
+              name="year"
+              value={year}
+              onChange={e => setYear(e.target.value)}
+              required
+            >
+              <option value="">연도</option>
+              {months.map(y => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
             </select>
           </div>
           <input id="birth" name="birth" required type="text" />
