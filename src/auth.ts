@@ -32,7 +32,6 @@ export const {
               body: JSON.stringify(credentials),
             },
           );
-          console.log('fetch executed');
           const user = await res.json();
           console.log('user', user);
           return user || null;

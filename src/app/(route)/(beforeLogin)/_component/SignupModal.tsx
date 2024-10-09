@@ -1,8 +1,8 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import onSubmit from '../_lib/signup';
 import { useState } from 'react';
+import onSubmit from '../_lib/signup';
 
 export default function SignupModal() {
   const [state, formAction] = useFormState(onSubmit, { message: null });
@@ -79,8 +79,8 @@ export default function SignupModal() {
             생년월일
             <div className="flex">
               <select
+                className="text-black"
                 id="month"
-                name="month"
                 value={month}
                 onChange={e => setMonth(e.target.value)}
                 required
@@ -95,8 +95,8 @@ export default function SignupModal() {
 
               {/* 일 */}
               <select
+                className="text-black"
                 id="day"
-                name="day"
                 value={day}
                 onChange={e => setDay(e.target.value)}
                 required
@@ -111,8 +111,8 @@ export default function SignupModal() {
 
               {/*연도 */}
               <select
+                className="text-black"
                 id="year"
-                name="year"
                 value={year}
                 onChange={e => setYear(e.target.value)}
                 required
