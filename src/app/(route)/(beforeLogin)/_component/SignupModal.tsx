@@ -29,7 +29,7 @@ export default function SignupModal() {
   };
 
   const handleInputChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.targt.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async e => {
