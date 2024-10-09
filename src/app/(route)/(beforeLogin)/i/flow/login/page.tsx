@@ -1,3 +1,3 @@
 export default function home() {
-  return <div>login</div>;
+  return <main>로그인 모달</main>;
 }

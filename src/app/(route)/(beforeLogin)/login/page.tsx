@@ -1,3 +1,5 @@
-export default function home() {
-  return <div>login</div>;
+import RedirectToLogin from './_component/RedirectToLogin';
+
+export default function Login() {
+  return <RedirectToLogin />;
 }
