@@ -8,7 +8,7 @@ export default function SignupModal() {
   const [state, formAction] = useFormState(onSubmit, { message: null });
   console.log('state', state);
 
-  /*생년월일 상태관리 */
+  /* 생년월일 상태관리 */
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
   const [day, setDay] = useState('');
