@@ -2,17 +2,22 @@
 
 import { useFormState } from 'react-dom';
 import { useState } from 'react';
-import onSubmit from '../_lib/signup';
+import { SignUp, SignUpData } from '@/app/api/auth/auth';
+import { useRouter } from 'next/navigation';
 
 export default function SignupModal() {
-  const [state, formAction] = useFormState(onSubmit, { message: null });
-  console.log('state', state);
+  const router = useRouter();
 
-  /* 생년월일 상태관리 */
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
   const [day, setDay] = useState('');
-
+  const [formData, setFormData] = useState({
+    email: '',
+    userName: '',
+    password: '',
+    customId: '',
+    phoneNumber: '',
+  });
   const years = Array.from(
     { length: 100 },
     (_, i) => new Date().getFullYear() - i,
@@ -23,8 +28,23 @@ export default function SignupModal() {
   const handleBirthDateChange = () => {
     return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   };
+
+  const handleInputChange = e => {
+    setFormData({ ...FormData, [e.target.name]: e.targt.value });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      await SignUp(formData);
+      alert('회원가입이 완료되었습니다');
+      router.push('/login');
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   return (
-    <form action={formAction}>
+    <form onSubmit={handleSubmit}>
       <div>
         <div>
           <label className="text-white" htmlFor="email">
@@ -33,7 +53,9 @@ export default function SignupModal() {
               id="email"
               name="email"
               type="text"
-              placeholder=""
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="이메일을 입력하세요"
               required
             />
           </label>
@@ -45,7 +67,9 @@ export default function SignupModal() {
               id="userName"
               name="userName"
               type="text"
-              placeholder=""
+              value={formData.userName}
+              onChange={handleInputChange}
+              placeholder="이름"
               required
             />
           </label>
@@ -58,6 +82,8 @@ export default function SignupModal() {
             id="password"
             name="password"
             type="password"
+            value={formData.password}
+            onChange={handleInputChange}
             placeholder=""
             required
           />
@@ -65,13 +91,27 @@ export default function SignupModal() {
         <div>
           <label className="text-white" htmlFor="customId">
             아이디
-            <input id="customId" name="customId" required type="text" />
+            <input
+              id="customId"
+              name="customId"
+              value={formData.customId}
+              onChange={handleInputChange}
+              required
+              type="text"
+            />
           </label>
         </div>
         <div>
           <label className="text-white" htmlFor="phoneNumber">
             핸드폰번호
-            <input id="phoneNumber" name="phoneNumber" required type="text" />
+            <input
+              id="phoneNumber"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              required
+              type="text"
+            />
           </label>
         </div>
         <div>
