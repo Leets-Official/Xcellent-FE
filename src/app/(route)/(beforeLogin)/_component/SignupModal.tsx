@@ -1,8 +1,7 @@
 'use client';
 
-import { useFormState } from 'react-dom';
 import { useState } from 'react';
-import { SignUp, SignUpData } from '@/app/api/auth/auth';
+import { SignUp } from '@/app/api/auth/auth';
 import { useRouter } from 'next/navigation';
 
 export default function SignupModal() {
@@ -30,7 +29,7 @@ export default function SignupModal() {
   };
 
   const handleInputChange = e => {
-    setFormData({ ...FormData, [e.target.name]: e.targt.value });
+    setFormData({ ...formData, [e.target.name]: e.targt.value });
   };
 
   const handleSubmit = async e => {
