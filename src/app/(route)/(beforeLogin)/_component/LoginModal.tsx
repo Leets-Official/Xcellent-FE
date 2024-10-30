@@ -5,33 +5,43 @@ import { useRouter } from 'next/navigation';
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 
 export default function LoginModal() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    message: '',
+  });
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   const router = useRouter();
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault();
-    setMessage('');
+
     try {
-      const res = await Login(email, password);
+      const res = await Login(formData);
       if (!res.ok) {
-        setMessage('아이디와 비밀번호가 일치하지 않습니다.');
+        setFormData(data => ({
+          ...data,
+          message: '아이디와 비밀번호가 일치하지 않습니다.',
+        }));
       } else {
         alert('로그인 성공!');
         router.replace('/home');
       }
     } catch (err) {
       console.error(err);
-      setMessage('로그인 중 오류가 발생했습니다.');
+      setFormData(data => ({
+        ...data,
+        message: '로그인 중 오류가 발생했습니다.',
+      }));
     }
-
-    const onChangeId: ChangeEventHandler<HTMLInputElement> = e => {
-      setEmail(e.target.value);
-    };
-    const onChangePassword: ChangeEventHandler<HTMLInputElement> = e => {
-      setPassword(e.target.value);
-    };
 
     return (
       <div>
@@ -43,8 +53,8 @@ export default function LoginModal() {
             <input
               id="email"
               className="bg-white"
-              value={email}
-              onChange={onChangeId}
+              value={formData.email}
+              onChange={handleChange}
               type="text"
               placeholder=""
             />
@@ -56,8 +66,8 @@ export default function LoginModal() {
             </label>
             <input
               id="password"
-              value={password}
-              onChange={onChangePassword}
+              value={formData.password}
+              onChange={handleChange}
               type="password"
               placeholder=""
             />
