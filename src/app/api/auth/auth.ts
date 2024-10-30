@@ -25,11 +25,13 @@ export const SignUp = async (data: SignUpData): Promise<any> => {
       },
     );
     if (!res.ok) {
-      console.log('회원가입 실패');
+      // console.log('회원가입 실패');
     }
     return res.json();
   } catch (error: unknown) {
-    console.error(error);
+    console.log(data);
+    console.log(JSON.stringify(data));
+    console.log(error);
   }
 };
 

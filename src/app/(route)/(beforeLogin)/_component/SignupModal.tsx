@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SignUp } from '@/app/api/auth/auth';
 import { useRouter } from 'next/navigation';
 
@@ -16,6 +16,7 @@ export default function SignupModal() {
     password: '',
     customId: '',
     phoneNumber: '',
+    userBirthDay: '',
   });
   const years = Array.from(
     { length: 100 },
@@ -24,14 +25,17 @@ export default function SignupModal() {
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
-  const handleBirthDateChange = () => {
-    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-  };
+  // 생년월일 값을 업데이트하는 useEffect
+  useEffect(() => {
+    if (year && month && day) {
+      const birthDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      setFormData(prevData => ({ ...prevData, userBirthDay: birthDate }));
+    }
+  }, [year, month, day]);
 
   const handleInputChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async e => {
     e.preventDefault();
     try {
@@ -147,8 +151,6 @@ export default function SignupModal() {
                   </option>
                 ))}
               </select>
-
-              {/*연도 */}
               <select
                 className="text-black"
                 id="year"
@@ -169,7 +171,7 @@ export default function SignupModal() {
               name="userBirthDay"
               required
               type="hidden"
-              value={handleBirthDateChange()}
+              value={formData.userBirthDay}
             />
           </label>
         </div>

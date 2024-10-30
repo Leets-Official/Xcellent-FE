@@ -1,3 +1,5 @@
-export default function home() {
-  return <main>로그인 모달</main>;
+import LoginModal from '@/app/(route)/(beforeLogin)/_component/LoginModal';
+
+export default function Login() {
+  return <LoginModal />;
 }
