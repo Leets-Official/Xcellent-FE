@@ -16,7 +16,9 @@ export default function SignupModal() {
     password: '',
     customId: '',
     phoneNumber: '',
-    userBirthDay: '',
+    userBirthDay: 0,
+    userBirthMonth: 0,
+    userBirthYear: 0,
   });
   const years = Array.from(
     { length: 100 },
@@ -24,14 +26,6 @@ export default function SignupModal() {
   );
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
-
-  // 생년월일 값을 업데이트하는 useEffect
-  useEffect(() => {
-    if (year && month && day) {
-      const birthDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      setFormData(prevData => ({ ...prevData, userBirthDay: birthDate }));
-    }
-  }, [year, month, day]);
 
   const handleInputChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -167,13 +161,6 @@ export default function SignupModal() {
               ))}
             </select>
           </div>
-          <input
-            id="userBirthDay"
-            name="userBirthDay"
-            required
-            type="hidden"
-            value={formData.userBirthDay}
-          />
         </div>
       </div>
       <div>

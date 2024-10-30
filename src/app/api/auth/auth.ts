@@ -4,7 +4,9 @@ export interface SignUpData {
   customId: string;
   userName: string;
   phoneNumber: string;
-  userBirthDay: string;
+  userBirthDay: number;
+  userBirthMonth: number;
+  userBirthYear: number;
 }
 
 export interface LoginData {
