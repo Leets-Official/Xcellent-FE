@@ -52,30 +52,30 @@ export default function SignupModal() {
         <div>
           <label className="text-white" htmlFor="email">
             이메일
-            <input
-              id="email"
-              name="email"
-              type="text"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="이메일을 입력하세요"
-              required
-            />
           </label>
+          <input
+            id="email"
+            name="email"
+            type="text"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="이메일을 입력하세요"
+            required
+          />
         </div>
         <div>
           <label className="text-white" htmlFor="name">
             이름
-            <input
-              id="userName"
-              name="userName"
-              type="text"
-              value={formData.userName}
-              onChange={handleInputChange}
-              placeholder="이름"
-              required
-            />
           </label>
+          <input
+            id="userName"
+            name="userName"
+            type="text"
+            value={formData.userName}
+            onChange={handleInputChange}
+            placeholder="이름"
+            required
+          />
         </div>
         <div>
           <label className="text-white" htmlFor="password">
@@ -94,86 +94,86 @@ export default function SignupModal() {
         <div>
           <label className="text-white" htmlFor="customId">
             아이디
-            <input
-              id="customId"
-              name="customId"
-              value={formData.customId}
-              onChange={handleInputChange}
-              required
-              type="text"
-            />
           </label>
+          <input
+            id="customId"
+            name="customId"
+            value={formData.customId}
+            onChange={handleInputChange}
+            required
+            type="text"
+          />
         </div>
         <div>
           <label className="text-white" htmlFor="phoneNumber">
             핸드폰번호
-            <input
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              required
-              type="text"
-            />
           </label>
+          <input
+            id="phoneNumber"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+            required
+            type="text"
+          />
         </div>
         <div>
           <label className="text-white" htmlFor="birth">
             생년월일
-            <div className="flex">
-              <select
-                className="text-black"
-                id="month"
-                value={month}
-                onChange={e => setMonth(e.target.value)}
-                required
-              >
-                <option value="">월</option>
-                {months.map(m => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-
-              {/* 일 */}
-              <select
-                className="text-black"
-                id="day"
-                value={day}
-                onChange={e => setDay(e.target.value)}
-                required
-              >
-                <option value="">일</option>
-                {days.map(d => (
-                  <option key={d} value={d}>
-                    {d}
-                  </option>
-                ))}
-              </select>
-              <select
-                className="text-black"
-                id="year"
-                value={year}
-                onChange={e => setYear(e.target.value)}
-                required
-              >
-                <option value="">연도</option>
-                {years.map(y => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <input
-              id="userBirthDay"
-              name="userBirthDay"
-              required
-              type="hidden"
-              value={formData.userBirthDay}
-            />
           </label>
+          <div className="flex">
+            <select
+              className="text-black"
+              id="month"
+              value={month}
+              onChange={e => setMonth(e.target.value)}
+              required
+            >
+              <option value="">월</option>
+              {months.map(m => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+
+            {/* 일 */}
+            <select
+              className="text-black"
+              id="day"
+              value={day}
+              onChange={e => setDay(e.target.value)}
+              required
+            >
+              <option value="">일</option>
+              {days.map(d => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+            <select
+              className="text-black"
+              id="year"
+              value={year}
+              onChange={e => setYear(e.target.value)}
+              required
+            >
+              <option value="">연도</option>
+              {years.map(y => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+          <input
+            id="userBirthDay"
+            name="userBirthDay"
+            required
+            type="hidden"
+            value={formData.userBirthDay}
+          />
         </div>
       </div>
       <div>

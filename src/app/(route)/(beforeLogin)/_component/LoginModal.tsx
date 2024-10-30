@@ -39,15 +39,15 @@ export default function LoginModal() {
           <div>
             <label htmlFor="email" className="text-white">
               이메일
-              <input
-                id="email"
-                className="bg-white"
-                value={email}
-                onChange={onChangeId}
-                type="text"
-                placeholder=""
-              />
             </label>
+            <input
+              id="email"
+              className="bg-white"
+              value={email}
+              onChange={onChangeId}
+              type="text"
+              placeholder=""
+            />
           </div>
 
           <div>
@@ -64,9 +64,7 @@ export default function LoginModal() {
           </div>
           {message && <p className="text-red-500">{message}</p>}
 
-          <div>
-            <button className="text-white">로그인하기</button>
-          </div>
+          <button className="text-white">로그인하기</button>
         </form>
       </div>
     );
