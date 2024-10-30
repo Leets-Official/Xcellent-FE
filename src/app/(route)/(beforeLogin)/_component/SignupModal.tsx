@@ -1,15 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { SignUp } from '@/app/api/auth/auth';
 import { useRouter } from 'next/navigation';
 
 export default function SignupModal() {
   const router = useRouter();
 
-  const [year, setYear] = useState('');
-  const [month, setMonth] = useState('');
-  const [day, setDay] = useState('');
+  const [birthDate, setBirthDate] = useState({
+    month: 0,
+    day: 0,
+    year: 0,
+  });
+
   const [formData, setFormData] = useState({
     email: '',
     userName: '',
@@ -21,7 +24,7 @@ export default function SignupModal() {
     userBirthYear: 0,
   });
   const years = Array.from(
-    { length: 100 },
+    { length: 80 },
     (_, i) => new Date().getFullYear() - i,
   );
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -29,6 +32,17 @@ export default function SignupModal() {
 
   const handleInputChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleDateChange = (type, value) => {
+    setBirthDate(prevDate => ({ ...prevDate, [type]: value }));
+    setFormData(prevData => ({
+      ...prevData,
+      [`userBirth${type.charAt(0).toUpperCase() + type.slice(1)}`]: parseInt(
+        value,
+        10,
+      ),
+    }));
   };
   const handleSubmit = async e => {
     e.preventDefault();
@@ -116,11 +130,12 @@ export default function SignupModal() {
             생년월일
           </label>
           <div className="flex">
+            {/* 월 */}
             <select
               className="text-black"
               id="month"
-              value={month}
-              onChange={e => setMonth(e.target.value)}
+              value={birthDate.month}
+              onChange={e => handleDateChange('month', e.target.value)}
               required
             >
               <option value="">월</option>
@@ -135,8 +150,8 @@ export default function SignupModal() {
             <select
               className="text-black"
               id="day"
-              value={day}
-              onChange={e => setDay(e.target.value)}
+              value={birthDate.day}
+              onChange={e => handleDateChange('day', e.target.value)}
               required
             >
               <option value="">일</option>
@@ -146,11 +161,12 @@ export default function SignupModal() {
                 </option>
               ))}
             </select>
+            {/* 년 */}
             <select
               className="text-black"
               id="year"
-              value={year}
-              onChange={e => setYear(e.target.value)}
+              value={birthDate.year}
+              onChange={e => handleDateChange('year', e.target.value)}
               required
             >
               <option value="">연도</option>
