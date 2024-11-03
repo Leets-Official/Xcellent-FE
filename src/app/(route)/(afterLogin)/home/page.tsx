@@ -1,3 +1,3 @@
-export default function Home(): JSX.Element {
+export default function Home() {
   return <main>홈페이지</main>;
 }
