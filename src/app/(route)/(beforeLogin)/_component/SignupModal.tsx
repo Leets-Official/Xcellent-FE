@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SignUp } from '@/app/api/auth/auth';
 import { useRouter } from 'next/navigation';
 
@@ -23,13 +23,33 @@ export default function SignupModal() {
     userBirthMonth: 0,
     userBirthYear: 0,
   });
+
+  const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
   const years = Array.from(
     { length: 80 },
     (_, i) => new Date().getFullYear() - i,
   );
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
+  // 달에 따라 일 수를 동적으로 설정
+  useEffect(() => {
+    const { month, year } = birthDate;
+
+    if (month) {
+      const getDaysInMonth = (month, year) => {
+        if (month === 2) {
+          return 29;
+        }
+        if ([4, 6, 9, 11].includes(month)) return 30;
+
+        return 31;
+      };
+
+      setDays(
+        Array.from({ length: getDaysInMonth(month, year) }, (_, i) => i + 1),
+      );
+    }
+  }, [birthDate.month, birthDate.year]);
   const handleInputChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
