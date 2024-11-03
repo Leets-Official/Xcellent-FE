@@ -106,7 +106,7 @@ export default function SignupModal() {
             onChange={handleInputChange}
             placeholder="이메일"
             required
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-1/2 p-4 bg-transparent border border-gray-500 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
@@ -118,7 +118,7 @@ export default function SignupModal() {
             onChange={handleInputChange}
             placeholder="이름"
             required
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-1/2 p-4 bg-transparent border border-gray-500 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
@@ -130,7 +130,7 @@ export default function SignupModal() {
             onChange={handleInputChange}
             placeholder="비밀번호"
             required
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-1/2 p-4 bg-transparent border border-gray-500 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
@@ -142,7 +142,7 @@ export default function SignupModal() {
             placeholder="아이디"
             required
             type="text"
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-1/2 bg-transparent p-4 border border-gray-500 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
@@ -154,14 +154,14 @@ export default function SignupModal() {
             placeholder="휴대폰"
             required
             type="text"
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-1/2 p-4 bg-transparent border border-gray-500 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
           <div className="flex space-x-2">
             {/* 월 */}
             <select
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
+              className="w-1/6 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
               id="month"
               value={birthDate.month}
               onChange={e => handleDateChange('month', e.target.value)}
@@ -177,7 +177,7 @@ export default function SignupModal() {
 
             {/* 일 */}
             <select
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
+              className="w-1/8 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
               id="day"
               value={birthDate.day}
               onChange={e => handleDateChange('day', e.target.value)}
@@ -193,7 +193,7 @@ export default function SignupModal() {
 
             {/* 년 */}
             <select
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
+              className="w-1/7 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
               id="year"
               value={birthDate.year}
               onChange={e => handleDateChange('year', e.target.value)}
@@ -210,7 +210,7 @@ export default function SignupModal() {
         </div>
         <button
           type="submit"
-          className="w-full p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          className="w-1/2 p-4 bg-white text-black rounded-full hover:bg-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
         >
           가입하기
         </button>
