@@ -9,6 +9,7 @@ export default function SignupModal() {
   const [isOpen, setIsOpen] = useState(true);
   const handleClose = () => {
     setIsOpen(false);
+    router.back();
   };
 
   const [birthDate, setBirthDate] = useState({
@@ -81,7 +82,7 @@ export default function SignupModal() {
     isOpen && (
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 p-6 bg-gray-800 rounded-lg"
+        className="space-y-4 p-6 bg-zinc-800 rounded-lg"
       >
         <div className="space-y-2">
           <button onClick={handleClose}>
@@ -97,24 +98,18 @@ export default function SignupModal() {
               </g>
             </svg>
           </button>
-          <label className="text-white" htmlFor="email">
-            이메일
-          </label>
           <input
             id="email"
             name="email"
             type="text"
             value={formData.email}
             onChange={handleInputChange}
-            placeholder="이메일을 입력하세요"
+            placeholder="이메일"
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
-          <label className="text-white" htmlFor="name">
-            이름
-          </label>
           <input
             id="userName"
             name="userName"
@@ -127,52 +122,42 @@ export default function SignupModal() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-white" htmlFor="password">
-            비밀번호
-          </label>
           <input
             id="password"
             name="password"
             type="password"
             value={formData.password}
             onChange={handleInputChange}
-            placeholder=""
+            placeholder="비밀번호"
             required
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
-          <label className="text-white" htmlFor="customId">
-            아이디
-          </label>
           <input
             id="customId"
             name="customId"
             value={formData.customId}
             onChange={handleInputChange}
+            placeholder="아이디"
             required
             type="text"
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
-          <label className="text-white" htmlFor="phoneNumber">
-            핸드폰번호
-          </label>
           <input
             id="phoneNumber"
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleInputChange}
+            placeholder="휴대폰"
             required
             type="text"
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="space-y-2">
-          <label className="text-white" htmlFor="birth">
-            생년월일
-          </label>
           <div className="flex space-x-2">
             {/* 월 */}
             <select
