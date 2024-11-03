@@ -74,131 +74,152 @@ export default function SignupModal() {
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <div>
-          <label className="text-white" htmlFor="email">
-            이메일
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="text"
-            value={formData.email}
-            onChange={handleInputChange}
-            placeholder="이메일을 입력하세요"
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 p-6 bg-gray-800 rounded-lg"
+    >
+      <div className="space-y-2">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-z80fyv r-19wmn03"
+        >
+          <g>
+            <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z" />
+          </g>
+        </svg>
+        <label className="text-white" htmlFor="email">
+          이메일
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="text"
+          value={formData.email}
+          onChange={handleInputChange}
+          placeholder="이메일을 입력하세요"
+          required
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="space-y-2">
+        <label className="text-white" htmlFor="name">
+          이름
+        </label>
+        <input
+          id="userName"
+          name="userName"
+          type="text"
+          value={formData.userName}
+          onChange={handleInputChange}
+          placeholder="이름"
+          required
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="space-y-2">
+        <label className="text-white" htmlFor="password">
+          비밀번호
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleInputChange}
+          placeholder=""
+          required
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="space-y-2">
+        <label className="text-white" htmlFor="customId">
+          아이디
+        </label>
+        <input
+          id="customId"
+          name="customId"
+          value={formData.customId}
+          onChange={handleInputChange}
+          required
+          type="text"
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="space-y-2">
+        <label className="text-white" htmlFor="phoneNumber">
+          핸드폰번호
+        </label>
+        <input
+          id="phoneNumber"
+          name="phoneNumber"
+          value={formData.phoneNumber}
+          onChange={handleInputChange}
+          required
+          type="text"
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="space-y-2">
+        <label className="text-white" htmlFor="birth">
+          생년월일
+        </label>
+        <div className="flex space-x-2">
+          {/* 월 */}
+          <select
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
+            id="month"
+            value={birthDate.month}
+            onChange={e => handleDateChange('month', e.target.value)}
             required
-          />
-        </div>
-        <div>
-          <label className="text-white" htmlFor="name">
-            이름
-          </label>
-          <input
-            id="userName"
-            name="userName"
-            type="text"
-            value={formData.userName}
-            onChange={handleInputChange}
-            placeholder="이름"
-            required
-          />
-        </div>
-        <div>
-          <label className="text-white" htmlFor="password">
-            비밀번호
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            placeholder=""
-            required
-          />
-        </div>
-        <div>
-          <label className="text-white" htmlFor="customId">
-            아이디
-          </label>
-          <input
-            id="customId"
-            name="customId"
-            value={formData.customId}
-            onChange={handleInputChange}
-            required
-            type="text"
-          />
-        </div>
-        <div>
-          <label className="text-white" htmlFor="phoneNumber">
-            핸드폰번호
-          </label>
-          <input
-            id="phoneNumber"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-            required
-            type="text"
-          />
-        </div>
-        <div>
-          <label className="text-white" htmlFor="birth">
-            생년월일
-          </label>
-          <div className="flex">
-            {/* 월 */}
-            <select
-              className="text-black"
-              id="month"
-              value={birthDate.month}
-              onChange={e => handleDateChange('month', e.target.value)}
-              required
-            >
-              <option value="">월</option>
-              {months.map(m => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
+          >
+            <option value="">월</option>
+            {months.map(m => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
 
-            {/* 일 */}
-            <select
-              className="text-black"
-              id="day"
-              value={birthDate.day}
-              onChange={e => handleDateChange('day', e.target.value)}
-              required
-            >
-              <option value="">일</option>
-              {days.map(d => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-            {/* 년 */}
-            <select
-              className="text-black"
-              id="year"
-              value={birthDate.year}
-              onChange={e => handleDateChange('year', e.target.value)}
-              required
-            >
-              <option value="">연도</option>
-              {years.map(y => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* 일 */}
+          <select
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
+            id="day"
+            value={birthDate.day}
+            onChange={e => handleDateChange('day', e.target.value)}
+            required
+          >
+            <option value="">일</option>
+            {days.map(d => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+
+          {/* 년 */}
+          <select
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
+            id="year"
+            value={birthDate.year}
+            onChange={e => handleDateChange('year', e.target.value)}
+            required
+          >
+            <option value="">연도</option>
+            {years.map(y => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
-      <button type="submit" className="bg-white">
+      <button
+        type="submit"
+        className="w-full p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      >
         가입하기
       </button>
     </form>

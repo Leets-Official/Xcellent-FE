@@ -11,11 +11,7 @@
   "dependencies": {
     "@auth/core": "^0.31.0",
     "next": "14.2.14",
-<<<<<<< HEAD
-    "next-auth": "^4.24.8",
-=======
     "next-auth": "^5.0.0-beta.22",
->>>>>>> acd9296d418b1f0725603324694cc45ce85432bf
     "react": "^18",
     "react-dom": "^18"
   },

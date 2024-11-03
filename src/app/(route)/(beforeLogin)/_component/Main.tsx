@@ -21,9 +21,7 @@ export default function Home() {
           지금 일어나고 있는 일
         </h1>
         <h2 className="text-4xl font-bold text-white mb-8">지금 가입하세요.</h2>
-        <p className="font-bold text-white mb-3">
-          ㅡㅡㅡㅡㅡㅡㅡ 또는 ㅡㅡㅡㅡㅡㅡㅡ
-        </p>
+
         <Link
           href="/i/flow/signup"
           className="bg-sky-500 rounded-3xl text-center text-white px-4 py-2.5 font-bold w-64 h-10 me-5 mb-4"

@@ -1,12 +1,9 @@
 'use client';
-
-import { useEffect } from 'react';
+import Main from '@/app/(route)/(beforeLogin)/_component/Main';
 import { useRouter } from 'next/navigation';
 
 export default function RedirectToLogin() {
   const router = useRouter();
-  useEffect(() => {
-    router.replace('/i/flow/login');
-  }, []);
-  return null;
+  router.replace('/i/flow/login');
+  return <Main />;
 }
