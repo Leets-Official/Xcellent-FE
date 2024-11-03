@@ -199,11 +199,9 @@ export default function SignupModal() {
           </div>
         </div>
       </div>
-      <div>
-        <button type="submit" className="bg-white">
-          가입하기
-        </button>
-      </div>
+      <button type="submit" className="bg-white">
+        가입하기
+      </button>
     </form>
   );
 }
