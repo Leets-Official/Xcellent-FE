@@ -31,7 +31,6 @@ export default function SignupModal() {
   );
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
-  // 달에 따라 일 수를 동적으로 설정
   useEffect(() => {
     const { month, year } = birthDate;
 
