@@ -1,4 +1,4 @@
-import LoginModal from '@/app/(route)/(beforeLogin)/_component/LoginModal';
+import LoginModal from '../../../_component/Loginmodal';
 
 export default function Page() {
   return <LoginModal />;

@@ -1,11 +1,5 @@
-import LoginCom from '@/app/(route)/(beforeLogin)/_component/LoginCom';
-import LoginModal from '@/app/(route)/(beforeLogin)/_component/LoginModal';
+import LoginModal from '@/app/(route)/(beforeLogin)/_component/Loginmodal';
 
 export default function Login() {
-  return (
-    <>
-      <LoginCom />
-      <LoginModal />
-    </>
-  );
+  return <LoginModal />;
 }
