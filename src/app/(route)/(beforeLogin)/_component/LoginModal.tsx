@@ -33,10 +33,11 @@ export default function LoginModal() {
       const res = await Login(formData);
       if (!res.ok) {
         const errorData = await res.json();
+        console.log('ErrorData: ', errorData);
         if (errorData.code === 401) {
-          setMessage('존재하지 않는 유저입니다.');
-        } else if (errorData.code === 404) {
           setMessage('아이디와 비밀번호가 일치하지 않습니다.');
+        } else if (errorData.code === 40) {
+          setMessage('존재하지 않는 유저입니다.');
         } else {
           setMessage('로그인 중 오류가 발생하였습니다.');
         }
@@ -92,9 +93,7 @@ export default function LoginModal() {
             />
           </div>
 
-          {formData.message && (
-            <p className="text-red-500 text-sm">{formData.message}</p>
-          )}
+          {message && <p className="text-red-500 text-sm">{message}</p>}
 
           <button
             type="submit"
