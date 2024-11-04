@@ -80,10 +80,13 @@ export default function SignupModal() {
   };
   return (
     isOpen && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+      <div
+        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
+        style={{ backgroundColor: 'rgba(104, 132, 145, 0.413)' }}
+      >
         <form
           onSubmit={handleSubmit}
-          className="w-1/3 space-y-4 p-6 bg-zinc-800 rounded-lg"
+          className=" bg-black rounded-xl p-6 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-xl"
         >
           <button
             onClick={handleClose}
