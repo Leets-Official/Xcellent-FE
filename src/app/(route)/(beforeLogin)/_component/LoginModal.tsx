@@ -11,8 +11,8 @@ export default function LoginModal() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    message: '',
   });
+  const [message, setMessage] = useState('');
 
   const handleClose = () => {
     router.back(); // 모달 닫을 때 이전 페이지로 돌아가기
@@ -32,10 +32,16 @@ export default function LoginModal() {
     try {
       const res = await Login(formData);
       if (!res.ok) {
-        setFormData(data => ({
-          ...data,
-          message: '아이디와 비밀번호가 일치하지 않습니다.',
-        }));
+        const errorData = await res.json();
+        console.log('ErrorData: ', errorData);
+        if (errorData.code === 401) {
+          setMessage('아이디와 비밀번호가 일치하지 않습니다.');
+        } else if (errorData.code === 40) {
+          setMessage('존재하지 않는 유저입니다.');
+        } else {
+          setMessage('로그인 중 오류가 발생하였습니다.');
+        }
+        console.log(formData);
       } else {
         res.json().then(data => {
           alert('로그인 성공!');
@@ -44,10 +50,7 @@ export default function LoginModal() {
       }
     } catch (err) {
       console.error(err);
-      setFormData(data => ({
-        ...data,
-        message: '로그인 중 오류가 발생했습니다.',
-      }));
+      setMessage('로그인 중 오류가 발생했습니다.');
     }
   };
 
@@ -90,9 +93,7 @@ export default function LoginModal() {
             />
           </div>
 
-          {formData.message && (
-            <p className="text-red-500 text-sm">{formData.message}</p>
-          )}
+          {message && <p className="text-red-500 text-sm">{message}</p>}
 
           <button
             type="submit"
