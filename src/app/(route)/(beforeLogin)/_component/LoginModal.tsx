@@ -2,7 +2,12 @@
 
 import { Login } from '@/app/api/auth/auth';
 import { useRouter } from 'next/navigation';
-import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from 'react';
 
 export default function LoginModal() {
   const router = useRouter();
@@ -12,12 +17,13 @@ export default function LoginModal() {
     message: '',
   });
 
-  const handleChange = e => {
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData(data => ({
+      ...data,
       [name]: value,
-    });
+    }));
   };
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async e => {
@@ -32,7 +38,7 @@ export default function LoginModal() {
         }));
       } else {
         alert('로그인 성공!');
-        router.replace('/home');
+        setLoginSuccess(true);
       }
     } catch (err) {
       console.error(err);
@@ -42,6 +48,11 @@ export default function LoginModal() {
       }));
     }
 
+    useEffect(() => {
+      if (loginSuccess) {
+        router.replace('/home');
+      }
+    }, [loginSuccess, router]);
     return (
       <div
         className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
