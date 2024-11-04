@@ -71,7 +71,7 @@ export default function LoginModal() {
               value={formData.email}
               onChange={handleChange}
               type="text"
-              placeholder="이메일 입력"
+              placeholder="이메일"
             />
           </div>
 
@@ -86,7 +86,7 @@ export default function LoginModal() {
               value={formData.password}
               onChange={handleChange}
               type="password"
-              placeholder="비밀번호 입력"
+              placeholder="비밀번호"
             />
           </div>
 
