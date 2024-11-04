@@ -17,7 +17,7 @@ export default function LoginModal() {
     message: '',
   });
 
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  // const [loginSuccess, setLoginSuccess] = useState(false);
   const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
     const { name, value } = e.target;
     setFormData(data => ({
@@ -37,8 +37,11 @@ export default function LoginModal() {
           message: '아이디와 비밀번호가 일치하지 않습니다.',
         }));
       } else {
-        alert('로그인 성공!');
-        setLoginSuccess(true);
+        res.json().then(data => {
+          alert('로그인 성공!');
+          router.replace('/home');
+          // setLoginSuccess(true);
+        });
       }
     } catch (err) {
       console.error(err);
@@ -48,11 +51,12 @@ export default function LoginModal() {
       }));
     }
 
-    useEffect(() => {
-      if (loginSuccess) {
-        router.replace('/home');
-      }
-    }, [loginSuccess, router]);
+    // useEffect(() => {
+    //   if (loginSuccess) {
+    //     router.replace('/home');
+    //   }
+    // }, [loginSuccess, router]);
+
     return (
       <div
         className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
