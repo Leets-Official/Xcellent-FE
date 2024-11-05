@@ -1,5 +1,3 @@
-// src/app/(route)/(beforeLogin)/_component/LoginModal.tsx
-
 'use client';
 
 import { useState } from 'react';
@@ -35,18 +33,21 @@ export default function LoginModal() {
         const errorData = await res.json();
         console.log('ErrorData: ', errorData);
         if (errorData.code === 401) {
-          setMessage('아이디와 비밀번호가 일치하지 않습니다.');
-        } else if (errorData.code === 40) {
+          setMessage('이메일과 비밀번호가 일치하지 않습니다.');
+        } else if (errorData.code === 404) {
           setMessage('존재하지 않는 유저입니다.');
         } else {
           setMessage('로그인 중 오류가 발생하였습니다.');
         }
         console.log(formData);
       } else {
-        res.json().then(data => {
-          alert('로그인 성공!');
-          router.replace('/home'); // 로그인 성공 시 홈으로 이동
-        });
+        const data = await res.json();
+
+        localStorage.setItem('accessToken', data.result.accessToken);
+        localStorage.setItem('refreshToken', data.result.refreshToken);
+
+        alert('로그인에 성공했습니다.');
+        router.replace('/home'); // 로그인 성공 시 홈으로 이동
       }
     } catch (err) {
       console.error(err);
