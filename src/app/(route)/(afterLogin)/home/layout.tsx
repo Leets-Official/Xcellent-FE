@@ -1,13 +1,3 @@
-/*import { ReactNode } from 'react';
-
-export default async function HomeLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return <div>홈 레이아웃{children}</div>;
-}
-*/
 import { ReactNode } from 'react';
 import Image from 'next/image';
 import { AiFillHome } from 'react-icons/ai';
