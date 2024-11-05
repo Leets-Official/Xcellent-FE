@@ -20,8 +20,8 @@ export default function Profile() {
         <img
           src={user.image}
           alt={user.customId}
-          className="absolute w-[136px] h-[150px] rounded-full border-2 border-white bg-gray-700"
-          style={{ top: '90%', transform: 'translateY(-50%)', left: '16px' }}
+          className="bg-slate-300 absolute w-[150px] h-[150px] rounded-full"
+          style={{ top: '95%', transform: 'translateY(-50%)', left: '16px' }}
         />
         <button className="absolute right-4 top-4 px-4 py-1 bg-black text-white border border-gray-600 rounded-full hover:bg-gray-700">
           Edit profile
@@ -43,7 +43,10 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <div></div>
+      <div className="text-white text-bold text-xl flex items-center justify-evenly">
+        <div>Posts</div>
+        <div>Likes</div>
+      </div>
     </main>
   );
 }
