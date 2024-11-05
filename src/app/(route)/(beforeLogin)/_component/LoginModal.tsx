@@ -46,9 +46,6 @@ export default function LoginModal() {
         localStorage.setItem('accessToken', data.result.accessToken);
         localStorage.setItem('refreshToken', data.result.refreshToken);
 
-        console.log('accessToken:', data.result.accessToken);
-        console.log('refreshToken:', data.result.refreshToken);
-
         alert('로그인에 성공했습니다.');
         router.replace('/home'); // 로그인 성공 시 홈으로 이동
       }
