@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 
 export default function LoginModal() {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(true);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -13,7 +15,8 @@ export default function LoginModal() {
   const [message, setMessage] = useState('');
 
   const handleClose = () => {
-    router.back(); // 모달 닫을 때 이전 페이지로 돌아가기
+    setIsOpen(false);
+    router.back();
   };
 
   const handleChange = e => {
@@ -64,6 +67,22 @@ export default function LoginModal() {
         <h2 className="text-2xl font-semibold text-white mb-4">로그인하세요</h2>
 
         <form onSubmit={onSubmit} className="space-y-4">
+          <button
+            onClick={handleClose}
+            className="hover:bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="fill-white r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-z80fyv r-19wmn03"
+            >
+              <g>
+                <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z" />
+              </g>
+            </svg>
+          </button>
           <div>
             <label htmlFor="email" className="block text-white mb-1">
               이메일
@@ -103,13 +122,6 @@ export default function LoginModal() {
             로그인하기
           </button>
         </form>
-
-        <button
-          onClick={handleClose} // 닫기 버튼 클릭 시 이전 페이지로 이동
-          className="mt-4 text-white"
-        >
-          닫기
-        </button>
       </div>
     </div>
   );
