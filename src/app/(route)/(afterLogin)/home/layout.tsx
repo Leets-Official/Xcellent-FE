@@ -1,4 +1,6 @@
-import { ReactNode } from 'react';
+'use client';
+
+import { ReactNode, useState } from 'react';
 import Image from 'next/image';
 import { AiFillHome } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
@@ -6,12 +8,36 @@ import { IoNotifications } from 'react-icons/io5';
 import { RiMailLine } from 'react-icons/ri';
 import { BsListCheck } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
+import { FaFeatherAlt } from 'react-icons/fa';
 
 interface HomeLayoutProps {
   children: ReactNode;
 }
 
 const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [postContent, setPostContent] = useState('');
+
+  const handlePostButtonClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handlePostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setPostContent(e.target.value);
+  };
+
+  const handlePostSubmit = () => {
+    if (postContent.trim()) {
+      console.log('게시글 작성:', postContent);
+      setPostContent('');
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-black text-white">
       <aside className="fixed w-72 h-screen border-r border-gray-700">
@@ -63,8 +89,12 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
               </li>
             </ul>
           </nav>
-          <button className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-6 text-lg font-bold">
-            게시하기
+          <button
+            onClick={handlePostButtonClick}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-6 text-lg font-bold flex items-center justify-center gap-2"
+          >
+            <FaFeatherAlt className="w-5 h-5" />
+            <span>게시하기</span>
           </button>
           <div className="mt-4 p-4 hover:bg-gray-900 rounded-full cursor-pointer">
             <div className="flex items-center gap-3">
@@ -87,6 +117,40 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
       <main className="flex-1 ml-72">
         {children}
       </main>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white text-black p-6 rounded-lg w-96">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">게시글 작성</h2>
+              <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <textarea
+              className="w-full h-32 p-2 border border-gray-300 rounded mb-4"
+              placeholder="무슨 일이 일어나고 있나요?"
+              value={postContent}
+              onChange={handlePostContentChange}
+            />
+            <div className="flex justify-end">
+              <button
+                onClick={handleCloseModal}
+                className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded mr-2"
+              >
+                닫기
+              </button>
+              <button
+                onClick={handlePostSubmit}
+                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              >
+                게시하기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
