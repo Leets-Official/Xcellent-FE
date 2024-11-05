@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import PostModal from "./PostModal";
 
 interface Post {
   id: number;
@@ -29,6 +30,7 @@ const Home: React.FC = () => {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [showComments, setShowComments] = useState<number | null>(null);
   const [newComment, setNewComment] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -71,10 +73,25 @@ const Home: React.FC = () => {
         comments: [],
         isLiked: false,
       };
-      setPosts((prevPosts) => [...prevPosts, post]);
+      setPosts((prevPosts) => [...prevPosts, post].sort((a, b) => b.likes - a.likes));
       setNewPost("");
       setSelectedImages([]);
     }
+  };
+
+  const handleModalPostSubmit = (content: string) => {
+    const post: Post = {
+      id: posts.length + 1,
+      author: "Myself",
+      authorImage: "/profile-placeholder.png",
+      content: content,
+      images: [],
+      likes: 0,
+      retweets: 0,
+      comments: [],
+      isLiked: false,
+    };
+    setPosts((prevPosts) => [...prevPosts, post].sort((a, b) => b.likes - a.likes));
   };
 
   const handleLike = (id: number) => {
@@ -95,7 +112,7 @@ const Home: React.FC = () => {
         return [
           ...updatedPosts,
           { ...postToRetweet, id: prevPosts.length + 1, author: "Myself" },
-        ];
+        ].sort((a, b) => b.likes - a.likes);
       }
       return prevPosts;
     });
@@ -299,6 +316,12 @@ const Home: React.FC = () => {
           />
         </div>
       </aside>
+
+      <PostModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleModalPostSubmit}
+      />
     </div>
   );
 };
