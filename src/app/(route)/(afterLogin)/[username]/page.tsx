@@ -20,8 +20,7 @@ export default function Profile() {
         <img
           src={user.image}
           alt={user.customId}
-          className="bg-slate-300 absolute w-[150px] h-[150px] rounded-full"
-          style={{ top: '95%', transform: 'translateY(-50%)', left: '16px' }}
+          className="bg-slate-300 absolute w-[150px] h-[150px] rounded-full top-[95%] -translate-y-1/2 left-4"
         />
         <button className="absolute right-4 top-4 px-4 py-1 bg-black text-white border border-gray-600 rounded-full hover:bg-gray-700">
           Edit profile
