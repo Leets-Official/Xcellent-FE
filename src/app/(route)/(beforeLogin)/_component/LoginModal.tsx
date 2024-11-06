@@ -1,4 +1,3 @@
-// 로그인 모달 컴포넌트
 'use client';
 
 import { useState } from 'react';
@@ -20,7 +19,7 @@ export default function LoginModal() {
     router.back();
   };
 
-  const handleChange = e => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(data => ({
       ...data,
@@ -28,7 +27,7 @@ export default function LoginModal() {
     }));
   };
 
-  const onSubmit = async e => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
