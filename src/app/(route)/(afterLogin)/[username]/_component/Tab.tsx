@@ -1,5 +1,5 @@
-import { Span } from 'next/dist/trace';
 import { useContext } from 'react';
+import { TabContext } from './TabProvider';
 
 export default function Tab() {
   const tabContext = useContext(TabContext);
@@ -13,11 +13,11 @@ export default function Tab() {
     setTab('like');
   };
   return (
-    <main className="w-full">
+    <main>
       <div className="flex justify-around w-full bg-transparent">
         <div
           onClick={onClickPost}
-          className={`px-4 py-2 ${tab === 'post' ? 'text-white font-bold' : ' text-gray-500'} relative `}
+          className={`px-4 py-2 ${tab === 'post' ? 'text-white font-bold' : ' text-gray-500'} relative hover:bg-gray-800 cursor-pointer`}
         >
           Posts
           {tab === 'post' && (
@@ -28,7 +28,7 @@ export default function Tab() {
           onClick={onClickLike}
           className={`px-4 py-2 ${
             tab === 'like' ? 'text-white font-bold' : 'text-gray-500'
-          } relative`}
+          } relative hover:bg-gray-800 cursor-pointer`}
         >
           Likes
           {tab === 'like' && (

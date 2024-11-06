@@ -1,8 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import BackButton from '@/app/(route)/(afterLogin)/_component/BackButton';
 import Tab from './_component/Tab';
+import TabProvider from './_component/TabProvider';
+
 export default function Profile() {
   const user = {
     userName: 'dahyeon',
