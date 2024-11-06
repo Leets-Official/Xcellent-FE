@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 export default function SignupModal() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
+
   const handleClose = () => {
     setIsOpen(false);
     router.back();
@@ -29,6 +30,11 @@ export default function SignupModal() {
     userBirthYear: 0,
   });
 
+  const [formErrors, setFormErrors] = useState({
+    email: '',
+    userName: '',
+  });
+
   const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
   const years = Array.from(
     { length: 80 },
@@ -40,7 +46,7 @@ export default function SignupModal() {
     const { month, year } = birthDate;
 
     if (month) {
-      const getDaysInMonth = (month, year) => {
+      const getDaysInMonth = (month: number, year: number) => {
         if (month === 2) {
           return 29;
         }
@@ -54,11 +60,28 @@ export default function SignupModal() {
       );
     }
   }, [birthDate.month, birthDate.year]);
-  const handleInputChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setFormErrors({
+        ...formErrors,
+        email: emailRegex.test(value) ? '' : '올바른 이메일 형식을 입력하세요.',
+      });
+    }
+    if (name === 'userName') {
+      const nameRegex = /^[A-Za-z]+$/;
+      setFormErrors({
+        ...formErrors,
+        userName: nameRegex.test(value) ? '' : '이름은 영문으로 입력해주세요.',
+      });
+    }
   };
 
-  const handleDateChange = (type, value) => {
+  const handleDateChange = (type: string, value: string) => {
     setBirthDate(prevDate => ({ ...prevDate, [type]: value }));
     setFormData(prevData => ({
       ...prevData,
@@ -68,16 +91,22 @@ export default function SignupModal() {
       ),
     }));
   };
-  const handleSubmit = async e => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await SignUp(formData);
       alert('회원가입이 완료되었습니다');
       router.push('/login');
     } catch (error) {
-      alert(error.message);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('예기치 못한 오류가 발생했습니다.');
+      }
     }
   };
+
   return (
     isOpen && (
       <div
@@ -86,10 +115,12 @@ export default function SignupModal() {
       >
         <form
           onSubmit={handleSubmit}
-          className=" bg-black rounded-xl p-6 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-xl"
+          className="bg-black rounded-xl p-6 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-xl"
         >
           <button
+            type="button"
             onClick={handleClose}
+            aria-label="닫기"
             className="hover:bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center"
           >
             <svg
@@ -97,7 +128,7 @@ export default function SignupModal() {
               height="20"
               viewBox="0 0 24 24"
               aria-hidden="true"
-              className="fill-white r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-z80fyv r-19wmn03"
+              className="fill-white"
             >
               <g>
                 <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z" />
@@ -115,8 +146,11 @@ export default function SignupModal() {
                 onChange={handleInputChange}
                 placeholder="이메일"
                 required
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3  focus:border-sky-400 "
+                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
               />
+              {formErrors.email && (
+                <p className="text-red-500 text-sm">{formErrors.email}</p>
+              )}
             </div>
             <div className="space-y-2">
               <input
@@ -127,8 +161,11 @@ export default function SignupModal() {
                 onChange={handleInputChange}
                 placeholder="이름"
                 required
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3  focus:border-sky-400"
+                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
               />
+              {formErrors.userName && (
+                <p className="text-red-500 text-sm">{formErrors.userName}</p>
+              )}
             </div>
             <div className="space-y-2">
               <input
@@ -139,7 +176,7 @@ export default function SignupModal() {
                 onChange={handleInputChange}
                 placeholder="비밀번호"
                 required
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3  focus:border-sky-400"
+                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
               />
             </div>
             <div className="space-y-2">
@@ -151,7 +188,7 @@ export default function SignupModal() {
                 placeholder="아이디"
                 required
                 type="text"
-                className="w-80 bg-transparent text-white p-4 border border-gray-500 rounded-md focus:outline-none focus:border-3  focus:border-sky-400"
+                className="w-80 bg-transparent text-white p-4 border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
               />
             </div>
             <div className="space-y-2">
@@ -163,15 +200,15 @@ export default function SignupModal() {
                 placeholder="휴대폰"
                 required
                 type="text"
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3  focus:border-sky-400"
+                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
               />
             </div>
-            <div className="text-white font-semibold ">생년월일</div>
+            <div className="text-white font-semibold">생년월일</div>
             <div className="space-y-2">
               <div className="flex space-x-2">
                 {/* 월 */}
                 <select
-                  className="w-40 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3  focus:border-sky-400"
+                  className="w-40 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
                   id="month"
                   value={birthDate.month}
                   onChange={e => handleDateChange('month', e.target.value)}
@@ -189,7 +226,7 @@ export default function SignupModal() {
 
                 {/* 일 */}
                 <select
-                  className="w-1/8 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3  focus:border-sky-400 text-black"
+                  className="w-1/8 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3 focus:border-sky-400 text-black"
                   id="day"
                   value={birthDate.day}
                   onChange={e => handleDateChange('day', e.target.value)}
@@ -207,7 +244,7 @@ export default function SignupModal() {
 
                 {/* 년 */}
                 <select
-                  className="w-1/7 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3  focus:border-sky-400 text-black"
+                  className="w-1/7 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3 focus:border-sky-400 text-black"
                   id="year"
                   value={birthDate.year}
                   onChange={e => handleDateChange('year', e.target.value)}
