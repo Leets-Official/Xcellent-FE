@@ -1,10 +1,12 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import BackButton from '@/app/(route)/(afterLogin)/_component/BackButton';
 import Tab from './_component/Tab';
 import TabProvider from './_component/TabProvider';
 
 export default function Profile() {
+  const router = useRouter();
   const user = {
     userName: 'dahyeon',
     customId: 'hihello',
@@ -13,6 +15,9 @@ export default function Profile() {
     followers: 30,
   };
 
+  const onClickToEditProfileModal = () => {
+    router.push('/settings/profile');
+  };
   return (
     <TabProvider>
       <main className="w-[600px] border-l border-r border-gray-200 flex flex-col items-stretch">
@@ -26,7 +31,10 @@ export default function Profile() {
             alt={user.customId}
             className="bg-slate-300 absolute w-[150px] h-[150px] rounded-full top-[95%] -translate-y-1/2 left-4"
           />
-          <button className="absolute right-4 top-4 px-4 py-1 bg-black text-white border border-gray-600 rounded-full hover:bg-gray-700">
+          <button
+            onClick={onClickToEditProfileModal}
+            className="absolute right-4 top-4 px-4 py-1 bg-black text-white border border-gray-600 rounded-full hover:bg-gray-700"
+          >
             Edit profile
           </button>
         </div>
