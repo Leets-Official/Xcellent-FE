@@ -20,10 +20,10 @@ export default function Profile() {
   };
 
   const onClickToFollowing = () => {
-    router.push(`/${user.customId}/following`);
+    router.push(`/${user.userName}z/following`);
   };
   const onClickToFollowers = () => {
-    router.push(`/${user.customId}/followers`);
+    router.push(`/${user.userName}/followers`);
   };
 
   return (
@@ -53,12 +53,12 @@ export default function Profile() {
           </div>
           <div className="flex space-x-4 mt-2 text-sm text-gray-500">
             <div className="hover:underline cursor-pointer">
-              <span
+              <Link
                 onClick={onClickToFollowing}
                 className="font-bold text-white "
               >
                 {user.following}
-              </span>{' '}
+              </Link>{' '}
               Following
             </div>
             <div className="hover:underline cursor-pointer">
