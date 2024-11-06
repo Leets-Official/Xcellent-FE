@@ -42,9 +42,9 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <div className="text-white text-bold text-xl flex items-center justify-evenly">
-        <div>Posts</div>
-        <div>Likes</div>
+      <div className="text-white text-bold text-xl flex items-center justify-evenly  border-b-2 border-gray-600 pb-4">
+        <div className="hover:bg-gray-700">Posts</div>
+        <div className="hover:bg-gray-700">Likes</div>
       </div>
     </main>
   );
