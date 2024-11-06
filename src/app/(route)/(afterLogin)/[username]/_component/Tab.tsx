@@ -13,7 +13,7 @@ export default function Tab() {
     setTab('like');
   };
   return (
-    <main>
+    <main className="w-full">
       <div className="flex justify-around w-full bg-transparent">
         <div
           onClick={onClickPost}
