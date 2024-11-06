@@ -54,11 +54,12 @@ export default function SignupModal() {
       );
     }
   }, [birthDate.month, birthDate.year]);
-  const handleInputChange = e => {
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleDateChange = (type, value) => {
+  const handleDateChange = (type: string, value: string) => {
     setBirthDate(prevDate => ({ ...prevDate, [type]: value }));
     setFormData(prevData => ({
       ...prevData,
@@ -68,7 +69,7 @@ export default function SignupModal() {
       ),
     }));
   };
-  const handleSubmit = async e => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await SignUp(formData);
@@ -89,7 +90,9 @@ export default function SignupModal() {
           className=" bg-black rounded-xl p-6 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-xl"
         >
           <button
+            type="button"
             onClick={handleClose}
+            aria-label="닫기"
             className="hover:bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center"
           >
             <svg
