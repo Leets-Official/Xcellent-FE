@@ -40,6 +40,7 @@ export default function Profile() {
             className="bg-slate-300 absolute w-[150px] h-[150px] rounded-full top-[95%] -translate-y-1/2 left-4"
           />
           <button
+            type="button"
             onClick={onClickToEditProfileModal}
             className="absolute right-4 top-4 px-4 py-1 bg-black text-white border border-gray-600 rounded-full hover:bg-gray-700"
           >
@@ -53,12 +54,12 @@ export default function Profile() {
           </div>
           <div className="flex space-x-4 mt-2 text-sm text-gray-500">
             <div className="hover:underline cursor-pointer">
-              <Link
+              <span
                 onClick={onClickToFollowing}
                 className="font-bold text-white "
               >
                 {user.following}
-              </Link>{' '}
+              </span>{' '}
               Following
             </div>
             <div className="hover:underline cursor-pointer">
@@ -72,7 +73,7 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <Tab />
+        <Tab type="postsLikes" />
       </main>
     </TabProvider>
   );
