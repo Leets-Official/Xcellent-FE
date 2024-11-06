@@ -67,7 +67,9 @@ export default function LoginModal() {
           className="bg-black rounded-xl p-6 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-xl"
         >
           <button
+            type="button"
             onClick={handleClose}
+            aria-label="닫기"
             className="hover:bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center"
           >
             <svg
