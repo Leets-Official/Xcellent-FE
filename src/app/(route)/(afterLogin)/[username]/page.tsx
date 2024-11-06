@@ -20,7 +20,7 @@ export default function Profile() {
   };
 
   const onClickToFollowing = () => {
-    router.push(`/${user.userName}z/following`);
+    router.push(`/${user.userName}/following`);
   };
   const onClickToFollowers = () => {
     router.push(`/${user.userName}/followers`);
