@@ -18,6 +18,14 @@ export default function Profile() {
   const onClickToEditProfileModal = () => {
     router.push('/settings/profile');
   };
+
+  const onClickToFollowing = () => {
+    router.push(`/${user.customId}/following`);
+  };
+  const onClickToFollowers = () => {
+    router.push(`/${user.customId}/followers`);
+  };
+
   return (
     <TabProvider>
       <main className="w-[600px] border-l border-r border-gray-200 flex flex-col items-stretch">
@@ -44,12 +52,22 @@ export default function Profile() {
             <div className="text-sm text-gray-500">@{user.customId}</div>
           </div>
           <div className="flex space-x-4 mt-2 text-sm text-gray-500">
-            <div>
-              <span className="font-bold text-white">{user.following}</span>{' '}
+            <div className="hover:underline cursor-pointer">
+              <span
+                onClick={onClickToFollowing}
+                className="font-bold text-white "
+              >
+                {user.following}
+              </span>{' '}
               Following
             </div>
-            <div>
-              <span className="font-bold text-white">{user.followers}</span>{' '}
+            <div className="hover:underline cursor-pointer">
+              <span
+                onClick={onClickToFollowers}
+                className="font-bold text-white "
+              >
+                {user.followers}
+              </span>{' '}
               Followers
             </div>
           </div>
