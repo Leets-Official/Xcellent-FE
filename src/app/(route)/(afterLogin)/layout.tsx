@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
 
-export default async function AfterLoginLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return <div>{children}</div>;
+type Props = { children: ReactNode; modal: ReactNode };
+export default function AfterLoginLayout({ children, modal }: Props) {
+  return (
+    <div>
+      {children}
+      {modal}
+    </div>
+  );
 }
