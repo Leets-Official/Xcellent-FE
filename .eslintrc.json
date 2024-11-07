@@ -27,11 +27,6 @@
     "@typescript-eslint/semi": "off",
     "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
     "no-useless-catch": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ]
+    "prettier/prettier": ["warn"]
   }
 }

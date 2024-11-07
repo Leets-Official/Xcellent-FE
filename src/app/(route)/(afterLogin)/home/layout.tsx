@@ -1,13 +1,3 @@
-/*import { ReactNode } from 'react';
-
-export default async function HomeLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return <div>홈 레이아웃{children}</div>;
-}
-*/
 import { ReactNode } from 'react';
 import Image from 'next/image';
 import { AiFillHome } from 'react-icons/ai';
@@ -102,7 +92,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
                 <Image
-                  src="/profile-placeholder.png"
+                  src="public/profile.svg"
                   alt="Profile"
                   width={40}
                   height={40}

@@ -54,21 +54,23 @@ export default function Profile() {
           </div>
           <div className="flex space-x-4 mt-2 text-sm text-gray-500">
             <div className="hover:underline cursor-pointer">
-              <span
+              <button
+                type="button"
                 onClick={onClickToFollowing}
                 className="font-bold text-white "
               >
                 {user.following}
-              </span>{' '}
+              </button>{' '}
               Following
             </div>
             <div className="hover:underline cursor-pointer">
-              <span
+              <button
+                type="button"
                 onClick={onClickToFollowers}
                 className="font-bold text-white "
               >
                 {user.followers}
-              </span>{' '}
+              </button>{' '}
               Followers
             </div>
           </div>
