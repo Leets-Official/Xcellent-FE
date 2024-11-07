@@ -318,7 +318,9 @@ const Home: React.FC = () => {
       </aside>
 
       <PostModal
-        isOpen={isModalOpen}
+        isOpen={isModalOpen} 
+/*Type '{ isOpen: boolean; onClose: () => void; onSubmit: (content: string) => void; }' is not assignable to type 'IntrinsicAttributes & PostModalProps'.
+  Property 'isOpen' does not exist on type 'IntrinsicAttributes & PostModalProps'.ts(2322) 오류 발생*/
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleModalPostSubmit}
       />
