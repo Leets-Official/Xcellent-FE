@@ -1,4 +1,4 @@
-'use client';
+/*'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -66,4 +66,5 @@ const PostModal: React.FC<PostModalProps> = ({ onSubmit }) => {
   );
 };
 
-export default PostModal;
+export default PostModal;*/ 
+Xcellent-FE\src\app\(route)\(afterLogin)\_component\PostModal.tsx로 새로 생성
