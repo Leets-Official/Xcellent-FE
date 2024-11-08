@@ -2,38 +2,103 @@
 
 import { ReactNode, useState } from 'react';
 import Sidebar from '@/app/(route)/(afterLogin)/_component/Sidebar';
+import PostModal from '@/app/(route)/(afterLogin)/_component/PostModal'; // 모달 컴포넌트 임포트
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import HomePage from '@/app/(route)/(afterLogin)/home/page'; // page.tsx 임포트
+
+// Post와 Comment 인터페이스 정의
+interface Comment {
+  id: number;
+  content: string;
+  author: string;
+  authorImage: string;
+  createdAt: string;
+}
+
+interface Post {
+  id: number;
+  author: string;
+  authorImage: string;
+  content: string;
+  images: string[];
+  likes: number;
+  retweets: number;
+  comments: Comment[];
+  isLiked: boolean;
+}
 
 interface HomeLayoutProps {
   children: ReactNode;
 }
 
 const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [postContent, setPostContent] = useState('');
+  // 사용자 ID 설정
+  const me = { id: 'dahyeon' };
 
-  // 임시 사용자 데이터 설정
-  const me = { id: 'dahyeon' }; // 사용자 ID
+  // 모달 상태 및 게시물 상태 관리
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const handlePostButtonClick = () => {
-    setIsModalOpen(true);
+    setIsModalOpen(true); // 모달 열기
   };
 
-  const handleCloseModal = () => {
+  // 새로운 게시물 추가 함수 (PostModal과 page.tsx 모두 이 함수를 사용)
+  const handlePostSubmit = (post: Post) => {
+    const newPost = {
+      id: posts.length + 1,
+      author: 'Myself',
+      authorImage: '/profile-placeholder.png',
+      content: post.content,
+      images: post.images,
+      likes: 0,
+      retweets: 0,
+      comments: [],
+      isLiked: false,
+    };
+    setPosts([newPost, ...posts]); // 새 게시물을 기존 게시물 목록 앞에 추가
     setIsModalOpen(false);
   };
-
-  const handlePostContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPostContent(e.target.value);
+  // 좋아요 토글 함수
+  const handleLike = (id: number) => {
+    setPosts(
+      posts.map(post =>
+        post.id === id
+          ? {
+              ...post,
+              isLiked: !post.isLiked,
+              likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+            }
+          : post,
+      ),
+    );
   };
 
-  const handlePostSubmit = () => {
-    if (postContent.trim()) {
-      console.log('게시글 작성:', postContent);
-      setPostContent('');
-      setIsModalOpen(false);
-    }
+  // 리트윗 함수
+  const handleRetweet = (id: number) => {
+    setPosts(
+      posts.map(post =>
+        post.id === id ? { ...post, retweets: post.retweets + 1 } : post,
+      ),
+    );
+  };
+
+  // 댓글 추가 함수
+  const handleCommentSubmit = (postId: number, commentContent: string) => {
+    const newComment = {
+      id: Date.now(),
+      content: commentContent,
+      author: 'Myself',
+      authorImage: '/profile-placeholder.png',
+      createdAt: new Date().toISOString(),
+    };
+    setPosts(
+      posts.map(post =>
+        post.id === postId
+          ? { ...post, comments: [...post.comments, newComment] }
+          : post,
+      ),
+    );
   };
 
   return (
@@ -44,42 +109,23 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
         <Link href={`/${me.id}`} legacyBehavior>
           <a className="text-blue-500 hover:underline">프로필</a>
         </Link>
-        {children}
+
+        {/* page.tsx에 posts 전달 및 이벤트 핸들러 전달 */}
+        <HomePage
+          posts={posts}
+          onLike={handleLike}
+          onRetweet={handleRetweet}
+          onCommentSubmit={handleCommentSubmit}
+          onPostSubmit={handlePostSubmit}
+        />
+
+        {/* 게시글 작성 모달 */}
+        <PostModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onPostSubmit={handlePostSubmit}
+        />
       </main>
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white text-black p-6 rounded-lg w-96">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">게시글 작성</h2>
-              <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
-            </div>
-            <textarea
-              className="w-full h-32 p-2 border border-gray-300 rounded mb-4"
-              placeholder="무슨 일이 일어나고 있나요?"
-              value={postContent}
-              onChange={handlePostContentChange}
-            />
-            <div className="flex justify-end">
-              <button
-                onClick={handleCloseModal}
-                className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded mr-2"
-              >
-                닫기
-              </button>
-              <button
-                onClick={handlePostSubmit}
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-              >
-                게시하기
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
