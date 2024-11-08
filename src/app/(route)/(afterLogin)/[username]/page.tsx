@@ -1,29 +1,17 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import BackButton from '@/app/(route)/(afterLogin)/_component/BackButton';
 import Tab from './_component/Tab';
 import TabProvider from './_component/TabProvider';
 
 export default function Profile() {
-  const router = useRouter();
   const user = {
     userName: 'dahyeon',
     customId: 'hihello',
     image: '/profile.svg',
     following: 10,
     followers: 30,
-  };
-
-  const onClickToEditProfileModal = () => {
-    router.push('/settings/profile');
-  };
-
-  const onClickToFollowing = () => {
-    router.push(`/${user.userName}/following`);
-  };
-  const onClickToFollowers = () => {
-    router.push(`/${user.userName}/followers`);
   };
 
   return (
@@ -39,13 +27,12 @@ export default function Profile() {
             alt={user.customId}
             className="bg-slate-300 absolute w-[150px] h-[150px] rounded-full top-[95%] -translate-y-1/2 left-4"
           />
-          <button
-            type="button"
-            onClick={onClickToEditProfileModal}
+          <Link
+            href="/settings/profile"
             className="absolute right-4 top-4 px-4 py-1 bg-black text-white border border-gray-600 rounded-full hover:bg-gray-700"
           >
             Edit profile
-          </button>
+          </Link>
         </div>
         <div className="p-4 pt-16">
           <div className="flex flex-col mt-4">
@@ -54,24 +41,20 @@ export default function Profile() {
           </div>
           <div className="flex space-x-4 mt-2 text-sm text-gray-500">
             <div className="hover:underline cursor-pointer">
-              <button
-                type="button"
-                onClick={onClickToFollowing}
-                className="font-bold text-white "
+              <Link
+                href={`/${user.userName}/following`}
+                className="hover:underline cursor-pointer font-bold text-white"
               >
-                {user.following}
-              </button>{' '}
-              Following
-            </div>
-            <div className="hover:underline cursor-pointer">
-              <button
-                type="button"
-                onClick={onClickToFollowers}
-                className="font-bold text-white "
+                {user.following} Following
+              </Link>
+
+              {/* Followers Link */}
+              <Link
+                href={`/${user.userName}/followers`}
+                className="hover:underline cursor-pointer font-bold text-white"
               >
-                {user.followers}
-              </button>{' '}
-              Followers
+                {user.followers} Followers
+              </Link>
             </div>
           </div>
         </div>
