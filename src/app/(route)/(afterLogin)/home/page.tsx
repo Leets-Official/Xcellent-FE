@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import PostModal from "./PostModal";
+import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 interface Post {
   id: number;
@@ -24,13 +23,17 @@ interface Comment {
   createdAt: string;
 }
 
-const Home: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [newPost, setNewPost] = useState<string>("");
+const Home: React.FC<{
+  posts: Post[];
+  onPostSubmit: (post: Post) => void;
+  onLike: (id: number) => void;
+  onRetweet: (id: number) => void;
+  onCommentSubmit: (postId: number, commentContent: string) => void;
+}> = ({ posts, onPostSubmit, onLike, onRetweet, onCommentSubmit }) => {
+  const [newPost, setNewPost] = useState<string>('');
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [showComments, setShowComments] = useState<number | null>(null);
-  const [newComment, setNewComment] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newComment, setNewComment] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -41,18 +44,21 @@ const Home: React.FC = () => {
 
   const handleResize = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + 'px';
     }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && selectedImages.length + files.length <= 4) {
-      const newImages = Array.from(files).map(file => URL.createObjectURL(file));
+      const newImages = Array.from(files).map(file =>
+        URL.createObjectURL(file),
+      );
       setSelectedImages(prev => [...prev, ...newImages]);
     } else {
-      alert("이미지는 최대 4개까지만 업로드할 수 있습니다.");
+      alert('이미지는 최대 4개까지만 업로드할 수 있습니다.');
     }
   };
 
@@ -64,8 +70,8 @@ const Home: React.FC = () => {
     if (newPost.trim() || selectedImages.length > 0) {
       const post: Post = {
         id: posts.length + 1,
-        author: "Myself",
-        authorImage: "/profile-placeholder.png",
+        author: 'Myself',
+        authorImage: '/profile-placeholder.png',
         content: newPost,
         images: selectedImages,
         likes: 0,
@@ -73,74 +79,22 @@ const Home: React.FC = () => {
         comments: [],
         isLiked: false,
       };
-      setPosts((prevPosts) => [...prevPosts, post].sort((a, b) => b.likes - a.likes));
-      setNewPost("");
+      onPostSubmit(post); // 새로운 게시물을 상위 컴포넌트로 전달
+      setNewPost('');
       setSelectedImages([]);
     }
   };
 
-  const handleModalPostSubmit = (content: string) => {
-    const post: Post = {
-      id: posts.length + 1,
-      author: "Myself",
-      authorImage: "/profile-placeholder.png",
-      content: content,
-      images: [],
-      likes: 0,
-      retweets: 0,
-      comments: [],
-      isLiked: false,
-    };
-    setPosts((prevPosts) => [...prevPosts, post].sort((a, b) => b.likes - a.likes));
-  };
-
   const handleLike = (id: number) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === id ? { ...post, isLiked: !post.isLiked, likes: post.likes + (post.isLiked ? -1 : 1) } : post
-      )
-    );
+    // Handle like logic here
   };
 
   const handleRetweet = (id: number) => {
-    setPosts((prevPosts) => {
-      const postToRetweet = prevPosts.find((post) => post.id === id);
-      if (postToRetweet) {
-        const updatedPosts = prevPosts.map((post) =>
-          post.id === id ? { ...post, retweets: post.retweets + 1 } : post
-        );
-        return [
-          ...updatedPosts,
-          { ...postToRetweet, id: prevPosts.length + 1, author: "Myself" },
-        ].sort((a, b) => b.likes - a.likes);
-      }
-      return prevPosts;
-    });
+    // Handle retweet logic here
   };
 
   const handleComment = (postId: number) => {
-    if (newComment.trim()) {
-      setPosts((prevPosts) =>
-        prevPosts.map((post) =>
-          post.id === postId
-            ? {
-                ...post,
-                comments: [
-                  ...post.comments,
-                  {
-                    id: post.comments.length + 1,
-                    author: "Myself",
-                    authorImage: "/profile-placeholder.png",
-                    content: newComment,
-                    createdAt: new Date().toISOString(),
-                  },
-                ],
-              }
-            : post
-        )
-      );
-      setNewComment("");
-    }
+    // Handle comment logic here
   };
 
   const sortedPosts = [...posts].sort((a, b) => b.likes - a.likes);
@@ -161,7 +115,7 @@ const Home: React.FC = () => {
               <textarea
                 ref={textareaRef}
                 value={newPost}
-                onChange={(e) => setNewPost(e.target.value)}
+                onChange={e => setNewPost(e.target.value)}
                 onInput={handleResize}
                 placeholder="무슨 일이 일어나고 있나요?"
                 className="w-full p-2 bg-black text-white border border-gray-700 rounded-md mb-2 min-h-[100px] resize-none"
@@ -202,7 +156,7 @@ const Home: React.FC = () => {
                 >
                   🖼️ 이미지 추가
                 </label>
-                <button 
+                <button
                   onClick={handlePost}
                   className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-6 font-semibold"
                 >
@@ -212,8 +166,11 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
-        {sortedPosts.map((post) => (
-          <div key={post.id} className="bg-black border border-gray-700 p-4 rounded-lg mb-4 max-w-xl mx-auto">
+        {sortedPosts.map(post => (
+          <div
+            key={post.id}
+            className="bg-black border border-gray-700 p-4 rounded-lg mb-4 max-w-xl mx-auto"
+          >
             <div className="flex items-start space-x-3">
               <Image
                 src={post.authorImage}
@@ -241,19 +198,22 @@ const Home: React.FC = () => {
                 )}
                 <div className="flex items-center mt-4 space-x-4 text-gray-500">
                   <button
-                    onClick={() => handleLike(post.id)}
-                    className={`flex items-center hover:text-red-500 ${post.isLiked ? "text-red-500" : "text-gray-500"}`}
+                    onClick={() => onLike(post.id)}
+                    className={`flex items-center hover:text-red-500 ${post.isLiked ? 'text-red-500' : 'text-gray-500'}`}
                   >
-                    {post.isLiked ? "❤️" : "♡"} <span className="ml-1">{post.likes}</span>
+                    {post.isLiked ? '❤️' : '♡'}{' '}
+                    <span className="ml-1">{post.likes}</span>
                   </button>
                   <button
-                    onClick={() => handleRetweet(post.id)}
+                    onClick={() => onRetweet(post.id)}
                     className="text-gray-500 hover:text-blue-500 flex items-center"
                   >
                     🔁 <span className="ml-1">{post.retweets}</span>
                   </button>
-                  <button 
-                    onClick={() => setShowComments(showComments === post.id ? null : post.id)}
+                  <button
+                    onClick={() =>
+                      setShowComments(showComments === post.id ? null : post.id)
+                    }
                     className="text-gray-500 hover:text-blue-500 flex items-center"
                   >
                     💬 <span className="ml-1">{post.comments.length}</span>
@@ -272,20 +232,23 @@ const Home: React.FC = () => {
                       <div className="flex-1">
                         <textarea
                           value={newComment}
-                          onChange={(e) => setNewComment(e.target.value)}
+                          onChange={e => setNewComment(e.target.value)}
                           placeholder="댓글을 입력하세요..."
                           className="w-full p-2 bg-black text-white border border-gray-700 rounded-md mb-2"
                         />
                         <button
-                          onClick={() => handleComment(post.id)}
+                          onClick={() => onCommentSubmit(post.id, newComment)}
                           className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-1 px-4 text-sm"
                         >
                           댓글 작성
                         </button>
                       </div>
                     </div>
-                    {post.comments.map((comment) => (
-                      <div key={comment.id} className="flex items-start space-x-2">
+                    {post.comments.map(comment => (
+                      <div
+                        key={comment.id}
+                        className="flex items-start space-x-2"
+                      >
                         <Image
                           src={comment.authorImage}
                           alt={comment.author}
@@ -306,24 +269,6 @@ const Home: React.FC = () => {
           </div>
         ))}
       </main>
-
-      <aside className="w-1/4 p-4 hidden md:block">
-        <div className="bg-black border border-gray-700 p-4 rounded-lg">
-          <input
-            type="text"
-            placeholder="검색하기"
-            className="w-full p-2 bg-black text-white border border-gray-700 rounded-md"
-          />
-        </div>
-      </aside>
-
-      <PostModal
-        isOpen={isModalOpen} 
-/*Type '{ isOpen: boolean; onClose: () => void; onSubmit: (content: string) => void; }' is not assignable to type 'IntrinsicAttributes & PostModalProps'.
-  Property 'isOpen' does not exist on type 'IntrinsicAttributes & PostModalProps'.ts(2322) 오류 발생*/
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleModalPostSubmit}
-      />
     </div>
   );
 };
