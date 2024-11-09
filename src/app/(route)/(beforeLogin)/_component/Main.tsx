@@ -16,11 +16,13 @@ export default function Home() {
           </g>
         </svg>
       </div>
-      <div className="flex flex-1 flex-col justify-center font-bold ">
-        <h1 className="text-6xl font-bold text-white  mb-12">
+      <div className="flex flex-1 flex-col justify-center font-bold">
+        <div className="text-6xl font-bold text-white mb-12">
           지금 일어나고 있는 일
-        </h1>
-        <h2 className="text-4xl font-bold text-white mb-8">지금 가입하세요.</h2>
+        </div>
+        <div className="text-4xl font-bold text-white mb-8">
+          지금 가입하세요.
+        </div>
 
         <Link
           href="/i/flow/signup"
@@ -32,10 +34,10 @@ export default function Home() {
           가입하시려면 쿠키 사용을 포함해 이용약관과 개인정보 처리
           <br /> 방침에 동의해야 합니다.
         </p>
-        <h3 className="text-white mb-5">이미 트위터에 가입하셨나요?</h3>
+        <div className="text-white mb-5">이미 트위터에 가입하셨나요?</div>
         <Link
           href="/login"
-          className="border-solid border-2 border-sky-500 rounded-3xl text-sky-500 text-center font-bold  px-5 py-2 w-64 h-10 me-5"
+          className="border-solid border-2 border-sky-500 rounded-3xl text-sky-500 text-center font-bold px-5 py-2 w-64 h-10 me-5"
         >
           로그인
         </Link>
