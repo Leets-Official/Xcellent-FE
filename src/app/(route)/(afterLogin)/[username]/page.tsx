@@ -44,12 +44,13 @@ export default function Profile() {
             <div className="text-sm text-gray-500">@{user.customId}</div>
           </div>
           <div className="flex space-x-4 mt-2 text-sm text-gray-500">
-            <div className="hover:underline cursor-pointer">
+            <div className="flex flex-row gap-8">
               <Link
                 href={`/${user.userName}/following`}
                 className="hover:underline cursor-pointer font-bold text-white"
               >
-                {user.following} Following
+                {user.following}{' '}
+                <span className="text-sm text-gray-500">Following</span>
               </Link>
 
               {/* Followers Link */}
@@ -57,7 +58,8 @@ export default function Profile() {
                 href={`/${user.userName}/followers`}
                 className="hover:underline cursor-pointer font-bold text-white"
               >
-                {user.followers} Followers
+                {user.followers}{' '}
+                <span className="text-sm text-gray-500">Followers</span>
               </Link>
             </div>
           </div>
