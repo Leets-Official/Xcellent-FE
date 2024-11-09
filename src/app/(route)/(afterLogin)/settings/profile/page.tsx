@@ -1,5 +1,5 @@
-import Profile from '@/app/(route)/(afterLogin)/[username]/page';
+import EditProfileModal from '@/app/(route)/(afterLogin)/_component/EditProfileModal';
 
 export default function Page() {
-  return <Profile />;
+  return <EditProfileModal />;
 }
