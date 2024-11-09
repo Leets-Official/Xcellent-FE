@@ -43,40 +43,67 @@ export default function SignupModal() {
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
   useEffect(() => {
-    const { month, year } = birthDate;
-
-    if (month) {
-      const getDaysInMonth = (month: number, year: number) => {
-        if (month === 2) {
-          return 29;
-        }
-        if ([4, 6, 9, 11].includes(month)) return 30;
-
-        return 31;
-      };
-
-      setDays(
-        Array.from({ length: getDaysInMonth(month, year) }, (_, i) => i + 1),
-      );
-    }
+    const getDaysInMonth = (month: number, year: number) => {
+      if (month === 2) return year % 4 === 0 ? 29 : 28;
+      if ([4, 6, 9, 11].includes(month)) return 30;
+      return 31;
+    };
+    setDays(
+      Array.from(
+        { length: getDaysInMonth(birthDate.month, birthDate.year) },
+        (_, i) => i + 1,
+      ),
+    );
   }, [birthDate.month, birthDate.year]);
+
+  const inputFields = [
+    {
+      id: 'email',
+      name: 'email',
+      type: 'text',
+      placeholder: '이메일',
+      error: formErrors.email,
+      regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      errorMessage: '올바른 이메일 형식을 입력하세요.',
+    },
+    {
+      id: 'userName',
+      name: 'userName',
+      type: 'text',
+      placeholder: '이름',
+      error: formErrors.userName,
+      regex: /^[A-Za-z]+$/,
+      errorMessage: '이름은 영문으로 입력해주세요.',
+    },
+    {
+      id: 'password',
+      name: 'password',
+      type: 'password',
+      placeholder: '비밀번호',
+    },
+    {
+      id: 'customId',
+      name: 'customId',
+      type: 'text',
+      placeholder: '아이디',
+    },
+    {
+      id: 'phoneNumber',
+      name: 'phoneNumber',
+      type: 'text',
+      placeholder: '휴대폰',
+    },
+  ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    if (name === 'email') {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const field = inputFields.find(f => f.name === name);
+    if (field?.regex) {
       setFormErrors({
         ...formErrors,
-        email: emailRegex.test(value) ? '' : '올바른 이메일 형식을 입력하세요.',
-      });
-    }
-    if (name === 'userName') {
-      const nameRegex = /^[A-Za-z]+$/;
-      setFormErrors({
-        ...formErrors,
-        userName: nameRegex.test(value) ? '' : '이름은 영문으로 입력해주세요.',
+        [name]: field.regex.test(value) ? '' : field.errorMessage,
       });
     }
   };
@@ -137,133 +164,74 @@ export default function SignupModal() {
           </button>
           <div className="flex flex-col justify-center items-center gap-5">
             <p className="text-white text-3xl font-bold">계정을 생성하세요</p>
-            <div className="space-y-2">
-              <input
-                id="email"
-                name="email"
-                type="text"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="이메일"
-                required
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
-              />
-              {formErrors.email && (
-                <p className="text-red-500 text-sm">{formErrors.email}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <input
-                id="userName"
-                name="userName"
-                type="text"
-                value={formData.userName}
-                onChange={handleInputChange}
-                placeholder="이름"
-                required
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
-              />
-              {formErrors.userName && (
-                <p className="text-red-500 text-sm">{formErrors.userName}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="비밀번호"
-                required
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
-              />
-            </div>
-            <div className="space-y-2">
-              <input
-                id="customId"
-                name="customId"
-                value={formData.customId}
-                onChange={handleInputChange}
-                placeholder="아이디"
-                required
-                type="text"
-                className="w-80 bg-transparent text-white p-4 border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
-              />
-            </div>
-            <div className="space-y-2">
-              <input
-                id="phoneNumber"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleInputChange}
-                placeholder="휴대폰"
-                required
-                type="text"
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
-              />
-            </div>
-            <div className="text-white font-semibold">생년월일</div>
-            <div className="space-y-2">
-              <div className="flex space-x-2">
-                {/* 월 */}
-                <select
-                  className="w-40 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
-                  id="month"
-                  value={birthDate.month}
-                  onChange={e => handleDateChange('month', e.target.value)}
+            {inputFields.map(field => (
+              <div key={field.id} className="space-y-2">
+                <input
+                  id={field.id}
+                  name={field.name}
+                  type={field.type}
+                  value={formData[field.name as keyof typeof formData]}
+                  onChange={handleInputChange}
+                  placeholder={field.placeholder}
                   required
-                >
-                  <option value="" className="bg-black">
-                    월
-                  </option>
-                  {months.map(m => (
-                    <option key={m} value={m} className="bg-black">
-                      {m}
-                    </option>
-                  ))}
-                </select>
-
-                {/* 일 */}
-                <select
-                  className="w-1/8 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3 focus:border-sky-400 text-black"
-                  id="day"
-                  value={birthDate.day}
-                  onChange={e => handleDateChange('day', e.target.value)}
-                  required
-                >
-                  <option value="" className="bg-black">
-                    일
-                  </option>
-                  {days.map(d => (
-                    <option key={d} value={d} className="bg-black">
-                      {d}
-                    </option>
-                  ))}
-                </select>
-
-                {/* 년 */}
-                <select
-                  className="w-1/7 p-4 bg-transparent text-white border border-gray-300 rounded-md focus:outline-none focus:border-3 focus:border-sky-400 text-black"
-                  id="year"
-                  value={birthDate.year}
-                  onChange={e => handleDateChange('year', e.target.value)}
-                  required
-                >
-                  <option value="" className="bg-black">
-                    년
-                  </option>
-                  {years.map(y => (
-                    <option key={y} value={y} className="bg-black">
-                      {y}
-                    </option>
-                  ))}
-                </select>
+                  className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
+                />
+                {field.error && (
+                  <p className="text-red-500 text-sm">{field.error}</p>
+                )}
               </div>
+            ))}
+            <div className="text-white font-semibold">생년월일</div>
+            <div className="flex space-x-2">
+              <select
+                className="w-40 p-4 bg-transparent text-white border border-gray-300 rounded-md"
+                value={birthDate.month}
+                onChange={e => handleDateChange('month', e.target.value)}
+                required
+              >
+                <option value="" className="bg-black">
+                  월
+                </option>
+                {months.map(m => (
+                  <option key={m} value={m} className="bg-black">
+                    {m}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="w-1/8 p-4 bg-transparent text-white border border-gray-300 rounded-md"
+                value={birthDate.day}
+                onChange={e => handleDateChange('day', e.target.value)}
+                required
+              >
+                <option value="" className="bg-black">
+                  일
+                </option>
+                {days.map(d => (
+                  <option key={d} value={d} className="bg-black">
+                    {d}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="w-1/7 p-4 bg-transparent text-white border border-gray-300 rounded-md"
+                value={birthDate.year}
+                onChange={e => handleDateChange('year', e.target.value)}
+                required
+              >
+                <option value="" className="bg-black">
+                  년
+                </option>
+                {years.map(y => (
+                  <option key={y} value={y} className="bg-black">
+                    {y}
+                  </option>
+                ))}
+              </select>
             </div>
             <button
               type="submit"
-              className="w-1/2 p-4 bg-white text-black rounded-full hover:bg-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="w-1/2 p-4 bg-white text-black rounded-full hover:bg-zinc-300"
             >
               가입하기
             </button>
