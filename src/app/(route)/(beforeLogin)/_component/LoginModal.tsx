@@ -19,6 +19,20 @@ export default function LoginModal() {
     router.back();
   };
 
+  const inputFields = [
+    {
+      id: 'email',
+      name: 'email',
+      type: 'text',
+      placeholder: '이메일',
+    },
+    {
+      id: 'password',
+      name: 'password',
+      type: 'password',
+      placeholder: '비밀번호',
+    },
+  ];
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(data => ({
@@ -86,30 +100,21 @@ export default function LoginModal() {
           </button>
           <div className="flex flex-col justify-center items-center gap-5">
             <p className="text-white text-3xl font-bold">로그인하세요</p>
-            <div className="space-y-2">
-              <input
-                id="email"
-                name="email"
-                type="text"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="이메일"
-                required
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
-              />
-            </div>
-            <div className="space-y-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="비밀번호"
-                required
-                className="w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
-              />
-            </div>
+            {inputFields.map(field => (
+              <div key={field.id} className="space-y-2">
+                <input
+                  id={field.id}
+                  name={field.name}
+                  type={field.type}
+                  value={formData[field.name as keyof typeof formData]}
+                  onChange={handleChange}
+                  placeholder={field.placeholder}
+                  required
+                  className='"w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
+'
+                />
+              </div>
+            ))}
             {message && <p className="text-red-500 text-sm">{message}</p>}
             <button
               type="submit"
