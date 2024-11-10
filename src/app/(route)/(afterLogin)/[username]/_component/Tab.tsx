@@ -70,30 +70,34 @@ export default function Tab({ type, userName }: TabProps) {
         )}
         {type === 'followersFollowing' && (
           <>
-            <button
-              type="button"
-              onClick={onClickFollowers}
-              className={`px-4 py-2 ${
-                tab === 'followers' ? 'text-white font-bold' : 'text-gray-500'
-              } relative hover:bg-gray-800`}
-            >
-              Followers
-              {tab === 'followers' && (
-                <span className="absolute bottom-0 left-0 w-full h-1 bg-sky-500 rounded-full" />
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={onClickFollowing}
-              className={`px-4 py-2 ${
-                tab === 'following' ? 'text-white font-bold' : 'text-gray-500'
-              } relative hover:bg-gray-800`}
-            >
-              Following
-              {tab === 'following' && (
-                <span className="absolute bottom-0 left-0 w-full h-1 bg-sky-500 rounded-full" />
-              )}
-            </button>
+            <div className="text-center hover:bg-slate-800 w-1/2">
+              <button
+                type="button"
+                onClick={onClickFollowers}
+                className={`px-4 py-2 ${
+                  tab === 'followers' ? 'text-white font-bold' : 'text-gray-500'
+                } relative hover:bg-gray-800`}
+              >
+                Followers
+                {tab === 'followers' && (
+                  <span className="absolute bottom-0 left-0 w-full h-1 bg-sky-500 rounded-full" />
+                )}
+              </button>
+            </div>
+            <div className="text-center hover:bg-slate-800 w-1/2">
+              <button
+                type="button"
+                onClick={onClickFollowing}
+                className={`px-4 py-2 ${
+                  tab === 'following' ? 'text-white font-bold' : 'text-gray-500'
+                } relative hover:bg-gray-800`}
+              >
+                Following
+                {tab === 'following' && (
+                  <span className="absolute bottom-0 left-0 w-full h-1 bg-sky-500 rounded-full" />
+                )}
+              </button>
+            </div>
           </>
         )}
       </div>
