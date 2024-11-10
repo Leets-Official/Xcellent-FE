@@ -1,20 +1,15 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
 import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
+import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
 
-export default function Followers() {
+export default function FollowersPage() {
   return (
     <TabProvider>
-      <main className="w-[600px] mx-auto">
-        <h1 className="text-xl font-bold text-white mb-4">Followers</h1>
-        <Tab type="followersFollowing" />
-        <div className="mt-4">
-          <div className="text-white">Followers</div>
-        </div>
-      </main>
+      <Tab type="followersFollowing" userName="dahyeon" />
+      <div className="p-4">
+        <div className="text-white">팔로워 목록 </div>
+      </div>
     </TabProvider>
   );
 }

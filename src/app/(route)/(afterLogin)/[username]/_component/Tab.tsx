@@ -1,19 +1,37 @@
 import { useContext } from 'react';
+import { useRouter } from 'next/navigation';
 import { TabContext } from './TabProvider';
 
 type TabType = 'postsLikes' | 'followersFollowing';
 
 type TabProps = {
   type: TabType;
+  userName: string;
 };
 
-export default function Tab({ type }: TabProps) {
+export default function Tab({ type, userName }: TabProps) {
   const { tab, setTab } = useContext(TabContext);
+  const router = useRouter();
 
-  const onClickPost = () => setTab('post');
-  const onClickLike = () => setTab('like');
-  const onClickFollowers = () => setTab('followers');
-  const onClickFollowing = () => setTab('following');
+  const onClickPost = () => {
+    setTab('post');
+    router.push(`/${userName}`);
+  };
+
+  const onClickLike = () => {
+    setTab('like');
+    router.push(`/${userName}`);
+  };
+
+  const onClickFollowers = () => {
+    setTab('followers');
+    router.push(`/${userName}/followers`);
+  };
+
+  const onClickFollowing = () => {
+    setTab('following');
+    router.push(`/${userName}/following`);
+  };
 
   return (
     <main>

@@ -23,7 +23,7 @@ export default function ProfilePage() {
             alt={user.customId}
             width={150}
             height={150}
-            className="rounded-full"
+            className="bg-slate-300 w-[150px] h-[150px] rounded-full"
           />
           <Link href="/settings/profile">
             <button
@@ -38,25 +38,24 @@ export default function ProfilePage() {
           <div className="text-white font-bold text-xl">{user.userName}</div>
           <div className="text-sm text-gray-500">@{user.customId}</div>
         </div>
-        <div className="flex space-x-4 mt-2">
-          <Link
-            href={`/${user.userName}/following`}
-            className="font-bold text-white"
-          >
-            {user.following}{' '}
-            <span className="text-sm text-gray-500">Following</span>
-          </Link>
+        <div className="flex flex-row gap-8">
           <Link
             href={`/${user.userName}/followers`}
-            className="font-bold text-white"
+            className="hover:underline cursor-pointer font-bold text-white"
           >
             {user.followers}{' '}
             <span className="text-sm text-gray-500">Followers</span>
           </Link>
+          <Link
+            href={`/${user.userName}/following`}
+            className="hover:underline cursor-pointer font-bold text-white"
+          >
+            {user.following}{' '}
+            <span className="text-sm text-gray-500">Following</span>
+          </Link>
         </div>
 
-        {/* 탭 컴포넌트 */}
-        <Tab type="postsLikes" />
+        <Tab type="postsLikes" userName={user.userName} />
       </div>
     </TabProvider>
   );

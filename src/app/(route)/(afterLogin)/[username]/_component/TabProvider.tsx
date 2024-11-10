@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode, useEffect } from 'react';
+import { useSelectedLayoutSegment } from 'next/navigation';
 
 type TabType = 'post' | 'like' | 'followers' | 'following';
 
@@ -15,8 +16,22 @@ export const TabContext = createContext<TabContextType>({
 });
 
 type Props = { children: ReactNode };
+
 export default function TabProvider({ children }: Props) {
+  const segment = useSelectedLayoutSegment();
   const [tab, setTab] = useState<TabType>('post');
+
+  useEffect(() => {
+    if (segment === 'followers') {
+      setTab('followers');
+    } else if (segment === 'following') {
+      setTab('following');
+    } else if (segment === 'like') {
+      setTab('like');
+    } else {
+      setTab('post');
+    }
+  }, [segment]);
 
   return (
     <TabContext.Provider value={{ tab, setTab }}>
