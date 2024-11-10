@@ -1,15 +1,36 @@
 'use client';
-
 import { useSelectedLayoutSegment } from 'next/navigation';
+
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
+import { getProfileInfo } from '@/app/api/auth/auth';
 
 type Props = { children: ReactNode; modal: ReactNode };
 export default function AfterLoginLayout({ children, modal }: Props) {
   const segment = useSelectedLayoutSegment();
-  const me = {
-    id: 'dahyeon', // 임시 사용자 ID
-  };
+  // const me = {
+  //   id: 'dahyeon', // 임시 사용자 ID
+  // };
+  const [userName, setUserName] = useState<string>('');
+  const [customId, setCustomId] = useState<string>('');
+  const [profileImage, setProfileImage] = useState<string>('/profile.svg');
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userInfo = await getProfileInfo();
+        setUserName(userInfo.userName);
+        setCustomId(userInfo.customId);
+        if (userInfo.profileImageUrl) {
+          setProfileImage(userInfo.profileImageUrl);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user info: ', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-black text-white">
@@ -76,17 +97,16 @@ export default function AfterLoginLayout({ children, modal }: Props) {
                   </div>
                 </Link>
               </li>
-              {me?.id && (
-                <li>
-                  <Link href={`/${me?.id}`}>
-                    <div
-                      className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === me.id ? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
-                    >
-                      <span>프로필</span>
-                    </div>
-                  </Link>
-                </li>
-              )}
+
+              <li>
+                <Link href={`/${userName}`}>
+                  <div
+                    className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === `${userName}`}? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
+                  >
+                    <span>프로필</span>
+                  </div>
+                </Link>
+              </li>
             </ul>
           </nav>
 
