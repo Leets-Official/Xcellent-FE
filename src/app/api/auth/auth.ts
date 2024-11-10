@@ -60,16 +60,31 @@ export const Login = async (data: LoginData): Promise<any> => {
 };
 
 export const getProfileInfo = async (): Promise<ProfileData> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/myinfo`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  );
+  try {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('AccessToken 이 존재하지 않습니다. 로그인해주세요');
+    }
 
-  const data = await res.json();
-  return data.result;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/myinfo`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data.result;
+  } catch (error) {
+    console.error('Error fetching profile data: ', error);
+    throw error;
+  }
 };

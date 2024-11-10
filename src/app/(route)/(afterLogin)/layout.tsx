@@ -8,9 +8,9 @@ import { getProfileInfo } from '@/app/api/auth/auth';
 type Props = { children: ReactNode; modal: ReactNode };
 export default function AfterLoginLayout({ children, modal }: Props) {
   const segment = useSelectedLayoutSegment();
-  // const me = {
-  //   id: 'dahyeon', // 임시 사용자 ID
-  // };
+  const me = {
+    id: 'dahyeon', // 임시 사용자 ID
+  };
   const [userName, setUserName] = useState<string>('');
   const [customId, setCustomId] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string>('/profile.svg');
@@ -97,16 +97,17 @@ export default function AfterLoginLayout({ children, modal }: Props) {
                   </div>
                 </Link>
               </li>
-
-              <li>
-                <Link href={`/${userName}`}>
-                  <div
-                    className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === `${userName}`}? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
-                  >
-                    <span>프로필</span>
-                  </div>
-                </Link>
-              </li>
+              {me?.id && (
+                <li>
+                  <Link href={`/${me?.id}`}>
+                    <div
+                      className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === `${userName}`}? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
+                    >
+                      <span>프로필</span>
+                    </div>
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
 
