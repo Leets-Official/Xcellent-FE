@@ -126,6 +126,7 @@ export default function EditProfileModal() {
             </button>
           </div>
 
+          {/* 프로필 이미지, 배경 이미지 변경 하는 것도 추가해야함  */}
           <div className="flex flex-col gap-4">
             {textareaFields.map(field => (
               <div key={field.id} className="space-y-2">
