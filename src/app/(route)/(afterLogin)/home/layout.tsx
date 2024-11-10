@@ -116,6 +116,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
           onLike={handleLike}
           onRetweet={handleRetweet}
           onCommentSubmit={handleCommentSubmit}
+<<<<<<< HEAD
           onPostSubmit={(postContent, images) =>
             handlePostSubmit({
               id: posts.length + 1, // 새로운 ID 생성
@@ -129,6 +130,9 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
               isLiked: false, // 기본 좋아요 상태
             })
           }
+=======
+          onPostSubmit={handlePostSubmit}
+>>>>>>> b28d4e6c30768862db5c44cc46e25065912361ba
         />
 
         {/* 게시글 작성 모달 */}
