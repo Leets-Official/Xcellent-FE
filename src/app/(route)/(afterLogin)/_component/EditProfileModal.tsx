@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function EditProfileModal() {
@@ -19,6 +19,33 @@ export default function EditProfileModal() {
     websiteUrl: '',
   });
 
+  const [birthDate, setBirthDate] = useState({
+    month: 0,
+    day: 0,
+    year: 0,
+  });
+
+  const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
+  const years = Array.from(
+    { length: 80 },
+    (_, i) => new Date().getFullYear() - i,
+  );
+  const months = Array.from({ length: 12 }, (_, i) => i + 1);
+
+  useEffect(() => {
+    const getDaysInMonth = (month: number, year: number) => {
+      if (month === 2) return year % 4 === 0 ? 29 : 28;
+      if ([4, 6, 9, 11].includes(month)) return 30;
+      return 31;
+    };
+    setDays(
+      Array.from(
+        { length: getDaysInMonth(birthDate.month, birthDate.year) },
+        (_, i) => i + 1,
+      ),
+    );
+  }, [birthDate.month, birthDate.year]);
+
   const textareaFields = [
     {
       id: 'userName',
@@ -29,7 +56,7 @@ export default function EditProfileModal() {
     {
       id: 'description',
       name: 'description',
-      placeholder: 'description',
+      placeholder: 'Description',
       rows: 3,
     },
     {
@@ -41,7 +68,7 @@ export default function EditProfileModal() {
     {
       id: 'websiteUrl',
       name: 'websiteUrl',
-      placeholder: 'WebsiteUrl',
+      placeholder: 'Website URL',
       rows: 1,
     },
   ];
@@ -49,6 +76,10 @@ export default function EditProfileModal() {
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleDateChange = (type: string, value: string) => {
+    setBirthDate(prevDate => ({ ...prevDate, [type]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -81,7 +112,9 @@ export default function EditProfileModal() {
                 aria-hidden="true"
                 className="fill-white"
               >
-                <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z" />
+                <g>
+                  <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z" />
+                </g>
               </svg>
             </button>
             <h2 className="text-xl font-bold text-white">Edit Profile</h2>
@@ -107,6 +140,55 @@ export default function EditProfileModal() {
                 />
               </div>
             ))}
+
+            <div className="text-white font-semibold">Birth date</div>
+            <div className="flex space-x-2">
+              <select
+                className="w-40 p-4 bg-transparent text-white border border-gray-500 rounded-md"
+                value={birthDate.month}
+                onChange={e => handleDateChange('month', e.target.value)}
+                required
+              >
+                <option value="" className="bg-black">
+                  Month
+                </option>
+                {months.map(m => (
+                  <option key={m} value={m} className="bg-black">
+                    {m}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="w-1/8 p-4 bg-transparent text-white border border-gray-500 rounded-md"
+                value={birthDate.day}
+                onChange={e => handleDateChange('day', e.target.value)}
+                required
+              >
+                <option value="" className="bg-black">
+                  Day
+                </option>
+                {days.map(d => (
+                  <option key={d} value={d} className="bg-black">
+                    {d}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="w-1/7 p-4 bg-transparent text-white border border-gray-500 rounded-md"
+                value={birthDate.year}
+                onChange={e => handleDateChange('year', e.target.value)}
+                required
+              >
+                <option value="" className="bg-black">
+                  Year
+                </option>
+                {years.map(y => (
+                  <option key={y} value={y} className="bg-black">
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </form>
       </div>
