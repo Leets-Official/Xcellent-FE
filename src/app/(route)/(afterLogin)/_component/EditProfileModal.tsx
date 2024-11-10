@@ -14,9 +14,9 @@ export default function EditProfileModal() {
 
   const [formData, setFormData] = useState({
     userName: '',
-    bio: '',
+    description: '',
     location: '',
-    website: '',
+    websiteUrl: '',
   });
 
   const textareaFields = [
@@ -27,9 +27,9 @@ export default function EditProfileModal() {
       rows: 1,
     },
     {
-      id: 'bio',
-      name: 'bio',
-      placeholder: 'Bio',
+      id: 'description',
+      name: 'description',
+      placeholder: 'description',
       rows: 3,
     },
     {
@@ -39,9 +39,9 @@ export default function EditProfileModal() {
       rows: 1,
     },
     {
-      id: 'website',
-      name: 'website',
-      placeholder: 'Website',
+      id: 'websiteUrl',
+      name: 'websiteUrl',
+      placeholder: 'WebsiteUrl',
       rows: 1,
     },
   ];
