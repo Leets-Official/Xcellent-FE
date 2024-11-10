@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import BackButton from '@/app/(route)/(afterLogin)/_component/BackButton';
 import Tab from './_component/Tab';
@@ -23,10 +24,12 @@ export default function Profile() {
         </div>
         <div className="flex relative bg-gray-800 h-40">
           <div className="absolute flex items-baseline gap-x-72 top-[95%] -translate-y-1/2 left-4">
-            <img
+            <Image
               src={user.image}
               alt={user.customId}
               className="bg-slate-300 w-[150px] h-[150px] rounded-full"
+              width={150}
+              height={150}
             />
             <Link href="/settings/profile">
               <button
@@ -53,7 +56,6 @@ export default function Profile() {
                 <span className="text-sm text-gray-500">Following</span>
               </Link>
 
-              {/* Followers Link */}
               <Link
                 href={`/${user.userName}/followers`}
                 className="hover:underline cursor-pointer font-bold text-white"
@@ -68,4 +70,9 @@ export default function Profile() {
       </main>
     </TabProvider>
   );
+}
+
+{
+  /* follower following 눌렀을 때 다른 페이지가 아니라 같은 페이지로 이동 . 그러나 프로필페이지의 헤더는 그대로이고 follower - > follower 탭이 선택된 상태 
+  followings -> followings 탭이 선택 된 상태로 바뀜  */
 }
