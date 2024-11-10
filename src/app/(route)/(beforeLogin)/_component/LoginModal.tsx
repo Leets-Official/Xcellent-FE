@@ -1,82 +1,130 @@
 'use client';
 
+import { useState } from 'react';
 import { Login } from '@/app/api/auth/auth';
 import { useRouter } from 'next/navigation';
-import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 
 export default function LoginModal() {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(true);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    message: '',
   });
+  const [message, setMessage] = useState('');
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const handleClose = () => {
+    setIsOpen(false);
+    router.back();
   };
 
-  const router = useRouter();
+  const inputFields = [
+    {
+      id: 'email',
+      name: 'email',
+      type: 'text',
+      placeholder: '이메일',
+    },
+    {
+      id: 'password',
+      name: 'password',
+      type: 'password',
+      placeholder: '비밀번호',
+    },
+  ];
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(data => ({
+      ...data,
+      [name]: value,
+    }));
+  };
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = async e => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const res = await Login(formData);
       if (!res.ok) {
-        setFormData(data => ({
-          ...data,
-          message: '아이디와 비밀번호가 일치하지 않습니다.',
-        }));
+        const errorData = await res.json();
+        if (errorData.code === 401) {
+          setMessage('이메일과 비밀번호가 일치하지 않습니다.');
+        } else if (errorData.code === 404) {
+          setMessage('존재하지 않는 유저입니다.');
+        } else {
+          setMessage('로그인 중 오류가 발생하였습니다.');
+        }
       } else {
-        alert('로그인 성공!');
+        const data = await res.json();
+
+        localStorage.setItem('accessToken', data.result.accessToken);
+        localStorage.setItem('refreshToken', data.result.refreshToken);
+
+        alert('로그인에 성공했습니다.');
         router.replace('/home');
       }
     } catch (err) {
       console.error(err);
-      setFormData(data => ({
-        ...data,
-        message: '로그인 중 오류가 발생했습니다.',
-      }));
+      setMessage('로그인 중 오류가 발생했습니다.');
     }
+  };
 
-    return (
-      <div>
-        <form onSubmit={onSubmit}>
-          <div>
-            <label htmlFor="email" className="text-white">
-              이메일
-            </label>
-            <input
-              id="email"
-              className="bg-white"
-              value={formData.email}
-              onChange={handleChange}
-              type="text"
-              placeholder=""
-            />
+  return (
+    isOpen && (
+      <div
+        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
+        style={{ backgroundColor: 'rgba(104, 132, 145, 0.413)' }}
+      >
+        <form
+          onSubmit={onSubmit}
+          className="bg-black rounded-xl p-6 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-xl"
+        >
+          <button
+            type="button"
+            onClick={handleClose}
+            aria-label="닫기"
+            className="hover:bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="fill-white"
+            >
+              <g>
+                <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z" />
+              </g>
+            </svg>
+          </button>
+          <div className="flex flex-col justify-center items-center gap-5">
+            <p className="text-white text-3xl font-bold">로그인하세요</p>
+            {inputFields.map(field => (
+              <div key={field.id} className="space-y-2">
+                <input
+                  id={field.id}
+                  name={field.name}
+                  type={field.type}
+                  value={formData[field.name as keyof typeof formData]}
+                  onChange={handleChange}
+                  placeholder={field.placeholder}
+                  required
+                  className='"w-80 p-4 bg-transparent text-white border border-gray-500 rounded-md focus:outline-none focus:border-3 focus:border-sky-400"
+'
+                />
+              </div>
+            ))}
+            {message && <p className="text-red-500 text-sm">{message}</p>}
+            <button
+              type="submit"
+              className="w-1/2 p-4 bg-white text-black rounded-full hover:bg-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+              로그인하기
+            </button>
           </div>
-
-          <div>
-            <label htmlFor="password" className="text-white">
-              비밀번호
-            </label>
-            <input
-              id="password"
-              value={formData.password}
-              onChange={handleChange}
-              type="password"
-              placeholder=""
-            />
-          </div>
-          {message && <p className="text-red-500">{message}</p>}
-
-          <button className="text-white">로그인하기</button>
         </form>
       </div>
-    );
-  };
+    )
+  );
 }

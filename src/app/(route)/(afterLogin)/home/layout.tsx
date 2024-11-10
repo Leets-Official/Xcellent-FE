@@ -27,7 +27,11 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
       <aside className="fixed w-72 h-screen border-r border-gray-700">
         <div className="flex flex-col h-full p-4">
           <div className="p-4">
-            <svg viewBox="0 0 24 24" className="h-8 w-8 text-white" fill="currentColor">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-8 w-8 text-white"
+              fill="currentColor"
+            >
               <g>
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
               </g>
@@ -36,37 +40,55 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
           <nav className="flex-1">
             <ul className="space-y-4">
               <li>
-                <a href="/home" className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full">
+                <a
+                  href="/home"
+                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
+                >
                   <AiFillHome className="w-7 h-7" />
                   <span>홈</span>
                 </a>
               </li>
               <li>
-                <a href="/explore" className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full">
+                <a
+                  href="/explore"
+                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
+                >
                   <BiSearch className="w-7 h-7" />
                   <span>탐색하기</span>
                 </a>
               </li>
               <li>
-                <a href="/notifications" className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full">
+                <a
+                  href="/notifications"
+                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
+                >
                   <IoNotifications className="w-7 h-7" />
                   <span>알림</span>
                 </a>
               </li>
               <li>
-                <a href="/messages" className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full">
+                <a
+                  href="/messages"
+                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
+                >
                   <RiMailLine className="w-7 h-7" />
                   <span>쪽지</span>
                 </a>
               </li>
               <li>
-                <a href="/lists" className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full">
+                <a
+                  href="/lists"
+                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
+                >
                   <BsListCheck className="w-7 h-7" />
                   <span>리스트</span>
                 </a>
               </li>
               <li>
-                <a href="/profile" className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full">
+                <a
+                  href="/profile"
+                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
+                >
                   <CgProfile className="w-7 h-7" />
                   <span>프로필</span>
                 </a>
@@ -94,9 +116,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
           </div>
         </div>
       </aside>
-      <main className="flex-1 ml-72">
-        {children}
-      </main>
+      <main className="flex-1 ml-72">{children}</main>
     </div>
   );
 };
