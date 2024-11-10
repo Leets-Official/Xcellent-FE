@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import BackButton from '@/app/(route)/(afterLogin)/_component/BackButton';
 import Tab from './_component/Tab';
 import TabProvider from './_component/TabProvider';
@@ -15,8 +15,10 @@ export default function Profile() {
     followers: 30,
   };
 
+  const pathname = usePathname();
+
   const onClickToEditProfileModal = () => {
-    router.push('/settings/profile');
+    router.push(`${pathname}/settings/profile`);
   };
 
   const onClickToFollowing = () => {

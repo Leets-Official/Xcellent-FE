@@ -1,122 +1,143 @@
-/*import { ReactNode } from 'react';
+'use client';
 
-export default async function HomeLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return <div>홈 레이아웃{children}</div>;
+import { ReactNode, useState } from 'react';
+import Sidebar from '@/app/(route)/(afterLogin)/_component/Sidebar';
+import PostModal from '@/app/(route)/(afterLogin)/_component/PostModal'; // 모달 컴포넌트 임포트
+import Link from 'next/link';
+import HomePage from '@/app/(route)/(afterLogin)/home/page'; // page.tsx 임포트
+
+// Post와 Comment 인터페이스 정의
+interface Comment {
+  id: number;
+  content: string;
+  author: string;
+  authorImage: string;
+  createdAt: string;
 }
-*/
-import { ReactNode } from 'react';
-import Image from 'next/image';
-import { AiFillHome } from 'react-icons/ai';
-import { BiSearch } from 'react-icons/bi';
-import { IoNotifications } from 'react-icons/io5';
-import { RiMailLine } from 'react-icons/ri';
-import { BsListCheck } from 'react-icons/bs';
-import { CgProfile } from 'react-icons/cg';
+
+interface Post {
+  id: number;
+  author: string;
+  authorImage: string;
+  content: string;
+  images: string[];
+  likes: number;
+  retweets: number;
+  comments: Comment[];
+  isLiked: boolean;
+}
 
 interface HomeLayoutProps {
   children: ReactNode;
 }
 
 const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
+  // 사용자 ID 설정
+  const me = { id: 'dahyeon' };
+
+  // 모달 상태 및 게시물 상태 관리
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  const handlePostButtonClick = () => {
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  // 새로운 게시물 추가 함수 (PostModal과 page.tsx 모두 이 함수를 사용)
+  const handlePostSubmit = (post: Post) => {
+    const newPost = {
+      id: posts.length + 1,
+      author: 'Myself',
+      authorImage: '/profile-placeholder.png',
+      content: post.content,
+      images: post.images,
+      likes: 0,
+      retweets: 0,
+      comments: [],
+      isLiked: false,
+    };
+    setPosts([newPost, ...posts]); // 새 게시물을 기존 게시물 목록 앞에 추가
+    setIsModalOpen(false);
+  };
+  // 좋아요 토글 함수
+  const handleLike = (id: number) => {
+    setPosts(
+      posts.map(post =>
+        post.id === id
+          ? {
+              ...post,
+              isLiked: !post.isLiked,
+              likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+            }
+          : post,
+      ),
+    );
+  };
+
+  // 리트윗 함수
+  const handleRetweet = (id: number) => {
+    setPosts(
+      posts.map(post =>
+        post.id === id ? { ...post, retweets: post.retweets + 1 } : post,
+      ),
+    );
+  };
+
+  // 댓글 추가 함수
+  const handleCommentSubmit = (postId: number, commentContent: string) => {
+    const newComment = {
+      id: Date.now(),
+      content: commentContent,
+      author: 'Myself',
+      authorImage: '/profile-placeholder.png',
+      createdAt: new Date().toISOString(),
+    };
+    setPosts(
+      posts.map(post =>
+        post.id === postId
+          ? { ...post, comments: [...post.comments, newComment] }
+          : post,
+      ),
+    );
+  };
+
   return (
     <div className="flex min-h-screen bg-black text-white">
-      <aside className="fixed w-72 h-screen border-r border-gray-700">
-        <div className="flex flex-col h-full p-4">
-          <div className="p-4">
-            <svg
-              viewBox="0 0 24 24"
-              className="h-8 w-8 text-white"
-              fill="currentColor"
-            >
-              <g>
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-              </g>
-            </svg>
-          </div>
-          <nav className="flex-1">
-            <ul className="space-y-4">
-              <li>
-                <a
-                  href="/home"
-                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
-                >
-                  <AiFillHome className="w-7 h-7" />
-                  <span>홈</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/explore"
-                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
-                >
-                  <BiSearch className="w-7 h-7" />
-                  <span>탐색하기</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/notifications"
-                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
-                >
-                  <IoNotifications className="w-7 h-7" />
-                  <span>알림</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/messages"
-                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
-                >
-                  <RiMailLine className="w-7 h-7" />
-                  <span>쪽지</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/lists"
-                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
-                >
-                  <BsListCheck className="w-7 h-7" />
-                  <span>리스트</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/profile"
-                  className="flex items-center gap-4 text-xl hover:bg-gray-900 px-4 py-3 rounded-full"
-                >
-                  <CgProfile className="w-7 h-7" />
-                  <span>프로필</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <button className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-6 text-lg font-bold">
-            게시하기
-          </button>
-          <div className="mt-4 p-4 hover:bg-gray-900 rounded-full cursor-pointer">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
-                <Image
-                  src="/profile-placeholder.png"
-                  alt="Profile"
-                  width={40}
-                  height={40}
-                />
-              </div>
-              <div>
-                <div className="font-bold">사용자 이름</div>
-                <div className="text-gray-500">@username</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </aside>
-      <main className="flex-1 ml-72">{children}</main>
+      <Sidebar onPostButtonClick={handlePostButtonClick} />
+      <main className="flex-1 ml-64">
+        {/* 프로필 링크 */}
+        <Link href={`/${me.id}`} legacyBehavior>
+          <a className="text-blue-500 hover:underline">프로필</a>
+        </Link>
+
+        {/* page.tsx에 posts 전달 및 이벤트 핸들러 전달 */}
+        <HomePage
+          posts={posts}
+          onLike={handleLike}
+          onRetweet={handleRetweet}
+          onCommentSubmit={handleCommentSubmit}
+          onPostSubmit={(postContent, images) =>
+            handlePostSubmit({
+              id: posts.length + 1, // 새로운 ID 생성
+              author: 'Myself', // 작성자 정보 추가
+              authorImage: '/profile-placeholder.png', // 작성자 이미지 추가
+              content: postContent,
+              images: images,
+              likes: 0, // 기본 좋아요 수
+              retweets: 0, // 기본 리트윗 수
+              comments: [], // 기본 댓글 목록
+              isLiked: false, // 기본 좋아요 상태
+            })
+          }
+        />
+
+        {/* 게시글 작성 모달 */}
+        <PostModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onPostSubmit={handlePostSubmit}
+        />
+      </main>
     </div>
   );
 };
