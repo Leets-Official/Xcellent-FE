@@ -10,22 +10,35 @@ export default function ProfilePage() {
     userName: 'dahyeon',
     customId: 'hihello',
     image: '/profile.svg',
+    backgroundImage: '/backgroundImage.jpg',
     following: 10,
     followers: 30,
   };
 
   return (
     <TabProvider>
-      <div className="p-4 pt-16">
-        <div className="relative flex items-center gap-8">
-          <Image
-            src={user.image}
-            alt={user.customId}
-            width={150}
-            height={150}
-            className="bg-slate-300 w-[150px] h-[150px] rounded-full"
-          />
-          <Link href="/settings/profile">
+      <div className="relative h-40">
+        <Image
+          src={user.backgroundImage}
+          alt="Background Image"
+          fill
+          className="object-cover w-full h-50 z-0"
+        />
+      </div>
+
+      <div className="relative z-10 p-4 pt-0">
+        <div className="flex items-center gap-8">
+          <div className="absolute top-[10%] left-4 transform -translate-y-1/2">
+            <Image
+              src={user.image}
+              alt={user.customId}
+              width={150}
+              height={150}
+              className="bg-slate-300 w-[150px] h-[150px] rounded-full"
+            />
+          </div>
+
+          <Link href="/settings/profile" className="ml-auto">
             <button
               type="button"
               className="px-4 py-2 font-bold bg-transparent rounded-full text-white border border-white hover:bg-slate-800"
@@ -34,11 +47,13 @@ export default function ProfilePage() {
             </button>
           </Link>
         </div>
-        <div className="flex flex-col mt-4">
+
+        <div className="mt-20 flex flex-col">
           <div className="text-white font-bold text-xl">{user.userName}</div>
           <div className="text-sm text-gray-500">@{user.customId}</div>
         </div>
-        <div className="flex flex-row gap-8">
+
+        <div className="flex flex-row gap-8 mt-2">
           <Link
             href={`/${user.userName}/followers`}
             className="hover:underline cursor-pointer font-bold text-white"
