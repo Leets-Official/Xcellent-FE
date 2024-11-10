@@ -53,6 +53,12 @@ export default function FollowersPage() {
                 </div>
                 <div className="text-gray-500">{follower.customId}</div>
               </div>
+              <button
+                type="button"
+                className="text-white text-sm  font-bold p-1 rounded-full border border-white w-28 ml-auto"
+              >
+                Following
+              </button>
             </div>
           ))}
         </div>
