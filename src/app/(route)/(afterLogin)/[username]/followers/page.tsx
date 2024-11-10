@@ -4,6 +4,7 @@ import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
 import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowersPage() {
   const router = useRouter();
@@ -53,12 +54,7 @@ export default function FollowersPage() {
                 </div>
                 <div className="text-gray-500">{follower.customId}</div>
               </div>
-              <button
-                type="button"
-                className="text-white text-sm  font-bold p-1 rounded-full border border-white w-28 ml-auto"
-              >
-                Following
-              </button>
+              <FollowingButton />
             </div>
           ))}
         </div>
