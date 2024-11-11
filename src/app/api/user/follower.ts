@@ -29,6 +29,8 @@ export const getFollowersList = async (
     }
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/follower?pageNo=${pageNo}&customId=${customId}`;
+    console.log('API 요청 URL : ', url);
+    console.log('Authorization 헤더:', `Bearer ${token}`);
     const res = await fetch(url, {
       method: 'GET',
       headers: {
