@@ -35,7 +35,7 @@ export default function FollowersPage() {
 
   useEffect(() => {
     const fetchFollowers = async () => {
-      if (!customId) return;
+      if (!customId) return console.log('customId 없음');
       try {
         const data = await getFollowersList(customId, pageNo);
         console.log('customId : ', customId);
@@ -69,42 +69,40 @@ export default function FollowersPage() {
     );
   }
 
-  if (followersList.length === 0) {
-    return (
-      <div className="text-center text-white font-bold">
-        No Followers Found.
-      </div>
-    );
-  }
-
   return (
     <TabProvider>
       <Tab type="followersFollowing" userName={customId} />
       <div className="p-4">
-        <div className="text-white">
-          {followersList.map(follower => (
-            <div
-              key={follower.customId}
-              onClick={() => onClickToUserProfile(follower.userName)}
-              className="flex items-center gap-x-4 mb-4 cursor-pointer"
-            >
-              <Image
-                src={follower.profileImage || '/profile.svg'}
-                alt={follower.customId}
-                width={40}
-                height={40}
-                className="bg-slate-300 w-10 h-10 rounded-full"
-              />
-              <div>
-                <div className="text-white font-bold hover:underline">
-                  {follower.userName}
+        {followersList.length === 0 ? (
+          <div className="text-center text-white font-bold">
+            No Followers Found.
+          </div>
+        ) : (
+          <div className="text-white">
+            {followersList.map(follower => (
+              <div
+                key={follower.customId}
+                onClick={() => onClickToUserProfile(follower.userName)}
+                className="flex items-center gap-x-4 mb-4 cursor-pointer"
+              >
+                <Image
+                  src={follower.profileImage || '/profile.svg'}
+                  alt={follower.customId}
+                  width={40}
+                  height={40}
+                  className="bg-slate-300 w-10 h-10 rounded-full"
+                />
+                <div>
+                  <div className="text-white font-bold hover:underline">
+                    {follower.userName}
+                  </div>
+                  <div className="text-gray-500">{follower.customId}</div>
                 </div>
-                <div className="text-gray-500">{follower.customId}</div>
+                <FollowingButton />
               </div>
-              <FollowingButton />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div className="flex justify-between mt-4">
           <button
