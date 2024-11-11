@@ -11,10 +11,7 @@ export default function SideBar() {
 
   const menuItems = [
     { href: '/home', label: '홈', segmentKey: 'home' },
-    { href: '/explore', label: '탐색하기', segmentKey: 'explore' },
-    { href: '/notifications', label: '알림', segmentKey: 'notifications' },
     { href: '/messages', label: '쪽지', segmentKey: 'messages' },
-    { href: '/lists', label: '리스트', segmentKey: 'lists' },
     { href: `/${me.id}`, label: '프로필', segmentKey: me.id },
   ];
 

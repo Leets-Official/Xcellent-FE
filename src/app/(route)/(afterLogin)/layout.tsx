@@ -30,8 +30,9 @@ export default function AfterLoginLayout({ children, modal }: Props) {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
-      <header className="flex flex-col items-end w-20 sm:w-72 h-screen border-r border-gray-700 bg-black fixed">
+    <div className="flex bg-black text-white justify-center">
+      {/* 왼쪽 사이드바 */}
+      <header className="flex flex-col items-end w-20 sm:w-72 h-screen border-r border-gray-700 bg-black fixed left-0">
         <section className="w-full flex flex-col items-center sm:items-start h-full p-2 sm:p-4">
           <Link
             href="/home"
@@ -40,10 +41,10 @@ export default function AfterLoginLayout({ children, modal }: Props) {
             <svg
               viewBox="0 0 24 24"
               aria-hidden="true"
-              className="w-8 h-8 fill-white r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1nao33i r-rxcuwo r-1777fci r-m327ed r-494qqr"
+              className="w-8 h-8 fill-white"
             >
               <g>
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z" />
               </g>
             </svg>
           </Link>
@@ -54,12 +55,12 @@ export default function AfterLoginLayout({ children, modal }: Props) {
 
           <button
             type="button"
-            className="w-full bg-sky-500 hover:bg-blue-600 text-white rounded-full py-3 px-6 text-lg font-bold"
+            className="w-full bg-sky-500 hover:bg-sky- text-white rounded-full py-3 px-6 text-lg font-bold mt-4"
           >
             게시하기
           </button>
 
-          <div className="flex items-center mt-6 p-2 w-12 sm:w-56 rounded-full hover:bg-gray-900 cursor-pointer">
+          <div className="flex items-center mt-6 p-2 w-12 sm:w-full rounded-full hover:bg-gray-900 cursor-pointer">
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
               <img
                 src={profileImage}
@@ -76,7 +77,9 @@ export default function AfterLoginLayout({ children, modal }: Props) {
       </header>
 
       {/* 메인 콘텐츠 영역 */}
-      <main className="flex-1 ml-20 sm:ml-72 p-4 relative">{children}</main>
+      <main className="flex-1 ml-20 sm:ml-72 p-4 relative max-w-screen-lg mx-auto">
+        {children}
+      </main>
     </div>
   );
 }
