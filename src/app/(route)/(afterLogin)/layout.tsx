@@ -1,16 +1,12 @@
 'use client';
-import { useSelectedLayoutSegment } from 'next/navigation';
 
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
 import { getProfileInfo } from '@/app/api/user/user';
+import SideBar from './_component/Sidebar';
 
 type Props = { children: ReactNode; modal: ReactNode };
 export default function AfterLoginLayout({ children, modal }: Props) {
-  const segment = useSelectedLayoutSegment();
-  const me = {
-    id: 'dahyeon', // 임시 사용자 ID
-  };
   const [userName, setUserName] = useState<string>('');
   const [customId, setCustomId] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string>('/profile.svg');
@@ -49,68 +45,9 @@ export default function AfterLoginLayout({ children, modal }: Props) {
             </svg>
           </div>
 
-          {/* 네비게이션 메뉴 */}
-          <nav className="flex-1">
-            <ul className="space-y-4">
-              <li>
-                <Link href="/home">
-                  <div
-                    className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === 'home' ? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
-                  >
-                    <span>홈</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/explore">
-                  <div
-                    className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === 'explore' ? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
-                  >
-                    <span>탐색하기</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/notifications">
-                  <div
-                    className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === 'notifications' ? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
-                  >
-                    <span>알림</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/messages">
-                  <div
-                    className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === 'messages' ? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
-                  >
-                    <span>쪽지</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/lists">
-                  <div
-                    className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === 'lists' ? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
-                  >
-                    <span>리스트</span>
-                  </div>
-                </Link>
-              </li>
-              {me?.id && (
-                <li>
-                  <Link href={`/${me?.id}`}>
-                    <div
-                      className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${segment === `${userName}`}? 'font-bold bg-gray-900' : 'hover:bg-gray-900'}`}
-                    >
-                      <span>프로필</span>
-                    </div>
-                  </Link>
-                </li>
-              )}
-            </ul>
+          <nav>
+            <SideBar />
           </nav>
-
           {/* 게시하기 버튼 */}
           <button
             type="button"
@@ -124,7 +61,7 @@ export default function AfterLoginLayout({ children, modal }: Props) {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
                 <div>
-                  <div className="font-bold">사용자 이름</div>
+                  <div className="font-bold text-white">사용자 이름</div>
                   <div className="text-gray-500">@username</div>
                 </div>
               </div>
