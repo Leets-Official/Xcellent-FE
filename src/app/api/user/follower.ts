@@ -29,8 +29,6 @@ export const getFollowersList = async (
     }
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/follower?pageNo=${pageNo}&customId=${customId}`;
-    console.log('API 요청 URL : ', url);
-    console.log('Authorization 헤더:', `Bearer ${token}`);
     const res = await fetch(url, {
       method: 'GET',
       headers: {
@@ -39,14 +37,14 @@ export const getFollowersList = async (
       },
     });
 
-    console.log('팔로워 목록 조회 응답 : ', res.status);
+    console.log('Response status : ', res.status);
 
     if (!res.ok) {
       throw new Error(`Error:${res.status}`);
     }
 
     const data = await res.json();
-    console.log(`팔로워 목록: `, data);
+    console.log(`Response Data : `, data);
 
     return data.result;
   } catch (error) {

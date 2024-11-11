@@ -23,7 +23,6 @@ export default function FollowersPage() {
       try {
         const userInfo = await getProfileInfo();
         setCustomId(userInfo.customId);
-        console.log('Fetched customId : ', userInfo.customId);
       } catch (err) {
         console.error('Failed to fetch customId: ', err);
         setError('Failed to fetch user info');
@@ -35,22 +34,20 @@ export default function FollowersPage() {
 
   useEffect(() => {
     const fetchFollowers = async () => {
-      // if (!customId) return console.log('customId 없음');
       try {
         const data = await getFollowersList(customId, pageNo);
         console.log('customId : ', customId);
-        console.log('API Response:', data); // API 응답 로그 출력
         setFollowersList(data.content || []);
         setTotalPages(data.totalPages || 0);
       } catch (err) {
         setError('Failed to fetch followers list.');
-        console.error('Error fetching followers:', err);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchFollowers();
+    if (customId) {
+      fetchFollowers();
+    }
   }, [customId, pageNo]);
 
   const onClickToUserProfile = (userName: string) => {
