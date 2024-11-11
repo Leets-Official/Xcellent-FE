@@ -6,6 +6,7 @@ import { getProfileInfo } from '@/app/api/user/user';
 import SideBar from './_component/Sidebar';
 
 type Props = { children: ReactNode; modal: ReactNode };
+
 export default function AfterLoginLayout({ children, modal }: Props) {
   const [userName, setUserName] = useState<string>('');
   const [customId, setCustomId] = useState<string>('');
@@ -30,49 +31,52 @@ export default function AfterLoginLayout({ children, modal }: Props) {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      <aside className="fixed w-72 h-screen border-r border-gray-700">
-        <div className="flex flex-col h-full p-4">
-          {/* 로고 섹션 */}
-          <div className="p-4">
+      <header className="flex flex-col items-end w-20 sm:w-72 h-screen border-r border-gray-700 bg-black fixed">
+        <section className="w-full flex flex-col items-center sm:items-start h-full p-2 sm:p-4">
+          <Link
+            href="/home"
+            className="flex justify-center w-12 h-12 rounded-full hover:bg-gray-900"
+          >
             <svg
               viewBox="0 0 24 24"
-              className="h-8 w-8 text-white"
-              fill="currentColor"
+              aria-hidden="true"
+              className="w-8 h-8 fill-white r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1nao33i r-rxcuwo r-1777fci r-m327ed r-494qqr"
             >
               <g>
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z" />
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </g>
             </svg>
-          </div>
+          </Link>
 
-          <nav>
+          <nav className="flex flex-1 flex-col mt-4">
             <SideBar />
           </nav>
-          {/* 게시하기 버튼 */}
+
           <button
             type="button"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-6 text-lg font-bold"
+            className="w-full bg-sky-500 hover:bg-blue-600 text-white rounded-full py-3 px-6 text-lg font-bold"
           >
             게시하기
           </button>
 
-          {/* 사용자 프로필 섹션 */}
-          <div className="mt-4 p-4 hover:bg-gray-900 rounded-full cursor-pointer">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
-                <div>
-                  <div className="font-bold text-white">사용자 이름</div>
-                  <div className="text-gray-500">@username</div>
-                </div>
-              </div>
+          <div className="flex items-center mt-6 p-2 w-12 sm:w-56 rounded-full hover:bg-gray-900 cursor-pointer">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="hidden sm:block ml-3">
+              <div className="text-base font-bold text-white">{userName}</div>
+              <div className="text-sm text-gray-500">@{customId}</div>
             </div>
           </div>
-        </div>
-      </aside>
+        </section>
+      </header>
 
       {/* 메인 콘텐츠 영역 */}
-
-      <main className="flex-1 ml-72 p-4 relative">{children}</main>
+      <main className="flex-1 ml-20 sm:ml-72 p-4 relative">{children}</main>
     </div>
   );
 }
