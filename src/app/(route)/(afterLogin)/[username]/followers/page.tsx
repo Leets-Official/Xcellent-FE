@@ -77,10 +77,10 @@ export default function FollowersPage() {
         ) : (
           <div className="text-white">
             {followersList.map(follower => (
-              <div
-                key={follower.customId}
+              <button
+                type="button"
                 onClick={() => onClickToUserProfile(follower.userName)}
-                className="flex items-center gap-x-4 mb-4 cursor-pointer"
+                className="flex items-center gap-x-4 mb-4 cursor-pointer w-full text-left"
               >
                 <Image
                   src={follower.profileImage || '/profile.svg'}
@@ -96,7 +96,7 @@ export default function FollowersPage() {
                   <div className="text-gray-500">{follower.customId}</div>
                 </div>
                 <FollowingButton />
-              </div>
+              </button>
             ))}
           </div>
         )}
