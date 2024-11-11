@@ -3,7 +3,7 @@
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
 import BackButton from '@/app/(route)/(afterLogin)/_component/BackButton';
-import { getProfileInfo } from '@/app/api/auth/auth';
+import { getProfileInfo } from '@/app/api/user/user';
 
 type Props = {
   children: ReactNode;

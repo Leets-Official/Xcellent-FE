@@ -3,7 +3,7 @@ import { useSelectedLayoutSegment } from 'next/navigation';
 
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
-import { getProfileInfo } from '@/app/api/auth/auth';
+import { getProfileInfo } from '@/app/api/user/user';
 
 type Props = { children: ReactNode; modal: ReactNode };
 export default function AfterLoginLayout({ children, modal }: Props) {
@@ -24,7 +24,6 @@ export default function AfterLoginLayout({ children, modal }: Props) {
         if (userInfo.profileImageUrl) {
           setProfileImage(userInfo.profileImageUrl);
         }
-        
       } catch (error) {
         console.error('Failed to fetch user info: ', error);
       }

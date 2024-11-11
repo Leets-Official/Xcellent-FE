@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getProfileInfo } from '@/app/api/auth/auth';
+import { getProfileInfo } from '@/app/api/user/user';
 import Image from 'next/image';
 import Link from 'next/link';
 import Tab from './_component/Tab';

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+// import BackButtonImg from '../../../../../public/backButton.svg';
 
 export default function BackButton() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function BackButton() {
         height={36}
         className="w-[36px] h-[36px]"
       />
+      {/* <BackButtonImg className="w-8 h-8" /> */}
     </button>
   );
 }
