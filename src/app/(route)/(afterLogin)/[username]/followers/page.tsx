@@ -2,12 +2,14 @@
 
 import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
 import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
+import useTabHandler from '@/app/(route)/(afterLogin)/[username]/hooks/useTabHandler';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowersPage() {
   const router = useRouter();
+  const handler = useTabHandler('followersFollowing', 'dahyeon');
 
   const followersList = [
     {
@@ -30,6 +32,7 @@ export default function FollowersPage() {
   const onClickToUserProfile = (userName: string) => {
     router.push(`/${userName}`);
   };
+
   return (
     <TabProvider>
       <Tab type="followersFollowing" userName="dahyeon" />
@@ -44,8 +47,8 @@ export default function FollowersPage() {
               <Image
                 src={follower.profileImage}
                 alt={follower.customId}
-                width={10}
-                height={10}
+                width={40}
+                height={40}
                 className="bg-slate-300 w-10 h-10 rounded-full"
               />
               <div>

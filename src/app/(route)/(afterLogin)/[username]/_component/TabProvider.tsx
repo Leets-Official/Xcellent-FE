@@ -22,15 +22,12 @@ export default function TabProvider({ children }: Props) {
   const [tab, setTab] = useState<TabType>('post');
 
   useEffect(() => {
-    if (segment === 'followers') {
-      setTab('followers');
-    } else if (segment === 'following') {
-      setTab('following');
-    } else if (segment === 'like') {
-      setTab('like');
-    } else {
-      setTab('post');
-    }
+    const mapSegmentToTab: Record<string, TabType> = {
+      followers: 'followers',
+      following: 'following',
+      like: 'like',
+    };
+    setTab(mapSegmentToTab[segment!] || 'post');
   }, [segment]);
 
   return (
