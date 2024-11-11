@@ -49,13 +49,12 @@ export default function ProfilePage() {
   };
 
   const goToFollowers = () => {
-    router.push(`/${user.userName}/followers`);
+    window.location.href = `/${user.userName}/followers`;
   };
 
   const goToFollowing = () => {
-    router.push(`/${user.userName}/following`);
+    window.location.href = `/${user.userName}/following`;
   };
-
   return (
     <TabProvider>
       <div className="relative h-40">

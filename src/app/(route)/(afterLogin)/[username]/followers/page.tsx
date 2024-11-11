@@ -3,15 +3,15 @@
 import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
 import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getFollowersList } from '@/app/api/user/follower';
 import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowersPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const customId = searchParams.get('customId') || '';
+  const pathname = usePathname();
+  const customId = pathname.split('/')[1];
   const [followersList, setFollowersList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +20,7 @@ export default function FollowersPage() {
 
   useEffect(() => {
     const fetchFollowers = async () => {
-      if (!customId) return;
+      if (!customId) return console.log('customId없음');
       try {
         const data = await getFollowersList(customId, pageNo);
         console.log('customId : ', customId);
