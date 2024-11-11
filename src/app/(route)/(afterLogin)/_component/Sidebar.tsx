@@ -10,9 +10,9 @@ export default function SideBar() {
   };
 
   const menuItems = [
-    { href: '/home', label: '홈', segmentKey: 'home' },
-    { href: '/messages', label: '쪽지', segmentKey: 'messages' },
-    { href: `/${me.id}`, label: '프로필', segmentKey: me.id },
+    { href: '/home', label: 'Home', segmentKey: 'home' },
+    { href: '/messages', label: 'Messages', segmentKey: 'messages' },
+    { href: `/${me.id}`, label: 'Profile', segmentKey: me.id },
   ];
 
   return (
@@ -24,8 +24,8 @@ export default function SideBar() {
               <div
                 className={`flex items-center gap-4 text-xl px-4 py-3 rounded-full ${
                   segment === segmentKey
-                    ? 'font-bold bg-gray-900'
-                    : 'hover:bg-gray-900'
+                    ? 'font-extrabold'
+                    : 'hover:bg-gray-800'
                 }`}
               >
                 <span>{label}</span>
