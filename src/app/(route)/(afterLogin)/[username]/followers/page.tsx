@@ -35,7 +35,7 @@ export default function FollowersPage() {
 
   useEffect(() => {
     const fetchFollowers = async () => {
-      if (!customId) return console.log('customId 없음');
+      // if (!customId) return console.log('customId 없음');
       try {
         const data = await getFollowersList(customId, pageNo);
         console.log('customId : ', customId);
@@ -104,23 +104,22 @@ export default function FollowersPage() {
           </div>
         )}
 
-        <div className="flex justify-between mt-4">
-          <button
-            type="button"
-            onClick={() => setPageNo(prev => Math.max(prev - 1, 1))}
-            disabled={pageNo === 1}
-            className="text-white font-bold px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            onClick={() => setPageNo(prev => prev + 1)}
-            disabled={pageNo >= totalPages - 1}
-            className="text-white font-bold px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50"
-          >
-            Next
-          </button>
+        {/* 무한 스크롤로 수정하는게 좋을 듯  */}
+        <div className="flex justify-center mt-6">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              type="button"
+              key={index}
+              onClick={() => setPageNo(index + 1)}
+              className={`text-white font-bold px-4 py-2 mx-1 rounded ${
+                pageNo === index + 1
+                  ? 'bg-blue-600'
+                  : 'bg-gray-700 hover:bg-gray-600'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
       </div>
     </TabProvider>
