@@ -15,9 +15,9 @@ export default function BackButton() {
       <Image
         src="/backButton.svg"
         alt="Back"
-        unoptimized
-        width={24}
-        height={24}
+        width={36}
+        height={36}
+        className="w-[36px] h-[36px]"
       />
     </button>
   );
