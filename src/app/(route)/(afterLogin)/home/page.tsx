@@ -1,10 +1,6 @@
-/*export default function Home() {
-  return <main>홈페이지</main>;
-}*/
-//변경 사항(헤연)
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 interface Post {
   id: number;
@@ -15,8 +11,9 @@ interface Post {
   comments: number;
   isLiked: boolean;
 }
+console.log('HomePage 렌더링 중');
 
-const Home: React.FC = () => {
+export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
@@ -24,8 +21,9 @@ const Home: React.FC = () => {
     setPosts([
       {
         id: 1,
-        author: "Elon Musk",
-        content: "🎶 We been spending most our lives Livin' in an Amish paradise 🎶",
+        author: 'Elon Musk',
+        content:
+          "🎶 We been spending most our lives Livin' in an Amish paradise 🎶",
         likes: 7300,
         retweets: 50000,
         comments: 310000,
@@ -36,20 +34,26 @@ const Home: React.FC = () => {
   }, []);
 
   const handleLike = (id: number) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === id ? { ...post, isLiked: !post.isLiked, likes: post.isLiked ? post.likes - 1 : post.likes + 1 } : post
-      )
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === id
+          ? {
+              ...post,
+              isLiked: !post.isLiked,
+              likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+            }
+          : post,
+      ),
     );
   };
 
   const handleRetweet = (id: number) => {
     // 리트윗 로직
-    const postToRetweet = posts.find((post) => post.id === id);
+    const postToRetweet = posts.find(post => post.id === id);
     if (postToRetweet) {
-      setPosts((prevPosts) => [
+      setPosts(prevPosts => [
         ...prevPosts,
-        { ...postToRetweet, id: prevPosts.length + 1, author: "Myself" },
+        { ...postToRetweet, id: prevPosts.length + 1, author: 'Myself' },
       ]);
     }
   };
@@ -58,8 +62,6 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100 text-black">
-    
-
       {/* Main Content */}
       <main className="flex-1 p-4">
         <div className="bg-white p-4 rounded-lg shadow-md mb-4 max-w-xl mx-auto">
@@ -67,28 +69,37 @@ const Home: React.FC = () => {
             placeholder="What's happening?"
             className="w-full p-2 border border-gray-300 rounded-md mb-2"
           />
-          <button className="bg-blue-500 text-white rounded-full py-2 px-6 font-semibold">
+          <button
+            type="button"
+            className="bg-blue-500 text-white rounded-full py-2 px-6 font-semibold"
+          >
             Post
           </button>
         </div>
-        {sortedPosts.map((post) => (
-          <div key={post.id} className="bg-white shadow-md p-4 rounded-lg mb-4 max-w-xl mx-auto">
+        {sortedPosts.map(post => (
+          <div
+            key={post.id}
+            className="bg-white shadow-md p-4 rounded-lg mb-4 max-w-xl mx-auto"
+          >
             <p className="font-semibold">{post.author}</p>
             <p className="mt-2">{post.content}</p>
             <div className="flex items-center mt-4 space-x-4 text-gray-500">
               <button
+                type="button"
                 onClick={() => handleLike(post.id)}
-                className={`flex items-center ${post.isLiked ? "text-red-500" : "text-gray-500"}`}
+                className={`flex items-center ${post.isLiked ? 'text-red-500' : 'text-gray-500'}`}
               >
-                {post.isLiked ? "❤️" : "♡"} <span className="ml-1">{post.likes}</span>
+                {post.isLiked ? '❤️' : '♡'}{' '}
+                <span className="ml-1">{post.likes}</span>
               </button>
               <button
+                type="button"
                 onClick={() => handleRetweet(post.id)}
                 className="text-blue-500 flex items-center"
               >
                 🔁 <span className="ml-1">{post.retweets}</span>
               </button>
-              <button className="flex items-center">
+              <button type="button" className="flex items-center">
                 💬 <span className="ml-1">{post.comments}</span>
               </button>
             </div>
@@ -108,7 +119,4 @@ const Home: React.FC = () => {
       </aside>
     </div>
   );
-};
-
-export default Home;
-
+}

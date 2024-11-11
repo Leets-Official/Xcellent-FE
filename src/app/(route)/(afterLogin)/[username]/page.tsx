@@ -1,80 +1,77 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import BackButton from '@/app/(route)/(afterLogin)/_component/BackButton';
+import Image from 'next/image';
+import Link from 'next/link';
 import Tab from './_component/Tab';
 import TabProvider from './_component/TabProvider';
 
-export default function Profile() {
-  const router = useRouter();
+export default function ProfilePage() {
   const user = {
     userName: 'dahyeon',
     customId: 'hihello',
     image: '/profile.svg',
+    backgroundImage: '/backgroundImage.jpg',
     following: 10,
     followers: 30,
   };
 
-  const onClickToEditProfileModal = () => {
-    router.push('/settings/profile');
-  };
-
-  const onClickToFollowing = () => {
-    router.push(`/${user.userName}/following`);
-  };
-  const onClickToFollowers = () => {
-    router.push(`/${user.userName}/followers`);
-  };
-
   return (
     <TabProvider>
-      <main className="w-[600px] border-l border-r border-gray-200 flex flex-col items-stretch">
-        <div className="flex items-center h-14 px-4">
-          <BackButton />
-          <h3 className="text-xl font-bold text-white ml-8">{user.userName}</h3>
+      <div className="relative h-40">
+        <Image
+          src={user.backgroundImage}
+          alt="Background Image"
+          fill
+          className="object-cover w-full h-50 z-0"
+        />
+      </div>
+
+      <div className="relative z-10 p-4 pt-0">
+        <div className="flex items-center gap-8">
+          <div className="absolute top-[10%] left-4 transform -translate-y-1/2">
+            <Image
+              src={user.image}
+              alt={user.customId}
+              width={150}
+              height={150}
+              className="bg-slate-300 w-[150px] h-[150px] rounded-full"
+            />
+          </div>
+
+          <Link href="/settings/profile" className="ml-auto">
+            <button
+              type="button"
+              className="px-4 py-2 font-bold bg-transparent rounded-full text-white border border-white hover:bg-slate-800"
+            >
+              Edit Profile
+            </button>
+          </Link>
         </div>
-        <div className="relative bg-gray-800 h-40">
-          <img
-            src={user.image}
-            alt={user.customId}
-            className="bg-slate-300 absolute w-[150px] h-[150px] rounded-full top-[95%] -translate-y-1/2 left-4"
-          />
-          <button
-            type="button"
-            onClick={onClickToEditProfileModal}
-            className="absolute right-4 top-4 px-4 py-1 bg-black text-white border border-gray-600 rounded-full hover:bg-gray-700"
+
+        <div className="mt-20 flex flex-col">
+          <div className="text-white font-bold text-xl">{user.userName}</div>
+          <div className="text-sm text-gray-500">@{user.customId}</div>
+        </div>
+
+        <div className="flex flex-row gap-8 mt-2">
+          <Link
+            href={`/${user.userName}/followers`}
+            className="hover:underline cursor-pointer font-bold text-white"
           >
-            Edit profile
-          </button>
+            {user.followers}{' '}
+            <span className="text-sm text-gray-500">Followers</span>
+          </Link>
+          <Link
+            href={`/${user.userName}/following`}
+            className="hover:underline cursor-pointer font-bold text-white"
+          >
+            {user.following}{' '}
+            <span className="text-sm text-gray-500">Following</span>
+          </Link>
         </div>
-        <div className="p-4 pt-16">
-          <div className="flex flex-col mt-4">
-            <div className="text-white font-bold text-xl">{user.userName}</div>
-            <div className="text-sm text-gray-500">@{user.customId}</div>
-          </div>
-          <div className="flex space-x-4 mt-2 text-sm text-gray-500">
-            <div className="hover:underline cursor-pointer">
-              <span
-                onClick={onClickToFollowing}
-                className="font-bold text-white "
-              >
-                {user.following}
-              </span>{' '}
-              Following
-            </div>
-            <div className="hover:underline cursor-pointer">
-              <span
-                onClick={onClickToFollowers}
-                className="font-bold text-white "
-              >
-                {user.followers}
-              </span>{' '}
-              Followers
-            </div>
-          </div>
-        </div>
-        <Tab type="postsLikes" />
-      </main>
+
+        <Tab type="postsLikes" userName={user.userName} />
+      </div>
     </TabProvider>
   );
 }
