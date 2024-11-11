@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getProfileInfo } from '@/app/api/user/user';
 import Image from 'next/image';
@@ -8,6 +9,7 @@ import Tab from './_component/Tab';
 import TabProvider from './_component/TabProvider';
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -44,6 +46,14 @@ export default function ProfilePage() {
     // backgroundImage: '/backgroundImage.jpg',
     following: 10,
     followers: 30,
+  };
+
+  const goToFollowers = () => {
+    router.push(`/${user.userName}/followers`);
+  };
+
+  const goToFollowing = () => {
+    router.push(`/${user.userName}/following`);
   };
 
   return (
@@ -85,20 +95,22 @@ export default function ProfilePage() {
         </div>
 
         <div className="flex flex-row gap-8 mt-2">
-          <Link
-            href={`/${user.userName}/followers`}
+          <button
+            type="button"
+            onClick={goToFollowers}
             className="hover:underline cursor-pointer font-bold text-white"
           >
             {mockData.followers}{' '}
             <span className="text-sm text-gray-500">Followers</span>
-          </Link>
-          <Link
-            href={`/${user.userName}/following`}
+          </button>
+          <button
+            type="button"
+            onClick={goToFollowing}
             className="hover:underline cursor-pointer font-bold text-white"
           >
             {mockData.following}{' '}
             <span className="text-sm text-gray-500">Following</span>
-          </Link>
+          </button>
         </div>
 
         <Tab type="postsLikes" userName={user.userName} />
