@@ -1,6 +1,9 @@
 'use client';
 import React, { useState, useRef } from 'react';
 import { AiOutlinePicture } from 'react-icons/ai';
+import { FaSmile } from 'react-icons/fa';
+import { BsCardImage } from 'react-icons/bs';
+import { IoMdSend } from 'react-icons/io';
 
 interface PostFormProps {
   onPostSubmit: (content: string, images: string[]) => void;
@@ -42,7 +45,7 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
   };
 
   return (
-    <div className="bg-black p-4 border-b border-gray-700 mb-4 max-w-xl mx-auto text-white">
+    <div className="bg-black p-4 border-b border-gray-700 mb-4 max-w-2xl mx-auto text-white">
       <div className="flex items-start space-x-3">
         {/* 프로필 이미지 자리 */}
         <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
@@ -83,7 +86,7 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
         <div className="flex space-x-4 text-blue-500">
           {/* 이미지 업로드 아이콘 */}
           <label htmlFor="image-upload" className="cursor-pointer">
-            <AiOutlinePicture size={24} />
+            <BsCardImage size={24} />
           </label>
           <input
             type="file"
@@ -93,14 +96,18 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
             className="hidden"
             id="image-upload"
           />
+
+          {/* 이모티콘 아이콘 */}
+          <FaSmile size={24} />
         </div>
 
         {/* 게시 버튼 */}
         <button
           onClick={handlePost}
-          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-4 font-semibold"
+          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-4 font-semibold flex items-center gap-2"
         >
           Post
+          <IoMdSend size={20} />
         </button>
       </div>
     </div>

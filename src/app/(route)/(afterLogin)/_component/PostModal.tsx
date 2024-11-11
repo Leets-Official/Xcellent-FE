@@ -72,7 +72,10 @@ const PostModal: React.FC<PostModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="bg-gray-900 p-4 rounded-lg w-full max-w-lg">
+      <div
+        className="bg-gray-900 p-4 rounded-lg w-full max-w-lg"
+        style={{ width: '1200px' }}
+      >
         <h2 className="text-lg font-bold text-white mb-4">
           What's happening?!
         </h2>
@@ -82,6 +85,7 @@ const PostModal: React.FC<PostModalProps> = ({
           placeholder="What's happening?!"
           className="w-full p-2 bg-gray-800 text-white border border-gray-700 rounded-md resize-none"
           rows={4}
+          style={{ width: '100%', height: '120px' }} // 높이는 적절하게 설정
         />
         <div className="flex items-center justify-between mt-4">
           {/* 이미지 아이콘을 클릭하면 파일 입력 요소가 클릭되도록 설정 */}

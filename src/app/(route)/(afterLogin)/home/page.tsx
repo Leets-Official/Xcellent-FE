@@ -1,13 +1,6 @@
-<<<<<<< HEAD
 import React from 'react';
 import PostForm from '../_component/PostForm';
 import PostItem from '../_component/PostItems';
-=======
-'use client';
-
-import React, { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
->>>>>>> b28d4e6c30768862db5c44cc46e25065912361ba
 
 // Post 인터페이스 정의
 interface Post {
@@ -18,106 +11,21 @@ interface Post {
   images: string[];
   likes: number;
   retweets: number;
-<<<<<<< HEAD
+
   comments: Comment[]; // Comment[]로 통일
   isLiked: boolean;
 }
 
 // Comment 인터페이스 정의 (createdAt 필드 추가)
-=======
-  comments: Comment[];
-  isLiked: boolean;
-}
 
->>>>>>> b28d4e6c30768862db5c44cc46e25065912361ba
 interface Comment {
   id: number;
   author: string;
   authorImage: string;
   content: string;
-<<<<<<< HEAD
+
   createdAt: string; // createdAt 필드를 추가하여 PostComment와 동일하게 만듦
 }
-=======
-  createdAt: string;
-}
-
-const Home: React.FC<{
-  posts: Post[];
-  onPostSubmit: (post: Post) => void;
-  onLike: (id: number) => void;
-  onRetweet: (id: number) => void;
-  onCommentSubmit: (postId: number, commentContent: string) => void;
-}> = ({ posts, onPostSubmit, onLike, onRetweet, onCommentSubmit }) => {
-  const [newPost, setNewPost] = useState<string>('');
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
-  const [showComments, setShowComments] = useState<number | null>(null);
-  const [newComment, setNewComment] = useState<string>('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      handleResize();
-    }
-  }, [newPost]);
-
-  const handleResize = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height =
-        textareaRef.current.scrollHeight + 'px';
-    }
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && selectedImages.length + files.length <= 4) {
-      const newImages = Array.from(files).map(file =>
-        URL.createObjectURL(file),
-      );
-      setSelectedImages(prev => [...prev, ...newImages]);
-    } else {
-      alert('이미지는 최대 4개까지만 업로드할 수 있습니다.');
-    }
-  };
-
-  const removeImage = (index: number) => {
-    setSelectedImages(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handlePost = () => {
-    if (newPost.trim() || selectedImages.length > 0) {
-      const post: Post = {
-        id: posts.length + 1,
-        author: 'Myself',
-        authorImage: '/profile-placeholder.png',
-        content: newPost,
-        images: selectedImages,
-        likes: 0,
-        retweets: 0,
-        comments: [],
-        isLiked: false,
-      };
-      onPostSubmit(post); // 새로운 게시물을 상위 컴포넌트로 전달
-      setNewPost('');
-      setSelectedImages([]);
-    }
-  };
-
-  const handleLike = (id: number) => {
-    // Handle like logic here
-  };
-
-  const handleRetweet = (id: number) => {
-    // Handle retweet logic here
-  };
-
-  const handleComment = (postId: number) => {
-    // Handle comment logic here
-  };
-
-  const sortedPosts = [...posts].sort((a, b) => b.likes - a.likes);
->>>>>>> b28d4e6c30768862db5c44cc46e25065912361ba
 
 const HomePage: React.FC<{
   posts: Post[];
@@ -127,7 +35,6 @@ const HomePage: React.FC<{
   onCommentSubmit: (postId: number, commentContent: string) => void;
 }> = ({ posts, onPostSubmit, onLike, onRetweet, onCommentSubmit }) => {
   return (
-<<<<<<< HEAD
     <main className="flex flex-col items-center min-h-screen bg-black text-white">
       {/* 게시글 작성 폼 */}
       <PostForm onPostSubmit={onPostSubmit} />
@@ -147,179 +54,3 @@ const HomePage: React.FC<{
 };
 
 export default HomePage;
-=======
-    <div className="flex min-h-screen bg-black text-white">
-      <main className="flex-1 p-4">
-        <div className="bg-black p-4 border border-gray-700 rounded-lg mb-4 max-w-xl mx-auto">
-          <div className="flex items-start space-x-3">
-            <Image
-              src="/profile-placeholder.png"
-              alt="Profile"
-              width={48}
-              height={48}
-              className="rounded-full"
-            />
-            <div className="flex-1">
-              <textarea
-                ref={textareaRef}
-                value={newPost}
-                onChange={e => setNewPost(e.target.value)}
-                onInput={handleResize}
-                placeholder="무슨 일이 일어나고 있나요?"
-                className="w-full p-2 bg-black text-white border border-gray-700 rounded-md mb-2 min-h-[100px] resize-none"
-              />
-              {selectedImages.length > 0 && (
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  {selectedImages.map((image, index) => (
-                    <div key={index} className="relative">
-                      <Image
-                        src={image}
-                        alt={`Preview ${index + 1}`}
-                        width={200}
-                        height={200}
-                        className="rounded-lg"
-                      />
-                      <button
-                        onClick={() => removeImage(index)}
-                        className="absolute top-1 right-1 bg-black rounded-full p-1"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="flex justify-between items-center">
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className="cursor-pointer text-blue-500 hover:text-blue-600"
-                >
-                  🖼️ 이미지 추가
-                </label>
-                <button
-                  onClick={handlePost}
-                  className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-6 font-semibold"
-                >
-                  게시하기
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        {sortedPosts.map(post => (
-          <div
-            key={post.id}
-            className="bg-black border border-gray-700 p-4 rounded-lg mb-4 max-w-xl mx-auto"
-          >
-            <div className="flex items-start space-x-3">
-              <Image
-                src={post.authorImage}
-                alt={post.author}
-                width={48}
-                height={48}
-                className="rounded-full"
-              />
-              <div className="flex-1">
-                <p className="font-semibold text-white">{post.author}</p>
-                <p className="mt-2 text-white">{post.content}</p>
-                {post.images.length > 0 && (
-                  <div className="grid grid-cols-2 gap-2 mt-2">
-                    {post.images.map((image, index) => (
-                      <Image
-                        key={index}
-                        src={image}
-                        alt={`Post image ${index + 1}`}
-                        width={200}
-                        height={200}
-                        className="rounded-lg"
-                      />
-                    ))}
-                  </div>
-                )}
-                <div className="flex items-center mt-4 space-x-4 text-gray-500">
-                  <button
-                    onClick={() => onLike(post.id)}
-                    className={`flex items-center hover:text-red-500 ${post.isLiked ? 'text-red-500' : 'text-gray-500'}`}
-                  >
-                    {post.isLiked ? '❤️' : '♡'}{' '}
-                    <span className="ml-1">{post.likes}</span>
-                  </button>
-                  <button
-                    onClick={() => onRetweet(post.id)}
-                    className="text-gray-500 hover:text-blue-500 flex items-center"
-                  >
-                    🔁 <span className="ml-1">{post.retweets}</span>
-                  </button>
-                  <button
-                    onClick={() =>
-                      setShowComments(showComments === post.id ? null : post.id)
-                    }
-                    className="text-gray-500 hover:text-blue-500 flex items-center"
-                  >
-                    💬 <span className="ml-1">{post.comments.length}</span>
-                  </button>
-                </div>
-                {showComments === post.id && (
-                  <div className="mt-4 space-y-4">
-                    <div className="flex items-start space-x-2">
-                      <Image
-                        src="/profile-placeholder.png"
-                        alt="My Profile"
-                        width={32}
-                        height={32}
-                        className="rounded-full"
-                      />
-                      <div className="flex-1">
-                        <textarea
-                          value={newComment}
-                          onChange={e => setNewComment(e.target.value)}
-                          placeholder="댓글을 입력하세요..."
-                          className="w-full p-2 bg-black text-white border border-gray-700 rounded-md mb-2"
-                        />
-                        <button
-                          onClick={() => onCommentSubmit(post.id, newComment)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-1 px-4 text-sm"
-                        >
-                          댓글 작성
-                        </button>
-                      </div>
-                    </div>
-                    {post.comments.map(comment => (
-                      <div
-                        key={comment.id}
-                        className="flex items-start space-x-2"
-                      >
-                        <Image
-                          src={comment.authorImage}
-                          alt={comment.author}
-                          width={32}
-                          height={32}
-                          className="rounded-full"
-                        />
-                        <div className="flex-1">
-                          <p className="font-semibold">{comment.author}</p>
-                          <p className="text-gray-300">{comment.content}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </main>
-    </div>
-  );
-};
-
-export default Home;
->>>>>>> b28d4e6c30768862db5c44cc46e25065912361ba
