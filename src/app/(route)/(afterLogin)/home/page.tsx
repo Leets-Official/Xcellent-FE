@@ -106,17 +106,6 @@ export default function Home() {
           </div>
         ))}
       </main>
-
-      {/* Right Sidebar */}
-      <aside className="w-1/4 p-4 hidden md:block">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full p-2 border border-gray-300 rounded-md"
-          />
-        </div>
-      </aside>
     </div>
   );
 }
