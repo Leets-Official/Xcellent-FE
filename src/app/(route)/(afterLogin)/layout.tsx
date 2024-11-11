@@ -24,6 +24,7 @@ export default function AfterLoginLayout({ children, modal }: Props) {
         if (userInfo.profileImageUrl) {
           setProfileImage(userInfo.profileImageUrl);
         }
+        
       } catch (error) {
         console.error('Failed to fetch user info: ', error);
       }

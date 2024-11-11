@@ -26,11 +26,15 @@ export default function ProfilePage() {
   }, []);
 
   if (loading) {
-    return <div className="text-white">Loading...</div>;
+    return <div className="text-center text-white font-bold">Loading...</div>;
   }
 
   if (!user) {
-    return <div className="text-white">Failed to load profile</div>;
+    return (
+      <div className="text-center text-white font-bold">
+        Failed to load profile
+      </div>
+    );
   }
 
   const mockData = {
@@ -101,4 +105,11 @@ export default function ProfilePage() {
       </div>
     </TabProvider>
   );
+}
+
+{
+  /* 팔로잉 팔로워 숫자 받아오는거 추가 
+    내 프로필일 경우 -> edit profile 
+    남의 프로필일 경우 -> follow 버튼  조건부 렌더링 
+  */
 }
