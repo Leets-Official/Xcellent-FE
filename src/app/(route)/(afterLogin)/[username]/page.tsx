@@ -83,14 +83,14 @@ export default function ProfilePage() {
 
           <div className="flex flex-row gap-8 mt-2">
             <Link
-              href={`/${user.userName}/followers`}
+              href={`/${user.customId}/followers`}
               className="hover:underline cursor-pointer font-bold text-white"
             >
               {mockData.followers}{' '}
               <span className="text-sm text-gray-500">Followers</span>
             </Link>
             <Link
-              href={`/${user.userName}/following`}
+              href={`/${user.customId}/following`}
               className="hover:underline cursor-pointer font-bold text-white"
             >
               {mockData.following}{' '}
