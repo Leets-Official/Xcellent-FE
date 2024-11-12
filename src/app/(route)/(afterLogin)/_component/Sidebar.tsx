@@ -22,6 +22,7 @@ export default function SideBar() {
     fetchUserInfo();
   }, []);
 
+  // 이거 건들면 안돼요
   const menuItems = [
     { href: '/home', label: 'Home', segmentKey: 'home' },
     { href: '/messages', label: 'Messages', segmentKey: 'messages' },
