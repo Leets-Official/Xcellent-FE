@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-
-export default function layout({
-  children,
-  modal,
-}: {
-  children: React.ReactNode;
-  modal: React.ReactNode;
-}) {
-  return (
-    <div>
-      <div>{children}</div>
-      <div>{modal}</div>
-    </div>
-  );
-}
-=======
 'use client';
 
 import { useSelectedLayoutSegment } from 'next/navigation';
@@ -62,4 +44,3 @@ export default function ProfileLayout({ children }: Props) {
     </div>
   );
 }
->>>>>>> b1d5e012c4505469e88d7a6891c927d5522afb32

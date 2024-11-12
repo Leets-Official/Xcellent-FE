@@ -1,124 +1,85 @@
 'use client';
 
-import { useState } from 'react';
-import Sidebar from '@/app/(route)/(afterLogin)/_component/Sidebar';
-import PostModal from '@/app/(route)/(afterLogin)/_component/PostModal';
-import HomePage from '@/app/(route)/(afterLogin)/home/page';
+import Link from 'next/link';
+import { ReactNode, useEffect, useState } from 'react';
+import { getProfileInfo } from '@/app/api/user/user';
+import SideBar from './_component/Sidebar';
 
-// Post와 Comment 인터페이스 정의
-interface Comment {
-  id: number;
-  content: string;
-  author: string;
-  authorImage: string;
-  createdAt: string;
-}
+type Props = { children: ReactNode; modal: ReactNode };
 
-interface Post {
-  id: number;
-  author: string;
-  authorImage: string;
-  content: string;
-  images: string[];
-  likes: number;
-  retweets: number;
-  comments: Comment[];
-  isLiked: boolean;
-}
+export default function AfterLoginLayout({ children, modal }: Props) {
+  const [userName, setUserName] = useState<string>('');
+  const [customId, setCustomId] = useState<string>('');
+  const [profileImage, setProfileImage] = useState<string>('/profile.svg');
 
-const Layout = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [posts, setPosts] = useState<Post[]>([]);
-
-  // 모달 열기
-  const handlePostButtonClick = () => {
-    setIsModalOpen(true);
-  };
-
-  // 게시글 작성 후 posts 배열 업데이트
-  const handlePostSubmit = (content: string, images: string[]) => {
-    const newPost = {
-      id: Date.now(),
-      author: 'Myself',
-      authorImage: '/profile-placeholder.png',
-      content,
-      images,
-      likes: 0,
-      retweets: 0,
-      comments: [],
-      isLiked: false,
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userInfo = await getProfileInfo();
+        setUserName(userInfo.userName);
+        setCustomId(userInfo.customId);
+        if (userInfo.profileImageUrl) {
+          setProfileImage(userInfo.profileImageUrl);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user info: ', error);
+      }
     };
-    setPosts([newPost, ...posts]); // 새 게시물을 기존 게시물 목록 앞에 추가
-    setIsModalOpen(false); // 모달 닫기
-  };
 
-  // 좋아요 토글 함수
-  const handleLike = (id: number) => {
-    setPosts(
-      posts.map(post =>
-        post.id === id
-          ? {
-              ...post,
-              isLiked: !post.isLiked,
-              likes: post.isLiked ? post.likes - 1 : post.likes + 1,
-            }
-          : post,
-      ),
-    );
-  };
-
-  // 리트윗 함수
-  const handleRetweet = (id: number) => {
-    setPosts(
-      posts.map(post =>
-        post.id === id ? { ...post, retweets: post.retweets + 1 } : post,
-      ),
-    );
-  };
-
-  // 댓글 추가 함수
-  const handleCommentSubmit = (postId: number, commentContent: string) => {
-    const newComment = {
-      id: Date.now(),
-      content: commentContent,
-      author: 'Myself',
-      authorImage: '/profile-placeholder.png',
-      createdAt: new Date().toISOString(),
-    };
-    setPosts(
-      posts.map(post =>
-        post.id === postId
-          ? { ...post, comments: [...post.comments, newComment] }
-          : post,
-      ),
-    );
-  };
+    fetchUserInfo();
+  }, []);
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
-      {/* 좌측 사이드바 */}
-      <Sidebar onPostButtonClick={handlePostButtonClick} />
+    <div className="flex bg-black text-white justify-center">
+      {/* 왼쪽 사이드바 */}
+      <header className="flex flex-col items-end w-20 sm:w-72 h-screen border-r border-gray-700 bg-black fixed left-0">
+        <section className="w-full flex flex-col items-center sm:items-start h-full p-2 sm:p-4">
+          <Link
+            href="/home"
+            className="flex justify-center w-12 h-12 rounded-full hover:bg-gray-900"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="w-9 h-9 fill-white r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1nao33i r-rxcuwo r-1777fci r-m327ed r-494qqr"
+            >
+              <g>
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </g>
+            </svg>
+          </Link>
 
-      {/* 중앙 피드 */}
-      <main className="flex-1 ml-64 border-r border-gray-700">
-        {/* page.tsx에 posts 전달 및 이벤트 핸들러 전달 */}
-        <HomePage
-          posts={posts}
-          onLike={handleLike} // 좋아요 기능 전달
-          onRetweet={handleRetweet} // 리트윗 기능 전달
-          onCommentSubmit={handleCommentSubmit} // 댓글 기능 전달
-          onPostSubmit={handlePostSubmit} // 게시글 작성 기능 전달
-        />
+          <nav className="flex flex-1 flex-col mt-4">
+            <SideBar />
+          </nav>
 
-        {/* 게시글 작성 모달 */}
-        <PostModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onPostSubmit={handlePostSubmit}
-        />
+          <button
+            type="button"
+            className="w-full bg-sky-500 hover:bg-sky- text-white rounded-full py-3 px-6 text-lg font-bold mt-4"
+          >
+            Post
+          </button>
+
+          <div className="flex items-center mt-6 p-2 w-12 sm:w-full rounded-full hover:bg-gray-900 cursor-pointer">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="hidden sm:block ml-3">
+              <div className="text-base font-bold text-white">{userName}</div>
+              <div className="text-sm text-gray-500">@{customId}</div>
+            </div>
+          </div>
+        </section>
+      </header>
+
+      {/* 메인 콘텐츠 영역 */}
+      <main className="flex-1 ml-20 sm:ml-72 p-4 relative max-w-screen-lg mx-auto">
+        {children}
       </main>
     </div>
   );
-};
-
-export default Layout;
+}
