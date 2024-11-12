@@ -30,7 +30,7 @@ export default function ProfileLayout({ children }: Props) {
   }, []);
 
   return (
-    <div className="w-[600px] border-l border-r border-gray-200 flex flex-col items-stretch">
+    <div className="flex flex-col items-stretch w-full max-w-[600px] mx-auto">
       <div className="flex items-center h-14 px-4">
         <BackButton />
         <div className="flex flex-col items-center">
