@@ -7,6 +7,7 @@ import TabProvider from './_component/TabProvider';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getProfileInfo } from '@/app/api/user/user';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
