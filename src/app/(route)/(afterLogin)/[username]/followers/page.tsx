@@ -77,8 +77,8 @@ export default function FollowersPage() {
         ) : (
           <div className="text-white">
             {followersList.map(follower => (
-              <button
-                type="button"
+              <div
+                key={follower.customId}
                 onClick={() => onClickToUserProfile(follower.userName)}
                 className="flex items-center gap-x-4 mb-4 cursor-pointer w-full text-left"
               >
@@ -96,12 +96,11 @@ export default function FollowersPage() {
                   <div className="text-gray-500">{follower.customId}</div>
                 </div>
                 <FollowingButton />
-              </button>
+              </div>
             ))}
           </div>
         )}
 
-        {/* 무한 스크롤로 수정하는게 좋을 듯  */}
         <div className="flex justify-center mt-6">
           {Array.from({ length: totalPages }, (_, index) => (
             <button
