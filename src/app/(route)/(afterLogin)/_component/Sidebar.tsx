@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -57,6 +58,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onPostButtonClick }) => {
             </li>
           </ul>
         </nav>
+
+        {/* 게시하기 버튼 */}
         <button
           onClick={onPostButtonClick}
           className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-6 text-lg font-bold flex items-center justify-center gap-2"
@@ -64,20 +67,23 @@ const Sidebar: React.FC<SidebarProps> = ({ onPostButtonClick }) => {
           <FaFeatherAlt className="w-5 h-5" />
           <span>게시하기</span>
         </button>
+
         {/* 사용자 정보 */}
         <div className="mt-auto p-4 hover:bg-gray-800 rounded-full cursor-pointer">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
-              <Image
-                src="/profile-placeholder.png"
-                alt="Profile"
-                width={40}
-                height={40}
-              />
-            </div>
+          <div className="flex items-center gap-[10px]">
+            {/* 프로필 이미지 */}
+            <Image
+              src="/profile-placeholder.png"
+              alt="Profile"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+            {/* 사용자 이름 및 아이디 */}
             <div>
-              <div className="font-bold">사용자 이름</div>
-              <div className="text-gray-500">@username</div>
+              사용자 이름
+              <br />
+              @username
             </div>
           </div>
         </div>

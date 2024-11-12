@@ -1,10 +1,9 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import Sidebar from '@/app/(route)/(afterLogin)/_component/Sidebar';
-import PostModal from '@/app/(route)/(afterLogin)/_component/PostModal'; // 모달 컴포넌트 임포트
-import Link from 'next/link';
-import HomePage from '@/app/(route)/(afterLogin)/home/page'; // page.tsx 임포트
+import PostModal from '@/app/(route)/(afterLogin)/_component/PostModal';
+import HomePage from '@/app/(route)/(afterLogin)/home/page';
 
 // Post와 Comment 인터페이스 정의
 interface Comment {
@@ -27,37 +26,30 @@ interface Post {
   isLiked: boolean;
 }
 
-interface HomeLayoutProps {
-  children: ReactNode;
-}
-
-const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
-  // 사용자 ID 설정
-  const me = { id: 'dahyeon' };
-
-  // 모달 상태 및 게시물 상태 관리
+const Layout = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
 
+  // 모달 열기
   const handlePostButtonClick = () => {
-    setIsModalOpen(true); // 모달 열기
+    setIsModalOpen(true);
   };
 
-  // 새로운 게시물 추가 함수 (PostModal과 page.tsx 모두 이 함수를 사용)
-  const handlePostSubmit = (post: Post) => {
+  // 게시글 작성 후 posts 배열 업데이트
+  const handlePostSubmit = (content: string, images: string[]) => {
     const newPost = {
-      id: posts.length + 1,
+      id: Date.now(),
       author: 'Myself',
       authorImage: '/profile-placeholder.png',
-      content: post.content,
-      images: post.images,
+      content,
+      images,
       likes: 0,
       retweets: 0,
       comments: [],
       isLiked: false,
     };
     setPosts([newPost, ...posts]); // 새 게시물을 기존 게시물 목록 앞에 추가
-    setIsModalOpen(false);
+    setIsModalOpen(false); // 모달 닫기
   };
 
   // 좋아요 토글 함수
@@ -109,32 +101,13 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
 
       {/* 중앙 피드 */}
       <main className="flex-1 ml-64 border-r border-gray-700">
-        {/* 프로필 링크 */}
-        <Link href={`/afterLogin/${me.id}`} legacyBehavior>
-          <a className="text-blue-500 hover:text-blue-400 hover:underline">
-            프로필
-          </a>
-        </Link>
-
         {/* page.tsx에 posts 전달 및 이벤트 핸들러 전달 */}
         <HomePage
           posts={posts}
-          onLike={handleLike}
-          onRetweet={handleRetweet}
-          onCommentSubmit={handleCommentSubmit}
-          onPostSubmit={(postContent, images) =>
-            handlePostSubmit({
-              id: posts.length + 1, // 새로운 ID 생성
-              author: 'Myself', // 작성자 정보 추가
-              authorImage: '/profile-placeholder.png', // 작성자 이미지 추가
-              content: postContent,
-              images,
-              likes: 0, // 기본 좋아요 수
-              retweets: 0, // 기본 리트윗 수
-              comments: [], // 기본 댓글 목록
-              isLiked: false, // 기본 좋아요 상태
-            })
-          }
+          onLike={handleLike} // 좋아요 기능 전달
+          onRetweet={handleRetweet} // 리트윗 기능 전달
+          onCommentSubmit={handleCommentSubmit} // 댓글 기능 전달
+          onPostSubmit={handlePostSubmit} // 게시글 작성 기능 전달
         />
 
         {/* 게시글 작성 모달 */}
@@ -144,10 +117,8 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
           onPostSubmit={handlePostSubmit}
         />
       </main>
-
-      {/* 우측 트렌딩 섹션과 추천 사용자 섹션 제거 */}
     </div>
   );
 };
 
-export default HomeLayout;
+export default Layout;
