@@ -30,14 +30,14 @@ export const getProfileInfo = async (): Promise<ProfileData> => {
         },
       },
     );
-    console.log('Response status:', res.status);
+    // console.log('Response status:', res.status);
 
     if (!res.ok) {
       throw new Error(`Error: ${res.status}`);
     }
 
     const data = await res.json();
-    console.log('Response data: ', data);
+    // console.log('Response data: ', data);
     return data.result;
   } catch (error) {
     console.error('Error fetching profile data: ', error);

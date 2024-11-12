@@ -20,7 +20,7 @@ export default function ProfileLayout({ children }: Props) {
         const userInfo = await getProfileInfo();
         setUserName(userInfo.userName);
         setCustomId(userInfo.customId);
-        console.log('Fetched user info: ', userInfo);
+        // console.log('Fetched user info: ', userInfo);
       } catch (error) {
         console.error('Error fetching profile info: ', error);
       }
