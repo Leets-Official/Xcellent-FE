@@ -9,7 +9,6 @@ import FollowingButton from '../_component/FollowingButton';
 export default function FollowingPage() {
   const router = useRouter();
 
-  // 팔로잉 목록
   const followingList = [
     {
       userName: 'KimGachon',
@@ -23,7 +22,6 @@ export default function FollowingPage() {
     },
   ];
 
-  // 사용자 프로필 페이지로 이동하는 함수
   const onClickToUserProfile = (userName: string) => {
     router.push(`/${userName}`);
   };
