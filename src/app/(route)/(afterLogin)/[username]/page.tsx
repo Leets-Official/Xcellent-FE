@@ -1,13 +1,12 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
-import BackButton from '@/app/(route)/(afterLogin)/_component/BackButton';
-import Tab from './_component/Tab';
-import TabProvider from './_component/TabProvider';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { getProfileInfo } from '@/app/api/user/user';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getProfileInfo } from '@/app/api/user/user';
+
+import Tab from './_component/Tab';
+import TabProvider from './_component/TabProvider';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -42,21 +41,6 @@ export default function ProfilePage() {
   const mockData = {
     following: 10,
     followers: 30,
-  };
-
-  const pathname = usePathname();
-
-  const router = useRouter();
-
-  const onClickToEditProfileModal = () => {
-    router.push(`${pathname}/settings/profile`);
-  };
-
-  const onClickToFollowing = () => {
-    router.push(`/${user.userName}/following`);
-  };
-  const onClickToFollowers = () => {
-    router.push(`/${user.userName}/followers`);
   };
 
   return (
