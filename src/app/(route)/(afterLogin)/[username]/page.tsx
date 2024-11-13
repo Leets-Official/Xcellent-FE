@@ -43,6 +43,7 @@ export default function ProfilePage() {
     fetchProfile();
   }, [pathname]);
 
+  // 팔로우 요청 함수
   const handleFollow = async () => {
     try {
       await followUser(user.customId);
@@ -52,6 +53,7 @@ export default function ProfilePage() {
     }
   };
 
+  // 언팔로우 요청 함수
   const handleUnfollow = async () => {
     try {
       await unfollowUser(user.customId);

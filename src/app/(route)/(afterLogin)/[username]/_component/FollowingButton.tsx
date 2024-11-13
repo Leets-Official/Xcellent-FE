@@ -35,7 +35,7 @@ export default function FollowingButton({
             ? hover
               ? 'bg-red-800 text-red-700 border border-red-700 bg-opacity-35'
               : 'text-white border border-white'
-            : 'border border-white text-white '
+            : 'border border-white text-white'
         }`}
     >
       {isFollowing ? (hover ? 'Unfollow' : 'Following') : 'Follow'}

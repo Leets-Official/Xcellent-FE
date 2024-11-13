@@ -1,58 +1,37 @@
 'use client';
 
-import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
-import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
-import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { getFollowersList } from '@/app/api/user/follower';
+import Image from 'next/image';
+import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
+import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
 import FollowingButton from '../_component/FollowingButton';
+import { getFollowersList } from '@/app/api/user/follower';
+import { followUser, unfollowUser } from '@/app/api/user/follow';
 
 export default function FollowersPage() {
   const router = useRouter();
   const pathname = usePathname();
   const [followersList, setFollowersList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [pageNo, setPageNo] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [pageNo, setPageNo] = useState<number>(1);
   const observerRef = useRef<HTMLDivElement | null>(null);
-
-  // URL에서 customId 추출
-  const pathSegments = pathname.split('/');
-  const customId = pathSegments[1];
+  const customId = pathname.split('/')[1];
 
   useEffect(() => {
     const fetchData = async () => {
       if (loading || !hasMore) return;
       try {
         setLoading(true);
-
-        // URL에서 추출한 customId로 팔로워 목록 요청
         const data = await getFollowersList(customId, pageNo);
         const newFollowers = data.content || [];
-
-        const updatedList = [
-          ...followersList,
-          ...newFollowers.filter(
-            newFollower =>
-              !followersList.some(
-                existingFollower =>
-                  existingFollower.customId === newFollower.customId,
-              ),
-          ),
-        ];
-
-        setFollowersList(updatedList);
-        setTotalPages(totalPages || 0);
-
-        if (pageNo >= totalPages) {
+        setFollowersList(prev => [...prev, ...newFollowers]);
+        if (pageNo >= data.totalPages) {
           setHasMore(false);
         }
-      } catch (err) {
-        console.error('Failed to fetch data: ', err);
-        setError('Failed to load data.');
+      } catch (error) {
+        console.error('Failed to fetch followers list:', error);
       } finally {
         setLoading(false);
       }
@@ -61,36 +40,27 @@ export default function FollowersPage() {
     fetchData();
   }, [pageNo, customId]);
 
-  useEffect(() => {
-    if (!hasMore || loading) return;
-
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting) {
-          setPageNo(prevPage => prevPage + 1);
-        }
-      },
-      { threshold: 1.0 },
+  const handleFollow = async (customId: string) => {
+    await followUser(customId);
+    setFollowersList(prev =>
+      prev.map(user =>
+        user.customId === customId ? { ...user, isFollowing: true } : user,
+      ),
     );
+  };
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [hasMore, loading]);
+  const handleUnfollow = async (customId: string) => {
+    await unfollowUser(customId);
+    setFollowersList(prev =>
+      prev.map(user =>
+        user.customId === customId ? { ...user, isFollowing: false } : user,
+      ),
+    );
+  };
 
   const onClickToUserProfile = (followerCustomId: string) => {
     router.push(`/${followerCustomId}`);
   };
-
-  if (error) {
-    return <div className="text-center text-red-500 font-bold">{error}</div>;
-  }
 
   return (
     <TabProvider>
@@ -101,32 +71,33 @@ export default function FollowersPage() {
             No Followers Found.
           </div>
         ) : (
-          <div className="text-white">
-            {followersList.map(follower => (
-              <div
-                key={follower.customId}
-                onClick={() => onClickToUserProfile(follower.customId)}
-                className="flex items-center gap-x-4 mb-4 cursor-pointer"
-              >
-                <Image
-                  src={follower.profileImage || '/profile.svg'}
-                  alt={follower.customId}
-                  width={40}
-                  height={40}
-                  className="bg-slate-300 w-10 h-10 rounded-full"
-                />
-                <div>
-                  <div className="text-white font-bold hover:underline cursor-pointer">
-                    {follower.userName}
-                  </div>
-                  <div className="text-gray-500">{follower.customId}</div>
+          followersList.map(follower => (
+            <div
+              key={follower.customId}
+              className="flex items-center gap-x-4 mb-4 cursor-pointer"
+              onClick={() => onClickToUserProfile(follower.customId)}
+            >
+              <Image
+                src={follower.profileImage || '/profile.svg'}
+                alt={follower.customId}
+                width={40}
+                height={40}
+                className="bg-slate-300 w-10 h-10 rounded-full"
+              />
+              <div>
+                <div className="text-white font-bold hover:underline">
+                  {follower.userName}
                 </div>
-                <FollowingButton />
+                <div className="text-gray-500">{follower.customId}</div>
               </div>
-            ))}
-          </div>
+              <FollowingButton
+                isFollowing={follower.isFollowing}
+                onFollow={() => handleFollow(follower.customId)}
+                onUnfollow={() => handleUnfollow(follower.customId)}
+              />
+            </div>
+          ))
         )}
-
         <div ref={observerRef} className="h-10" />
         {loading && (
           <div className="text-center text-white font-bold">
