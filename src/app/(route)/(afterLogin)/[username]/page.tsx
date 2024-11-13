@@ -1,30 +1,44 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getProfileInfo } from '@/app/api/user/user';
+import { getOtherUserInfo, getProfileInfo } from '@/app/api/user/user';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-
-import Tab from './_component/Tab';
 import TabProvider from './_component/TabProvider';
+import Tab from './_component/Tab';
+// import PostItem from '../_component/PostItems';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
+  const [myCustomId, setMyCustomId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await getProfileInfo();
-        setUser(profileData);
+        const pathSegments = pathname.split('/');
+        const customId = pathSegments[1];
+
+        const myProfileData = await getProfileInfo();
+        const myCustomId = myProfileData.customId;
+        setMyCustomId(myCustomId);
+
+        if (customId === myCustomId) {
+          setUser(myProfileData);
+        } else {
+          const otherUserData = await getOtherUserInfo(customId);
+          setUser(otherUserData);
+        }
       } catch (error) {
-        console.error('Error fetching profile data: ', error);
+        console.error('프로필 조회에 오류가 생겼습니다.', error);
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
-  }, []);
+  }, [pathname]);
 
   if (loading) {
     return <div className="text-center text-white font-bold">Loading...</div>;
@@ -37,11 +51,6 @@ export default function ProfilePage() {
       </div>
     );
   }
-
-  const mockData = {
-    following: 10,
-    followers: 30,
-  };
 
   return (
     <TabProvider>
@@ -87,20 +96,25 @@ export default function ProfilePage() {
               href={`/${user.customId}/followers`}
               className="hover:underline cursor-pointer font-bold text-white"
             >
-              {mockData.followers}{' '}
+              {user.followersCount}{' '}
               <span className="text-sm text-gray-500">Followers</span>
             </Link>
             <Link
               href={`/${user.customId}/following`}
               className="hover:underline cursor-pointer font-bold text-white"
             >
-              {mockData.following}{' '}
+              {user.followingsCount}{' '}
               <span className="text-sm text-gray-500">Following</span>
             </Link>
           </div>
 
-          <Tab type="postsLikes" userName={user.userName} />
+          <Tab type="postsLikes" customId={user.customId} />
         </div>
+        {/* <PostItem />
+        <PostItem />
+        <PostItem />
+        <PostItem />
+        <PostItem /> */}
       </div>
     </TabProvider>
   );

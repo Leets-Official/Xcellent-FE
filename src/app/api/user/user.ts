@@ -11,6 +11,10 @@ export interface ProfileData {
   description: string | null;
   websiteUrl: string | null;
   location: string | null;
+  followersCount: number;
+  followingsCount: number;
+  isFollowing: boolean;
+  isMyProfile: boolean;
 }
 
 export const getProfileInfo = async (): Promise<ProfileData> => {
@@ -41,6 +45,35 @@ export const getProfileInfo = async (): Promise<ProfileData> => {
     return data.result;
   } catch (error) {
     console.error('Error fetching profile data: ', error);
+    throw error;
+  }
+};
+
+export const getOtherUserInfo = async (
+  customId: string,
+): Promise<ProfileData> => {
+  try {
+    const token = localStorage.getItem('accessToken');
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/info?customId=${customId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    // console.log('프로필 조회 성공: ', data);
+    return data.result;
+  } catch (error) {
+    console.error('Error fetching other user profile data: ', error);
     throw error;
   }
 };

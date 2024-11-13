@@ -1,3 +1,5 @@
+'use client';
+
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { TabContext } from '../_component/TabProvider';
@@ -18,34 +20,32 @@ type TabHandlers = PostsLikesHandlers | FollowersFollowingHandlers;
 
 export default function useTabHandler(
   type: TabType,
-  userName: string,
+  customId: string,
 ): TabHandlers {
   const { setTab } = useContext(TabContext);
   const router = useRouter();
 
-  // customId 경로로 수정 , 좋아요는 customId/likes 경로로 이동하도록 수정해야함
   if (type === 'postsLikes') {
     return {
       post: () => {
         setTab('post');
-        router.push(`/${userName}`);
+        router.push(`/${customId}`);
       },
       like: () => {
         setTab('like');
-        router.push(`/${userName}`);
+        router.push(`/${customId}/likes`);
       },
     };
   }
 
-  // customId/followers , customId/following으로 이동하도록 수정해야함
   return {
     followers: () => {
       setTab('followers');
-      router.push(`/${userName}/followers`);
+      router.push(`/${customId}/followers`);
     },
     following: () => {
       setTab('following');
-      router.push(`/${userName}/following`);
+      router.push(`/${customId}/following`);
     },
   };
 }
