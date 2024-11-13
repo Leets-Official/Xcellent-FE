@@ -49,12 +49,14 @@ export const getOtherUserInfo = async (
   customId: string,
 ): Promise<ProfileData> => {
   try {
+    const token = localStorage.getItem('accessToken');
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/info?customId=${customId}`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
       },
     );
