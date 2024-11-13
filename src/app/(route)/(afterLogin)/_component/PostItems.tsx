@@ -6,11 +6,11 @@ import { FaRegComment, FaRetweet } from 'react-icons/fa';
 import { FiBarChart2 } from 'react-icons/fi';
 import { MdDeleteForever } from 'react-icons/md';
 import { removeArticleAPI } from '@/app/api/article/article';
+import { createCommentAPI, removeCommentAPI } from '@/app/api/comment/comment';
 
 interface PostItemProps {
   post: any;
   onLike: (id: string) => void;
-  onRetweet: (id: string) => void;
   onCommentSubmit: (postId: string, commentContent: string) => void;
   fetchArticleList: () => void; // fetchArticleList 함수 추가
 }
@@ -18,11 +18,15 @@ interface PostItemProps {
 export default function PostItems({
   post,
   onLike,
-  onRetweet,
-  onCommentSubmit,
+
   fetchArticleList,
 }: PostItemProps) {
   const [isCommentVisible, setIsCommentVisible] = useState(false);
+  const [commentContent, setCommentContent] = useState('');
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentContent(e.target.value);
+  };
 
   const toggleCommentVisibility = () => {
     setIsCommentVisible(!isCommentVisible);
@@ -35,6 +39,29 @@ export default function PostItems({
       fetchArticleList(); // 삭제 후 fetchArticleList 함수 호출
     } catch (error) {
       console.error('Error deleting article:', error);
+    }
+  };
+
+  const handleCommentDelete = async (commentId: string) => {
+    console.log('post.comments.commentId:', post.comments.commentId);
+    try {
+      await removeCommentAPI(commentId);
+      alert('댓글이 삭제되었습니다.');
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+  };
+
+  const submitComment = async (articleId: string) => {
+    if (!commentContent.trim()) {
+      alert('댓글을 입력해주세요.');
+      return;
+    }
+    try {
+      await createCommentAPI(articleId, commentContent);
+      setCommentContent(''); // 입력창 초기화
+    } catch (error) {
+      console.error('Error: ', error);
     }
   };
 
@@ -71,7 +98,7 @@ export default function PostItems({
             <div
               className={`grid gap-2 mt-2 ${post.mediaUrls.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}
             >
-              {post.mediaUrls.map((image, index) => (
+              {post.mediaUrls.map((image: string, index: any) => (
                 <Image
                   key={index}
                   src={image} // 이미지 경로가 올바른지 확인 필요
@@ -98,7 +125,7 @@ export default function PostItems({
             {/* 리트윗 아이콘 */}
             <button
               type="button"
-              onClick={() => onRetweet(post.id)}
+              // onClick={() => onRetweet(post.id)}
               className="hover:text-green-500 flex items-center space-x-1"
             >
               <FaRetweet />
@@ -125,26 +152,58 @@ export default function PostItems({
           </div>
           {/* 댓글 섹션 - 클릭 시에만 표시됨 */}
           {isCommentVisible && (
-            <div className="mt-4">
-              {/* 댓글 입력창 구현 가능 */}
-              {/* 예시로 간단히 구현 */}
-              <textarea
-                placeholder="Write a comment..."
-                className="w-full p-2 bg-black text-white border border-gray-700 rounded-md resize-none"
-                rows={2}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const commentContent = (
-                      e.target as HTMLTextAreaElement
-                    ).value.trim();
-                    if (commentContent) {
-                      onCommentSubmit(post.id, commentContent);
-                      (e.target as HTMLTextAreaElement).value = ''; // 입력창 초기화
-                    }
-                  }
-                }}
-              />
+            <div className="mt-4 flex-auto">
+              <div className="flex-auto">
+                {post.comments.map((comment: any, index: any) => (
+                  <div
+                    key={index}
+                    className="flex items-center space-x-2 w-full"
+                  >
+                    <div className="w-8 h-8 bg-gray-600 rounded-full">
+                      <Image
+                        src={'/profile.svg'}
+                        alt="profile.svg"
+                        color="white"
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                    </div>
+                    <div className="w-full">
+                      <div className="font-semibold justify-between flex">
+                        {comment.userName}
+                        {comment.owner && (
+                          <MdDeleteForever
+                            size={24}
+                            onClick={() =>
+                              handleCommentDelete(comment.commentId)
+                            }
+                            className="cursor-pointer"
+                          />
+                        )}
+                      </div>
+                      <p>{comment.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex">
+                <textarea
+                  placeholder="댓글을 입력하세요."
+                  className="w-full p-2 bg-black text-white border border-gray-700 rounded-md resize-none"
+                  rows={2}
+                  value={commentContent}
+                  onChange={handleCommentChange}
+                />
+                <div className="items-center justify-center flex flex-shrink-0 p-3">
+                  <button
+                    onClick={() => submitComment(post.articleId)}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    댓글 작성
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
