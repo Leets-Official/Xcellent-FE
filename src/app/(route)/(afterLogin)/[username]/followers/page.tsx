@@ -120,11 +120,6 @@ export default function FollowersPage() {
                   </div>
                   <div className="text-gray-500">{follower.customId}</div>
                 </div>
-                <FollowingButton
-                  isFollowing={follower.isFollowing}
-                  onFollow={() => console.log('Follow clicked')}
-                  onUnfollow={() => console.log('Unfollow clicked')}
-                />
               </div>
             ))}
           </div>
