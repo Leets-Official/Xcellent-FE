@@ -21,16 +21,13 @@ export default function ProfileLayout({ children }: Props) {
         const pathSegments = pathname.split('/');
         const customIdFromUrl = pathSegments[1];
 
-        // 로그인한 사용자의 customId 가져오기
         const myProfileData = await getProfileInfo();
         const myCustomId = myProfileData.customId;
 
         if (customIdFromUrl === myCustomId) {
-          // 내 프로필
           setUserName(myProfileData.userName);
           setCustomId(myProfileData.customId);
         } else {
-          // 다른 유저의 프로필
           const otherUserData = await getOtherUserInfo(customIdFromUrl);
           setUserName(otherUserData.userName);
           setCustomId(otherUserData.customId);
