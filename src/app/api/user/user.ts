@@ -11,6 +11,10 @@ export interface ProfileData {
   description: string | null;
   websiteUrl: string | null;
   location: string | null;
+  followersCount: number;
+  followingsCount: number;
+  isFollowing: boolean;
+  isMyProfile: boolean;
 }
 
 export const getProfileInfo = async (): Promise<ProfileData> => {
@@ -66,6 +70,7 @@ export const getOtherUserInfo = async (
     }
 
     const data = await res.json();
+    // console.log('프로필 조회 성공: ', data);
     return data.result;
   } catch (error) {
     console.error('Error fetching other user profile data: ', error);

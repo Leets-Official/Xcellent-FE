@@ -52,11 +52,6 @@ export default function ProfilePage() {
     );
   }
 
-  const mockData = {
-    following: 10,
-    followers: 30,
-  };
-
   return (
     <TabProvider>
       <div className="w-full">
@@ -101,14 +96,14 @@ export default function ProfilePage() {
               href={`/${user.customId}/followers`}
               className="hover:underline cursor-pointer font-bold text-white"
             >
-              {mockData.followers}{' '}
+              {user.followersCount}{' '}
               <span className="text-sm text-gray-500">Followers</span>
             </Link>
             <Link
               href={`/${user.customId}/following`}
               className="hover:underline cursor-pointer font-bold text-white"
             >
-              {mockData.following}{' '}
+              {user.followingsCount}{' '}
               <span className="text-sm text-gray-500">Following</span>
             </Link>
           </div>
