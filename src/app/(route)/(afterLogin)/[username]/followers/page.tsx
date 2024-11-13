@@ -1,37 +1,57 @@
 'use client';
 
+import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
+import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
+import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import Image from 'next/image';
-import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
-import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
-import FollowingButton from '../_component/FollowingButton';
 import { getFollowersList } from '@/app/api/user/follower';
-import { followUser, unfollowUser } from '@/app/api/user/follow';
+import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowersPage() {
   const router = useRouter();
   const pathname = usePathname();
   const [followersList, setFollowersList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [pageNo, setPageNo] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
-  const customId = pathname.split('/')[1];
+
+  const pathSegments = pathname.split('/');
+  const customId = pathSegments[1];
 
   useEffect(() => {
     const fetchData = async () => {
       if (loading || !hasMore) return;
       try {
         setLoading(true);
+
         const data = await getFollowersList(customId, pageNo);
         const newFollowers = data.content || [];
-        setFollowersList(prev => [...prev, ...newFollowers]);
+
+        // 중복된 customId를 가진 데이터 제거
+        const uniqueFollowers = [
+          ...followersList,
+          ...newFollowers.filter(
+            newFollower =>
+              !followersList.some(
+                existingFollower =>
+                  existingFollower.customId === newFollower.customId,
+              ),
+          ),
+        ];
+
+        setFollowersList(uniqueFollowers);
+        setTotalPages(data.totalPages || 0);
+
         if (pageNo >= data.totalPages) {
           setHasMore(false);
         }
-      } catch (error) {
-        console.error('Failed to fetch followers list:', error);
+      } catch (err) {
+        console.error('Failed to fetch data: ', err);
+        setError('Failed to load data.');
       } finally {
         setLoading(false);
       }
@@ -40,27 +60,36 @@ export default function FollowersPage() {
     fetchData();
   }, [pageNo, customId]);
 
-  const handleFollow = async (customId: string) => {
-    await followUser(customId);
-    setFollowersList(prev =>
-      prev.map(user =>
-        user.customId === customId ? { ...user, isFollowing: true } : user,
-      ),
-    );
-  };
+  useEffect(() => {
+    if (!hasMore || loading) return;
 
-  const handleUnfollow = async (customId: string) => {
-    await unfollowUser(customId);
-    setFollowersList(prev =>
-      prev.map(user =>
-        user.customId === customId ? { ...user, isFollowing: false } : user,
-      ),
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setPageNo(prevPage => prevPage + 1);
+        }
+      },
+      { threshold: 1.0 },
     );
-  };
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [hasMore, loading]);
 
   const onClickToUserProfile = (followerCustomId: string) => {
     router.push(`/${followerCustomId}`);
   };
+
+  if (error) {
+    return <div className="text-center text-red-500 font-bold">{error}</div>;
+  }
 
   return (
     <TabProvider>
@@ -71,32 +100,34 @@ export default function FollowersPage() {
             No Followers Found.
           </div>
         ) : (
-          followersList.map(follower => (
-            <div
-              key={follower.customId}
-              className="flex items-center gap-x-4 mb-4 cursor-pointer"
-              onClick={() => onClickToUserProfile(follower.customId)}
-            >
-              <Image
-                src={follower.profileImage || '/profile.svg'}
-                alt={follower.customId}
-                width={40}
-                height={40}
-                className="bg-slate-300 w-10 h-10 rounded-full"
-              />
-              <div>
-                <div className="text-white font-bold hover:underline">
-                  {follower.userName}
+          <div className="text-white">
+            {followersList.map(follower => (
+              <div
+                key={follower.customId}
+                onClick={() => onClickToUserProfile(follower.customId)}
+                className="flex items-center gap-x-4 mb-4 cursor-pointer"
+              >
+                <Image
+                  src={follower.profileImage || '/profile.svg'}
+                  alt={follower.customId}
+                  width={40}
+                  height={40}
+                  className="bg-slate-300 w-10 h-10 rounded-full"
+                />
+                <div>
+                  <div className="text-white font-bold hover:underline cursor-pointer">
+                    {follower.userName}
+                  </div>
+                  <div className="text-gray-500">{follower.customId}</div>
                 </div>
-                <div className="text-gray-500">{follower.customId}</div>
+                <FollowingButton
+                  isFollowing={follower.isFollowing}
+                  onFollow={() => console.log('Follow clicked')}
+                  onUnfollow={() => console.log('Unfollow clicked')}
+                />
               </div>
-              <FollowingButton
-                isFollowing={follower.isFollowing}
-                onFollow={() => handleFollow(follower.customId)}
-                onUnfollow={() => handleUnfollow(follower.customId)}
-              />
-            </div>
-          ))
+            ))}
+          </div>
         )}
         <div ref={observerRef} className="h-10" />
         {loading && (

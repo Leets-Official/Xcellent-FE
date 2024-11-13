@@ -15,7 +15,9 @@ export default function FollowingButton({
 }: FollowingButtonProps) {
   const [hover, setHover] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // 이벤트 전파 막기
+
     if (isFollowing) {
       onUnfollow();
     } else {

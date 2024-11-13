@@ -6,12 +6,12 @@ import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { getFollowingList } from '@/app/api/user/following';
-import { followUser, unfollowUser } from '@/app/api/user/follow';
 import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowingPage() {
   const router = useRouter();
   const pathname = usePathname();
+
   const [followingList, setFollowingList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,13 +20,15 @@ export default function FollowingPage() {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const customId = pathname.split('/')[1];
+  const pathSegments = pathname.split('/');
+  const customId = pathSegments[1];
 
   useEffect(() => {
     const fetchData = async () => {
       if (loading || !hasMore) return;
       try {
         setLoading(true);
+
         const data = await getFollowingList(customId, pageNo);
         const newFollowing = data.content || [];
 
@@ -56,33 +58,30 @@ export default function FollowingPage() {
     };
 
     fetchData();
-  }, [pageNo, customId]);
+  }, [pageNo]);
 
-  const handleFollow = async (customId: string) => {
-    try {
-      await followUser(customId);
-      setFollowingList(prev =>
-        prev.map(user =>
-          user.customId === customId ? { ...user, isFollowing: true } : user,
-        ),
-      );
-    } catch (error) {
-      console.error('Failed to follow user:', error);
-    }
-  };
+  useEffect(() => {
+    if (!hasMore || loading) return;
 
-  const handleUnfollow = async (customId: string) => {
-    try {
-      await unfollowUser(customId);
-      setFollowingList(prev =>
-        prev.map(user =>
-          user.customId === customId ? { ...user, isFollowing: false } : user,
-        ),
-      );
-    } catch (error) {
-      console.error('Failed to unfollow user:', error);
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setPageNo(prevPage => prevPage + 1);
+        }
+      },
+      { threshold: 1.0 },
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
     }
-  };
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [hasMore, loading]);
 
   const onClickToUserProfile = (followingCustomId: string) => {
     router.push(`/${followingCustomId}`);
@@ -105,8 +104,8 @@ export default function FollowingPage() {
             {followingList.map(following => (
               <div
                 key={following.customId}
-                className="flex items-center gap-x-4 mb-4 cursor-pointer"
                 onClick={() => onClickToUserProfile(following.customId)}
+                className="flex items-center gap-x-4 mb-4 cursor-pointer"
               >
                 <Image
                   src={following.profileImage || '/profile.svg'}
@@ -116,15 +115,15 @@ export default function FollowingPage() {
                   className="bg-slate-300 w-10 h-10 rounded-full"
                 />
                 <div>
-                  <div className="text-white font-bold hover:underline">
+                  <div className="text-white font-bold hover:underline cursor-pointer">
                     {following.userName}
                   </div>
                   <div className="text-gray-500">{following.customId}</div>
                 </div>
                 <FollowingButton
                   isFollowing={following.isFollowing}
-                  onFollow={() => handleFollow(following.customId)}
-                  onUnfollow={() => handleUnfollow(following.customId)}
+                  onFollow={() => console.log('Follow clicked')}
+                  onUnfollow={() => console.log('Unfollow clicked')}
                 />
               </div>
             ))}
