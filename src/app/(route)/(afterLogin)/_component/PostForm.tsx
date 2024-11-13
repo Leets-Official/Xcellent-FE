@@ -1,9 +1,9 @@
 'use client';
 
+import { createArticleAPI } from '@/app/api/article/article';
 import React, { useState, useRef } from 'react';
 import { BsCardImage } from 'react-icons/bs';
 import { IoMdSend } from 'react-icons/io';
-// import createPost from '@/app/client/createPost'; // 클라이언트용 API 호출 함수 임포트
 
 interface PostFormProps {
   onPostSubmit: (content: string, images: File[]) => void; // File[] 타입으로 수정
@@ -30,21 +30,19 @@ export default function PostForm({ onPostSubmit }: PostFormProps) {
   const handlePost = async () => {
     if (textareaRef.current) {
       const content = textareaRef.current.value.trim();
-
       if (!content && selectedImages.length === 0) {
         alert('내용 또는 이미지를 입력해주세요.');
         return;
       }
-
-      try {
-        // 부모 컴포넌트로 content와 File 배열 전달
-        onPostSubmit(content, selectedImages); // selectedImages는 File[] 타입
-        textareaRef.current.value = '';
-        setSelectedImages([]);
-      } catch (error) {
-        console.error('Failed to create post:', error);
-        alert('Failed to create post. Please try again.');
-      }
+      const createArticle = async () => {
+        try {
+          await createArticleAPI(content);
+          // console.log('Fetched user info: ', userInfo);
+        } catch (error) {
+          console.error('Error: ', error);
+        }
+      };
+      createArticle();
     }
   };
   return (
