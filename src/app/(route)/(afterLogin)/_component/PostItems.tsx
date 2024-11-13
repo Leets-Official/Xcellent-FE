@@ -4,33 +4,15 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { FaRegComment, FaRetweet } from 'react-icons/fa';
 import { FiBarChart2 } from 'react-icons/fi';
-// Post와 Comment 인터페이스 정의
-// interface Post {
-//   id: string; // articleId는 string 타입
-//   writorId: string;
-//   authorImage: string;
-//   content: string;
-//   images: string[];
-//   likes: number;
-//   retweets: number;
-//   comments: Comment[];
-//   isLiked: boolean;
-// }
+import { MdDeleteForever } from 'react-icons/md';
+import { removeArticleAPI } from '@/app/api/article/article';
 
-// interface Comment {
-//   id: number;
-//   author: string;
-//   authorImage: string;
-//   content: string;
-//   createdAt: string;
-// }
-
-// PostItemProps 인터페이스 정의
 interface PostItemProps {
   post: any;
-  onLike: (id: string) => void; // id 타입을 string으로 변경
-  onRetweet: (id: string) => void; // id 타입을 string으로 변경
-  onCommentSubmit: (postId: string, commentContent: string) => void; // 추가
+  onLike: (id: string) => void;
+  onRetweet: (id: string) => void;
+  onCommentSubmit: (postId: string, commentContent: string) => void;
+  fetchArticleList: () => void; // fetchArticleList 함수 추가
 }
 
 export default function PostItems({
@@ -38,11 +20,22 @@ export default function PostItems({
   onLike,
   onRetweet,
   onCommentSubmit,
+  fetchArticleList,
 }: PostItemProps) {
   const [isCommentVisible, setIsCommentVisible] = useState(false);
 
   const toggleCommentVisibility = () => {
     setIsCommentVisible(!isCommentVisible);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await removeArticleAPI(post.articleId);
+      alert('게시글이 삭제되었습니다.');
+      fetchArticleList(); // 삭제 후 fetchArticleList 함수 호출
+    } catch (error) {
+      console.error('Error deleting article:', error);
+    }
   };
 
   return (
@@ -57,6 +50,13 @@ export default function PostItems({
           className="rounded-full"
         />
         <div className="flex-grow">
+          {post.owner && (
+            <MdDeleteForever
+              size={24}
+              onClick={handleDelete}
+              className="cursor-pointer justify-self-end"
+            />
+          )}
           {/* 작성자 이름 및 아이디 */}
           <p className="font-semibold">{post.userName}</p>
           <p className="text-gray-400">@{post.customId}</p>
@@ -88,7 +88,7 @@ export default function PostItems({
               onClick={toggleCommentVisibility}
             >
               <FaRegComment />
-              <span>{post.comments}</span>
+              {/* <span>{post.comments.length}</span> */}
             </button>
 
             {/* 리트윗 아이콘 */}

@@ -30,21 +30,18 @@ interface Comment {
 export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]); // 게시글 목록 상태
 
-  useEffect(() => {
-    const fetchArticleList = async () => {
-      try {
-        setPosts(await getArticleList());
-        // console.log('Fetched user info: ', userInfo);
-      } catch (error) {
-        console.error('Error: ', error);
-      }
-    };
+  const fetchArticleList = async () => {
+    try {
+      setPosts(await getArticleList());
+      // console.log('Fetched user info: ', userInfo);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
+  };
 
+  useEffect(() => {
     fetchArticleList();
   }, []);
-
-  // 게시글 작성 후 호출되는 함수
-
   return (
     <div className="flex flex-col w-full min-h-screen h-screen items-center bg-black text-white">
       <div className="w-1/2">
@@ -60,6 +57,7 @@ export default function Page() {
               onLike={() => {}}
               onRetweet={() => {}}
               onCommentSubmit={() => {}}
+              fetchArticleList={fetchArticleList}
             />
           ))
         ) : (
