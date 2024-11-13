@@ -20,23 +20,20 @@ export default function FollowingPage() {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  // customId와 팔로잉 목록을 한 번에 가져오는 useEffect
   useEffect(() => {
     const fetchData = async () => {
+      if (loading || !hasMore) return;
       try {
         setLoading(true);
 
-        // customId 가져오기
         const userInfo = await getProfileInfo();
         const userCustomId = userInfo.customId;
         setCustomId(userCustomId);
 
-        // 팔로잉 목록 가져오기
         const data = await getFollowingList(userCustomId, pageNo);
         setFollowingList(prev => [...prev, ...(data.content || [])]);
         setTotalPages(data.totalPages || 0);
 
-        // 더 이상 가져올 데이터가 없는 경우
         if (pageNo >= data.totalPages) {
           setHasMore(false);
         }
@@ -51,7 +48,6 @@ export default function FollowingPage() {
     fetchData();
   }, [pageNo]);
 
-  // Intersection Observer로 무한 스크롤링 구현
   useEffect(() => {
     if (!hasMore || loading) return;
 
