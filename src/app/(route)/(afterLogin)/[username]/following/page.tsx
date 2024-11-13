@@ -157,7 +157,7 @@ export default function FollowingPage() {
                   <div className="text-white font-bold hover:underline cursor-pointer">
                     {following.userName}
                   </div>
-                  <div className="text-gray-500">{following.customId}</div>
+                  <div className="text-gray-500">@{following.customId}</div>
                 </div>
               </div>
             ))}
