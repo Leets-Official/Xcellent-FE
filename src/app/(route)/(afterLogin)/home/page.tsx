@@ -31,15 +31,21 @@ export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]); // 게시글 목록 상태
   const [cursor, setCursor] = useState<string | null>(null); // 커서 상태
   const [loading, setLoading] = useState<boolean>(false); // 로딩 상태
+  const [hasMore, setHasMore] = useState<boolean>(true); // 더 불러올 게시글이 있는지 여부
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const isFirstRender = useRef(true);
 
   const fetchArticleList = async (cursor: string | null = null) => {
     try {
       setLoading(true);
       const result = await getArticleList(cursor);
-      setPosts(prevPosts => [...prevPosts, ...result]);
-      setCursor(result.createdAt); // 다음 커서 업데이트
+      if (result.length === 0) {
+        setHasMore(false); // 더 불러올 게시글이 없음을 설정
+      } else {
+        setPosts(prevPosts => [...prevPosts, ...result]);
+        setCursor(result[result.length - 1].createdAt); // 다음 커서 업데이트
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error: ', error);
@@ -48,14 +54,16 @@ export default function Page() {
   };
 
   useEffect(() => {
-    fetchArticleList();
-  }, []);
+    if (isFirstRender.current) {
+      fetchArticleList();
+      isFirstRender.current = false; // 첫 렌더링 이후에는 호출하지 않도록 설정
+    }
+  }, []); // 빈 배열로 첫 렌더링에서만 실행되도록 설정
 
   useEffect(() => {
     if (observerRef.current) observerRef.current.disconnect();
-
     observerRef.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && !loading) {
+      if (entries[0].isIntersecting && !loading && hasMore) {
         fetchArticleList(cursor);
       }
     });
@@ -67,7 +75,7 @@ export default function Page() {
     return () => {
       if (observerRef.current) observerRef.current.disconnect();
     };
-  }, [cursor, loading]);
+  }, [cursor, loading, hasMore]);
 
   return (
     <div className="flex flex-col w-full min-h-screen h-screen items-center bg-black text-white">
