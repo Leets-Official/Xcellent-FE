@@ -1,26 +1,17 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { AiOutlinePicture } from 'react-icons/ai';
-import { FaSmile } from 'react-icons/fa';
 import { BsCardImage } from 'react-icons/bs';
 import { IoMdSend } from 'react-icons/io';
-import createPost from '@/app/client/createPost'; // 클라이언트용 API 호출 함수 임포트
+// import createPost from '@/app/client/createPost'; // 클라이언트용 API 호출 함수 임포트
 
 interface PostFormProps {
   onPostSubmit: (content: string, images: File[]) => void; // File[] 타입으로 수정
 }
 
-const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
+export default function PostForm({ onPostSubmit }: PostFormProps) {
   const [selectedImages, setSelectedImages] = useState<File[]>([]); // File 객체 배열로 변경
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleResize = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -57,17 +48,17 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
     }
   };
   return (
-    <div className="bg-black p-4 border-b border-gray-700 mb-4 max-w-2xl mx-auto text-white">
+    <div className="bg-black p-4 border-b border-gray-700 mb-4 w-full mx-auto text-white">
       <div className="flex items-start space-x-3">
         {/* 프로필 이미지 자리 */}
-        <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
+        <div className="w-12 h-12 bg-gray-600 rounded-full"> 프로필 </div>
 
         {/* 텍스트 입력 필드 */}
         <textarea
           ref={textareaRef}
           placeholder="What is happening?!"
           className="w-full p-2 bg-black text-lg placeholder-gray-500 border-none focus:outline-none resize-none"
-          onInput={handleResize}
+          // onInput={handleResize}
           style={{ minHeight: '50px' }}
         />
       </div>
@@ -121,6 +112,4 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
       </div>
     </div>
   );
-};
-
-export default PostForm;
+}
