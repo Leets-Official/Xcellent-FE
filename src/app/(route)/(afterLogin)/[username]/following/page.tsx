@@ -31,8 +31,21 @@ export default function FollowingPage() {
         setCustomId(userCustomId);
 
         const data = await getFollowingList(userCustomId, pageNo);
-        setFollowingList(prev => [...prev, ...(data.content || [])]);
-        setTotalPages(data.totalPages || 0);
+        const newFollowing = data.content || [];
+
+        const updatedList = [
+          ...followingList,
+          ...newFollowing.filter(
+            newFollow =>
+              !followingList.some(
+                existingFollow =>
+                  existingFollow.customId === newFollow.customId,
+              ),
+          ),
+        ];
+
+        setFollowingList(updatedList);
+        setTotalPages(totalPages || 0);
 
         if (pageNo >= totalPages) {
           setHasMore(false);
