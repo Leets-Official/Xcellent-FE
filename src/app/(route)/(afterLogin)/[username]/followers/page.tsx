@@ -50,8 +50,8 @@ export default function FollowersPage() {
     }
   }, [customId, pageNo]);
 
-  const onClickToUserProfile = (userName: string) => {
-    router.push(`/${userName}`);
+  const onClickToUserProfile = () => {
+    router.push(`/${customId}`);
   };
 
   if (error) {
@@ -79,7 +79,7 @@ export default function FollowersPage() {
             {followersList.map(follower => (
               <div
                 key={follower.customId}
-                onClick={() => onClickToUserProfile(follower.userName)}
+                onClick={onClickToUserProfile}
                 className="flex items-center gap-x-4 mb-4 cursor-pointer w-full text-left"
               >
                 <Image
@@ -109,7 +109,7 @@ export default function FollowersPage() {
               onClick={() => setPageNo(index + 1)}
               className={`text-white font-bold px-4 py-2 mx-1 rounded ${
                 pageNo === index + 1
-                  ? 'bg-blue-600'
+                  ? 'bg-gray-600'
                   : 'bg-gray-700 hover:bg-gray-600'
               }`}
             >
