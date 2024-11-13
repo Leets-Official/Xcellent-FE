@@ -101,14 +101,15 @@ export const removeArticleAPI = async (articleId: string): Promise<any> => {
   }
 };
 
-export const getArticleList = async (): Promise<any> => {
+export const getArticleList = async (cursor: string | null): Promise<any> => {
   try {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       throw new Error('AccessToken이 존재하지 않습니다. 로그인해주세요.');
     }
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/article`;
+    const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/article?size=10`;
+    const url = cursor ? `${baseUrl}&cursor=${cursor}` : baseUrl;
     const res = await fetch(url, {
       method: 'GET',
       headers: {
