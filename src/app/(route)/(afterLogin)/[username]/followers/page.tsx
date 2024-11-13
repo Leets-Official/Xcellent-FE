@@ -31,8 +31,21 @@ export default function FollowersPage() {
         setCustomId(userCustomId);
 
         const data = await getFollowersList(userCustomId, pageNo);
-        setFollowersList(prev => [...prev, ...(data.content || [])]);
-        setTotalPages(data.totalPages || 0);
+        const newFollowers = data.content || [];
+
+        const updatedList = [
+          ...followersList,
+          ...newFollowers.filter(
+            newFollower =>
+              !followersList.some(
+                existingFollower =>
+                  existingFollower.customId === newFollower.customId,
+              ),
+          ),
+        ];
+
+        setFollowersList(updatedList);
+        setTotalPages(totalPages || 0);
 
         if (pageNo >= totalPages) {
           setHasMore(false);
@@ -71,8 +84,8 @@ export default function FollowersPage() {
     };
   }, [hasMore, loading]);
 
-  const onClickToUserProfile = (id: string) => {
-    router.push(`/${id}`);
+  const onClickToUserProfile = () => {
+    router.push(`/${customId}`);
   };
 
   if (error) {
@@ -92,7 +105,7 @@ export default function FollowersPage() {
             {followersList.map(follower => (
               <div
                 key={follower.customId}
-                onClick={() => onClickToUserProfile(follower.customId)}
+                onClick={onClickToUserProfile}
                 className="flex items-center gap-x-4 mb-4 cursor-pointer"
               >
                 <Image
@@ -114,6 +127,7 @@ export default function FollowersPage() {
           </div>
         )}
 
+        {/* 무한 스크롤 트리거 요소 */}
         <div ref={observerRef} className="h-10" />
         {loading && (
           <div className="text-center text-white font-bold">
