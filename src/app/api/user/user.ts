@@ -44,3 +44,29 @@ export const getProfileInfo = async (): Promise<ProfileData> => {
     throw error;
   }
 };
+
+export const getOtherUserInfo = async (
+  customId: string,
+): Promise<ProfileData> => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/info?customId=${customId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data.result;
+  } catch (error) {
+    console.log('특정 유저 프로필 조회에 오류가 생겼습니다.', error);
+    throw error;
+  }
+};
