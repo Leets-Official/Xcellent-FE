@@ -43,11 +43,12 @@ export default function PostItems({
   };
 
   const handleCommentDelete = async (commentId: string) => {
+    console.log('post.comments.commentId:', post.comments.commentId);
     try {
       await removeCommentAPI(commentId);
       alert('댓글이 삭제되었습니다.');
     } catch (error) {
-      console.error('Error deleting article:', error);
+      console.error('Error deleting comment:', error);
     }
   };
 
@@ -174,7 +175,9 @@ export default function PostItems({
                         {comment.owner && (
                           <MdDeleteForever
                             size={24}
-                            onClick={handleCommentDelete}
+                            onClick={() =>
+                              handleCommentDelete(comment.commentId)
+                            }
                             className="cursor-pointer"
                           />
                         )}
