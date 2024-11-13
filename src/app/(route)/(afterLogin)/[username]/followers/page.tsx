@@ -19,7 +19,6 @@ export default function FollowersPage() {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  // URL에서 customId 추출
   const pathSegments = pathname.split('/');
   const customId = pathSegments[1];
 
@@ -29,11 +28,11 @@ export default function FollowersPage() {
       try {
         setLoading(true);
 
-        // URL에서 추출한 customId로 팔로워 목록 요청
         const data = await getFollowersList(customId, pageNo);
         const newFollowers = data.content || [];
 
-        const updatedList = [
+        // 중복된 customId를 가진 데이터 제거
+        const uniqueFollowers = [
           ...followersList,
           ...newFollowers.filter(
             newFollower =>
@@ -44,10 +43,10 @@ export default function FollowersPage() {
           ),
         ];
 
-        setFollowersList(updatedList);
-        setTotalPages(totalPages || 0);
+        setFollowersList(uniqueFollowers);
+        setTotalPages(data.totalPages || 0);
 
-        if (pageNo >= totalPages) {
+        if (pageNo >= data.totalPages) {
           setHasMore(false);
         }
       } catch (err) {
@@ -121,12 +120,10 @@ export default function FollowersPage() {
                   </div>
                   <div className="text-gray-500">{follower.customId}</div>
                 </div>
-                <FollowingButton />
               </div>
             ))}
           </div>
         )}
-
         <div ref={observerRef} className="h-10" />
         {loading && (
           <div className="text-center text-white font-bold">
