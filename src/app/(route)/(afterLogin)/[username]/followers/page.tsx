@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { getFollowersList } from '@/app/api/user/follower';
-import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowersPage() {
   const router = useRouter();
@@ -118,7 +117,7 @@ export default function FollowersPage() {
                   <div className="text-white font-bold hover:underline cursor-pointer">
                     {follower.userName}
                   </div>
-                  <div className="text-gray-500">{follower.customId}</div>
+                  <div className="text-gray-500">@{follower.customId}</div>
                 </div>
               </div>
             ))}

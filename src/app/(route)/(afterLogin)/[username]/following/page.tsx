@@ -38,10 +38,8 @@ export default function FollowingPage() {
             : user,
         ),
       );
-      alert('팔로우에 성공했습니다.');
     } catch (error) {
       console.error('팔로우 요청 실패:', error);
-      alert('팔로우 요청에 실패했습니다.');
     }
   };
 
@@ -56,10 +54,8 @@ export default function FollowingPage() {
             : user,
         ),
       );
-      alert('언팔로우에 성공했습니다.');
     } catch (error) {
       console.error('언팔로우 요청 실패:', error);
-      alert('언팔로우 요청에 실패했습니다.');
     }
   };
 
@@ -144,7 +140,7 @@ export default function FollowingPage() {
             {followingList.map(following => (
               <div
                 key={following.customId}
-                className="flex items-center gap-x-4 mb-4 cursor-pointer"
+                className="flex items-center gap-x-4 mb-4"
               >
                 <Image
                   src={following.profileImage || '/profile.svg'}
@@ -153,12 +149,20 @@ export default function FollowingPage() {
                   height={40}
                   className="bg-slate-300 w-10 h-10 rounded-full"
                 />
-                <div onClick={() => onClickToUserProfile(following.customId)}>
-                  <div className="text-white font-bold hover:underline cursor-pointer">
+                <div
+                  onClick={() => onClickToUserProfile(following.customId)}
+                  className="cursor-pointer"
+                >
+                  <div className="text-white font-bold hover:underline">
                     {following.userName}
                   </div>
                   <div className="text-gray-500">@{following.customId}</div>
                 </div>
+                <FollowingButton
+                  isFollowing={following.isFollowing}
+                  onFollow={() => handleFollow(following.customId)}
+                  onUnfollow={() => handleUnfollow(following.customId)}
+                />
               </div>
             ))}
           </div>
