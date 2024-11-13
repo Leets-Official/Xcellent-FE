@@ -4,17 +4,14 @@ import { createArticleAPI } from '@/app/api/article/article';
 import React, { useState, useRef } from 'react';
 import { BsCardImage } from 'react-icons/bs';
 import { IoMdSend } from 'react-icons/io';
+import Image from 'next/image';
 
-interface PostFormProps {
-  onPostSubmit: (content: string, images: File[]) => void; // File[] 타입으로 수정
-}
-
-export default function PostForm({ onPostSubmit }: PostFormProps) {
+export default function PostForm() {
   const [selectedImages, setSelectedImages] = useState<File[]>([]); // File 객체 배열로 변경
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    const { files } = e.target;
     if (files && selectedImages.length + files.length <= 4) {
       const newImages = Array.from(files);
       setSelectedImages(prev => [...prev, ...newImages]);
@@ -66,12 +63,17 @@ export default function PostForm({ onPostSubmit }: PostFormProps) {
         <div className="grid grid-cols-2 gap-2 mt-3">
           {selectedImages.map((image, index) => (
             <div key={index} className="relative">
-              <img
+              <Image
                 src={URL.createObjectURL(image)} // 미리보기 URL 생성
                 alt={`Preview ${index + 1}`}
+                layout="responsive"
+                width={200}
+                height={200}
+                objectFit="cover"
                 className="rounded-lg"
               />
               <button
+                type="button"
                 onClick={() => removeImage(index)}
                 className="absolute top-1 right-1 bg-black rounded-full p-1 text-white"
               >
@@ -101,6 +103,7 @@ export default function PostForm({ onPostSubmit }: PostFormProps) {
 
         {/* 게시 버튼 */}
         <button
+          type="button"
           onClick={handlePost}
           className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-4 font-semibold flex items-center gap-2"
         >

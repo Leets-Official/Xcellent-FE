@@ -2,32 +2,32 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { FaRegComment, FaRetweet, FaHeart } from 'react-icons/fa';
+import { FaRegComment, FaRetweet } from 'react-icons/fa';
 import { FiBarChart2 } from 'react-icons/fi';
 // Post와 Comment 인터페이스 정의
-interface Post {
-  id: string; // articleId는 string 타입
-  writorId: string;
-  authorImage: string;
-  content: string;
-  images: string[];
-  likes: number;
-  retweets: number;
-  comments: Comment[];
-  isLiked: boolean;
-}
+// interface Post {
+//   id: string; // articleId는 string 타입
+//   writorId: string;
+//   authorImage: string;
+//   content: string;
+//   images: string[];
+//   likes: number;
+//   retweets: number;
+//   comments: Comment[];
+//   isLiked: boolean;
+// }
 
-interface Comment {
-  id: number;
-  author: string;
-  authorImage: string;
-  content: string;
-  createdAt: string;
-}
+// interface Comment {
+//   id: number;
+//   author: string;
+//   authorImage: string;
+//   content: string;
+//   createdAt: string;
+// }
 
 // PostItemProps 인터페이스 정의
 interface PostItemProps {
-  post: Post;
+  post: any;
   onLike: (id: string) => void; // id 타입을 string으로 변경
   onRetweet: (id: string) => void; // id 타입을 string으로 변경
   onCommentSubmit: (postId: string, commentContent: string) => void; // 추가
@@ -86,6 +86,7 @@ export default function PostItems({
           <div className="flex items-center mt-4 space-x-6 text-gray-500">
             {/* 댓글 아이콘 */}
             <button
+              type="button"
               className="hover:text-blue-500 flex items-center space-x-1"
               onClick={toggleCommentVisibility}
             >
@@ -95,6 +96,7 @@ export default function PostItems({
 
             {/* 리트윗 아이콘 */}
             <button
+              type="button"
               onClick={() => onRetweet(post.id)}
               className="hover:text-green-500 flex items-center space-x-1"
             >
@@ -104,6 +106,7 @@ export default function PostItems({
 
             {/* 좋아요 아이콘 */}
             <button
+              type="button"
               onClick={() => onLike(post.id)}
               className={`flex items-center space-x-1 ${post.isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
             >
@@ -112,7 +115,10 @@ export default function PostItems({
             </button>
 
             {/* 조회수 아이콘 */}
-            <button className="hover:text-gray-400 flex items-center space-x-1">
+            <button
+              type="button"
+              className="hover:text-gray-400 flex items-center space-x-1"
+            >
               <FiBarChart2 />
             </button>
           </div>

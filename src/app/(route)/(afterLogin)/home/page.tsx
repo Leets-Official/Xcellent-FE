@@ -44,42 +44,12 @@ export default function Page() {
   }, []);
 
   // 게시글 작성 후 호출되는 함수
-  const handlePostSubmit = async (content: string, images: File[] = []) => {
-    try {
-      // FormData 객체 생성
-      const formData = new FormData();
-      formData.append('content', content);
 
-      // 이미지 파일들을 FormData에 추가
-      images.forEach(image => {
-        formData.append('images', image); // 여러 이미지를 추가
-      });
-
-      // createPost 함수에 FormData 전달
-      const articleId = await createPost(formData);
-
-      const newPost: Post = {
-        id: articleId,
-        author: 'Current User',
-        authorImage: '/path/to/profile.jpg',
-        content,
-        images: images.map(image => URL.createObjectURL(image)), // 미리보기 URL로 변환
-        likes: 0,
-        retweets: 0,
-        comments: [],
-        isLiked: false,
-      };
-
-      setPosts([newPost, ...posts]);
-    } catch (error) {
-      console.error('Failed to create post:', error);
-    }
-  };
   return (
     <div className="flex flex-col w-full min-h-screen h-screen items-center bg-black text-white">
       <div className="w-1/2">
         {/* 게시글 작성 폼 */}
-        <PostForm onPostSubmit={handlePostSubmit} />
+        <PostForm />
 
         {/* 게시물 목록 */}
         {Array.isArray(posts) && posts.length > 0 ? (
