@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Tab from './_component/Tab';
 import TabProvider from './_component/TabProvider';
+// import PostItem from '../_component/PostItems';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -98,8 +99,13 @@ export default function ProfilePage() {
             </Link>
           </div>
 
-          <Tab type="postsLikes" userName={user.userName} />
+          <Tab type="postsLikes" customId={user.customId} />
         </div>
+        {/* <PostItem />
+        <PostItem />
+        <PostItem />
+        <PostItem />
+        <PostItem /> */}
       </div>
     </TabProvider>
   );
