@@ -6,12 +6,11 @@ import { FaRegComment, FaRetweet } from 'react-icons/fa';
 import { FiBarChart2 } from 'react-icons/fi';
 import { MdDeleteForever } from 'react-icons/md';
 import { removeArticleAPI } from '@/app/api/article/article';
-import { createCommentAPI } from '@/app/api/comment/comment';
+import { createCommentAPI, removeCommentAPI } from '@/app/api/comment/comment';
 
 interface PostItemProps {
   post: any;
   onLike: (id: string) => void;
-  onRetweet: (id: string) => void;
   onCommentSubmit: (postId: string, commentContent: string) => void;
   fetchArticleList: () => void; // fetchArticleList 함수 추가
 }
@@ -19,7 +18,7 @@ interface PostItemProps {
 export default function PostItems({
   post,
   onLike,
-  onRetweet,
+
   fetchArticleList,
 }: PostItemProps) {
   const [isCommentVisible, setIsCommentVisible] = useState(false);
@@ -38,6 +37,15 @@ export default function PostItems({
       await removeArticleAPI(post.articleId);
       alert('게시글이 삭제되었습니다.');
       fetchArticleList(); // 삭제 후 fetchArticleList 함수 호출
+    } catch (error) {
+      console.error('Error deleting article:', error);
+    }
+  };
+
+  const handleCommentDelete = async (commentId: string) => {
+    try {
+      await removeCommentAPI(commentId);
+      alert('댓글이 삭제되었습니다.');
     } catch (error) {
       console.error('Error deleting article:', error);
     }
@@ -116,7 +124,7 @@ export default function PostItems({
             {/* 리트윗 아이콘 */}
             <button
               type="button"
-              onClick={() => onRetweet(post.id)}
+              // onClick={() => onRetweet(post.id)}
               className="hover:text-green-500 flex items-center space-x-1"
             >
               <FaRetweet />
@@ -144,9 +152,12 @@ export default function PostItems({
           {/* 댓글 섹션 - 클릭 시에만 표시됨 */}
           {isCommentVisible && (
             <div className="mt-4 flex-auto">
-              <div>
+              <div className="flex-auto">
                 {post.comments.map((comment: any, index: any) => (
-                  <div key={index} className="flex items-center space-x-2">
+                  <div
+                    key={index}
+                    className="flex items-center space-x-2 w-full"
+                  >
                     <div className="w-8 h-8 bg-gray-600 rounded-full">
                       <Image
                         src={'/profile.svg'}
@@ -157,8 +168,17 @@ export default function PostItems({
                         className="rounded-full"
                       />
                     </div>
-                    <div>
-                      <div className="font-semibold">{comment.userName}</div>
+                    <div className="w-full">
+                      <div className="font-semibold justify-between flex">
+                        {comment.userName}
+                        {comment.owner && (
+                          <MdDeleteForever
+                            size={24}
+                            onClick={handleCommentDelete}
+                            className="cursor-pointer"
+                          />
+                        )}
+                      </div>
                       <p>{comment.content}</p>
                     </div>
                   </div>

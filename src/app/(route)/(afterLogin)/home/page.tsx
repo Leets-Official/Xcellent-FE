@@ -90,7 +90,6 @@ export default function Page() {
               key={post.id}
               post={post}
               onLike={() => {}}
-              onRetweet={() => {}}
               onCommentSubmit={() => {}}
               fetchArticleList={fetchArticleList}
             />
