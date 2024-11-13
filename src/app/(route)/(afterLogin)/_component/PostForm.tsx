@@ -37,6 +37,9 @@ export default function PostForm() {
       } catch (error) {
         console.error('Error: ', error);
       }
+
+      textareaRef.current.value = '';
+      setSelectedImages([]);
     }
   };
 
