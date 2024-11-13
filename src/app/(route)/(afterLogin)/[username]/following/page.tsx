@@ -34,7 +34,7 @@ export default function FollowingPage() {
         setFollowingList(prev => [...prev, ...(data.content || [])]);
         setTotalPages(data.totalPages || 0);
 
-        if (pageNo >= data.totalPages) {
+        if (pageNo >= totalPages) {
           setHasMore(false);
         }
       } catch (err) {
