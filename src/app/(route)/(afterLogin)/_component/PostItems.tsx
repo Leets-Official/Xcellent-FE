@@ -42,23 +42,27 @@ export default function PostItems({
     <div className="bg-black border-b border-gray-800 p-4 w-full mx-auto text-white">
       <div className="flex items-start space-x-3">
         {/* 프로필 이미지 */}
-        <Image
-          src={post.authorImage}
-          alt={post.author}
-          width={48}
-          height={48}
-          className="rounded-full"
-        />
-        <div className="flex-grow">
-          {post.owner && (
-            <MdDeleteForever
-              size={24}
-              onClick={handleDelete}
-              className="cursor-pointer justify-self-end"
-            />
-          )}
-          {/* 작성자 이름 및 아이디 */}
-          <p className="font-semibold">{post.userName}</p>
+        <div className="w-12 h-12 bg-gray-600 rounded-full">
+          <Image
+            src={'/profile.svg'}
+            alt="profile.svg"
+            color="white"
+            width={48}
+            height={48}
+            className="rounded-full"
+          />
+        </div>
+        <div className="flex-auto">
+          <div className="flex justify-between">
+            <div className="font-semibold">{post.userName}</div>
+            {post.owner && (
+              <MdDeleteForever
+                size={24}
+                onClick={handleDelete}
+                className="cursor-pointer"
+              />
+            )}
+          </div>
           <p className="text-gray-400">@{post.customId}</p>
           {/* 게시글 내용 */}
           <p className="mt-2">{post.content}</p>
