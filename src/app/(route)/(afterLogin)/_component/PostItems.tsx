@@ -58,8 +58,8 @@ export default function PostItems({
         />
         <div className="flex-grow">
           {/* 작성자 이름 및 아이디 */}
-          <p className="font-semibold">{post.writerId}</p>
-          <p className="text-gray-400">@{post.writerId}</p>
+          <p className="font-semibold">{post.userName}</p>
+          <p className="text-gray-400">@{post.customId}</p>
           {/* 게시글 내용 */}
           <p className="mt-2">{post.content}</p>
 
