@@ -66,7 +66,7 @@ export const getOtherUserInfo = async (
     const data = await res.json();
     return data.result;
   } catch (error) {
-    console.log('특정 유저 프로필 조회에 오류가 생겼습니다.', error);
+    console.error('Error fetching other user profile data: ', error);
     throw error;
   }
 };
