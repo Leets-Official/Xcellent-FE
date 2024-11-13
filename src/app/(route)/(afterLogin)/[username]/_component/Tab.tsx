@@ -8,12 +8,12 @@ type TabType = 'postsLikes' | 'followersFollowing';
 
 type TabProps = {
   type: TabType;
-  userName: string;
+  customId: string;
 };
 
-export default function Tab({ type, userName }: TabProps) {
+export default function Tab({ type, customId }: TabProps) {
   const { tab } = useContext(TabContext);
-  const tabHandler = useTabHandler(type, userName);
+  const tabHandler = useTabHandler(type, customId);
 
   const isPostsLikesHandler = (
     handler: any,
