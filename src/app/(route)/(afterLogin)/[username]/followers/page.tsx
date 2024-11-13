@@ -4,21 +4,24 @@ import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
 import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
 import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { getProfileInfo } from '@/app/api/user/user';
+import { useRouter, usePathname } from 'next/navigation';
 import { getFollowersList } from '@/app/api/user/follower';
 import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowersPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const [followersList, setFollowersList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [pageNo, setPageNo] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [customId, setCustomId] = useState<string>('');
   const [hasMore, setHasMore] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
+
+  // URL에서 customId 추출
+  const pathSegments = pathname.split('/');
+  const customId = pathSegments[1];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,11 +29,8 @@ export default function FollowersPage() {
       try {
         setLoading(true);
 
-        const userInfo = await getProfileInfo();
-        const userCustomId = userInfo.customId;
-        setCustomId(userCustomId);
-
-        const data = await getFollowersList(userCustomId, pageNo);
+        // URL에서 추출한 customId로 팔로워 목록 요청
+        const data = await getFollowersList(customId, pageNo);
         const newFollowers = data.content || [];
 
         const updatedList = [
@@ -59,7 +59,7 @@ export default function FollowersPage() {
     };
 
     fetchData();
-  }, [pageNo]);
+  }, [pageNo, customId]);
 
   useEffect(() => {
     if (!hasMore || loading) return;
@@ -84,8 +84,8 @@ export default function FollowersPage() {
     };
   }, [hasMore, loading]);
 
-  const onClickToUserProfile = () => {
-    router.push(`/${customId}`);
+  const onClickToUserProfile = (followerCustomId: string) => {
+    router.push(`/${followerCustomId}`);
   };
 
   if (error) {
@@ -105,7 +105,7 @@ export default function FollowersPage() {
             {followersList.map(follower => (
               <div
                 key={follower.customId}
-                onClick={onClickToUserProfile}
+                onClick={() => onClickToUserProfile(follower.customId)}
                 className="flex items-center gap-x-4 mb-4 cursor-pointer"
               >
                 <Image

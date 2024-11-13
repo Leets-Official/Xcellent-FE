@@ -4,21 +4,25 @@ import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
 import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
 import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { getProfileInfo } from '@/app/api/user/user';
 import { getFollowingList } from '@/app/api/user/following';
 import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowingPage() {
   const router = useRouter();
+  const pathname = usePathname();
+
   const [followingList, setFollowingList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [pageNo, setPageNo] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [customId, setCustomId] = useState<string>('');
   const [hasMore, setHasMore] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const pathSegments = pathname.split('/');
+  const customId = pathSegments[1];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,11 +30,7 @@ export default function FollowingPage() {
       try {
         setLoading(true);
 
-        const userInfo = await getProfileInfo();
-        const userCustomId = userInfo.customId;
-        setCustomId(userCustomId);
-
-        const data = await getFollowingList(userCustomId, pageNo);
+        const data = await getFollowingList(customId, pageNo);
         const newFollowing = data.content || [];
 
         const updatedList = [
