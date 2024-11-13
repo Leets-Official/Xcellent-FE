@@ -1,16 +1,18 @@
 'use client';
+
 import React, { useState, useRef } from 'react';
 import { AiOutlinePicture } from 'react-icons/ai';
 import { FaSmile } from 'react-icons/fa';
 import { BsCardImage } from 'react-icons/bs';
 import { IoMdSend } from 'react-icons/io';
+import createPost from '@/app/client/createPost'; // 클라이언트용 API 호출 함수 임포트
 
 interface PostFormProps {
-  onPostSubmit: (content: string, images: string[]) => void;
+  onPostSubmit: (content: string, images: File[]) => void; // File[] 타입으로 수정
 }
 
 const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]); // File 객체 배열로 변경
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleResize = () => {
@@ -23,9 +25,7 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && selectedImages.length + files.length <= 4) {
-      const newImages = Array.from(files).map(file =>
-        URL.createObjectURL(file),
-      );
+      const newImages = Array.from(files);
       setSelectedImages(prev => [...prev, ...newImages]);
     } else {
       alert('이미지는 최대 4개까지만 업로드할 수 있습니다.');
@@ -36,14 +36,26 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
     setSelectedImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (textareaRef.current) {
-      onPostSubmit(textareaRef.current.value.trim() || '', selectedImages);
-      textareaRef.current.value = ''; // 텍스트 초기화
-    }
-    setSelectedImages([]); // 이미지 초기화
-  };
+      const content = textareaRef.current.value.trim();
 
+      if (!content && selectedImages.length === 0) {
+        alert('내용 또는 이미지를 입력해주세요.');
+        return;
+      }
+
+      try {
+        // 부모 컴포넌트로 content와 File 배열 전달
+        onPostSubmit(content, selectedImages); // selectedImages는 File[] 타입
+        textareaRef.current.value = '';
+        setSelectedImages([]);
+      } catch (error) {
+        console.error('Failed to create post:', error);
+        alert('Failed to create post. Please try again.');
+      }
+    }
+  };
   return (
     <div className="bg-black p-4 border-b border-gray-700 mb-4 max-w-2xl mx-auto text-white">
       <div className="flex items-start space-x-3">
@@ -66,7 +78,7 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
           {selectedImages.map((image, index) => (
             <div key={index} className="relative">
               <img
-                src={image}
+                src={URL.createObjectURL(image)} // 미리보기 URL 생성
                 alt={`Preview ${index + 1}`}
                 className="rounded-lg"
               />
@@ -96,9 +108,6 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
             className="hidden"
             id="image-upload"
           />
-
-          {/* 이모티콘 아이콘 */}
-          <FaSmile size={24} />
         </div>
 
         {/* 게시 버튼 */}

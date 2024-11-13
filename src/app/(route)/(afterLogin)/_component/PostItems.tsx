@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { FaRegComment, FaRetweet, FaHeart } from 'react-icons/fa';
@@ -6,7 +7,7 @@ import { FiBarChart2 } from 'react-icons/fi';
 
 // Post와 Comment 인터페이스 정의
 interface Post {
-  id: number;
+  id: string; // articleId는 string 타입
   author: string;
   authorImage: string;
   content: string;
@@ -28,9 +29,9 @@ interface Comment {
 // PostItemProps 인터페이스 정의
 interface PostItemProps {
   post: Post;
-  onLike: (id: number) => void;
-  onRetweet: (id: number) => void;
-  onCommentSubmit: (postId: number, commentContent: string) => void; // 추가
+  onLike: (id: string) => void; // id 타입을 string으로 변경
+  onRetweet: (id: string) => void; // id 타입을 string으로 변경
+  onCommentSubmit: (postId: string, commentContent: string) => void; // 추가
 }
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -72,7 +73,7 @@ const PostItem: React.FC<PostItemProps> = ({
               {post.images.map((image, index) => (
                 <Image
                   key={index}
-                  src={image}
+                  src={image} // 이미지 경로가 올바른지 확인 필요
                   alt={`Post image ${index + 1}`}
                   width={200}
                   height={200}
