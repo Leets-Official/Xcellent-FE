@@ -5,7 +5,6 @@ import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabPro
 import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { getProfileInfo } from '@/app/api/user/user';
 import { getFollowingList } from '@/app/api/user/following';
 import FollowingButton from '../_component/FollowingButton';
 
