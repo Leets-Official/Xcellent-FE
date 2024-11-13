@@ -3,7 +3,7 @@
 import Tab from '@/app/(route)/(afterLogin)/[username]/_component/Tab';
 import TabProvider from '@/app/(route)/(afterLogin)/[username]/_component/TabProvider';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { getProfileInfo } from '@/app/api/user/user';
 import { getFollowingList } from '@/app/api/user/following';
@@ -12,16 +12,20 @@ import FollowingButton from '../_component/FollowingButton';
 export default function FollowingPage() {
   const router = useRouter();
   const [followingList, setFollowingList] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [pageNo, setPageNo] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [customId, setCustomId] = useState<string>('');
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
   // customId와 팔로잉 목록을 한 번에 가져오는 useEffect
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+
         // customId 가져오기
         const userInfo = await getProfileInfo();
         const userCustomId = userInfo.customId;
@@ -29,8 +33,13 @@ export default function FollowingPage() {
 
         // 팔로잉 목록 가져오기
         const data = await getFollowingList(userCustomId, pageNo);
-        setFollowingList(data.content || []);
+        setFollowingList(prev => [...prev, ...(data.content || [])]);
         setTotalPages(data.totalPages || 0);
+
+        // 더 이상 가져올 데이터가 없는 경우
+        if (pageNo >= data.totalPages) {
+          setHasMore(false);
+        }
       } catch (err) {
         console.error('Failed to fetch data: ', err);
         setError('Failed to load data.');
@@ -42,20 +51,36 @@ export default function FollowingPage() {
     fetchData();
   }, [pageNo]);
 
+  // Intersection Observer로 무한 스크롤링 구현
+  useEffect(() => {
+    if (!hasMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setPageNo(prevPage => prevPage + 1);
+        }
+      },
+      { threshold: 1.0 },
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [hasMore, loading]);
+
   const onClickToUserProfile = () => {
     router.push(`/${customId}`);
   };
 
   if (error) {
     return <div className="text-center text-red-500 font-bold">{error}</div>;
-  }
-
-  if (loading) {
-    return (
-      <div className="text-center text-white font-bold">
-        Loading following...
-      </div>
-    );
   }
 
   return (
@@ -93,22 +118,12 @@ export default function FollowingPage() {
           </div>
         )}
 
-        <div className="flex justify-center mt-6">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              type="button"
-              key={index}
-              onClick={() => setPageNo(index + 1)}
-              className={`text-white font-bold px-4 py-2 mx-1 rounded ${
-                pageNo === index + 1
-                  ? 'bg-gray-600'
-                  : 'bg-gray-700 hover:bg-gray-600'
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        <div ref={observerRef} className="h-10" />
+        {loading && (
+          <div className="text-center text-white font-bold">
+            Loading more...
+          </div>
+        )}
       </div>
     </TabProvider>
   );
