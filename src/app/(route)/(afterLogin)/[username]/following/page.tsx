@@ -94,7 +94,7 @@ export default function FollowingPage() {
 
   return (
     <TabProvider>
-      <Tab type="followersFollowing" userName={customId} />
+      <Tab type="followersFollowing" customId={customId} />
       <div className="p-4">
         {followingList.length === 0 ? (
           <div className="text-center text-white font-bold">

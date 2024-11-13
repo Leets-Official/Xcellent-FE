@@ -94,7 +94,7 @@ export default function FollowersPage() {
 
   return (
     <TabProvider>
-      <Tab type="followersFollowing" userName={customId} />
+      <Tab type="followersFollowing" customId={customId} />
       <div className="p-4">
         {followersList.length === 0 ? (
           <div className="text-center text-white font-bold">
@@ -127,7 +127,6 @@ export default function FollowersPage() {
           </div>
         )}
 
-        {/* 무한 스크롤 트리거 요소 */}
         <div ref={observerRef} className="h-10" />
         {loading && (
           <div className="text-center text-white font-bold">
