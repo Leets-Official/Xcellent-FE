@@ -2,17 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { getOtherUserInfo, getProfileInfo } from '@/app/api/user/user';
+import { followUser, unfollowUser } from '@/app/api/user/follow';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import TabProvider from './_component/TabProvider';
 import Tab from './_component/Tab';
-// import PostItem from '../_component/PostItems';
+import FollowingButton from './_component/FollowingButton';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
   const [myCustomId, setMyCustomId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -30,6 +32,7 @@ export default function ProfilePage() {
         } else {
           const otherUserData = await getOtherUserInfo(customId);
           setUser(otherUserData);
+          setIsFollowing(otherUserData.isFollowing);
         }
       } catch (error) {
         console.error('프로필 조회에 오류가 생겼습니다.', error);
@@ -39,6 +42,24 @@ export default function ProfilePage() {
     };
     fetchProfile();
   }, [pathname]);
+
+  const handleFollow = async () => {
+    try {
+      await followUser(user.customId);
+      setIsFollowing(true);
+    } catch (error) {
+      console.error('팔로우 요청에 실패했습니다:', error);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      await unfollowUser(user.customId);
+      setIsFollowing(false);
+    } catch (error) {
+      console.error('언팔로우 요청에 실패했습니다:', error);
+    }
+  };
 
   if (loading) {
     return <div className="text-center text-white font-bold">Loading...</div>;
@@ -76,14 +97,22 @@ export default function ProfilePage() {
               />
             </div>
 
-            <Link href="/settings/profile" className="ml-auto">
-              <button
-                type="button"
-                className="px-4 py-2 font-bold bg-transparent rounded-full text-white border border-white hover:bg-slate-800"
-              >
-                Edit Profile
-              </button>
-            </Link>
+            {user.customId === myCustomId ? (
+              <Link href="/settings/profile" className="ml-auto">
+                <button
+                  type="button"
+                  className="px-4 py-2 font-bold bg-transparent rounded-full text-white border border-white hover:bg-slate-800"
+                >
+                  Edit Profile
+                </button>
+              </Link>
+            ) : (
+              <FollowingButton
+                isFollowing={isFollowing}
+                onFollow={handleFollow}
+                onUnfollow={handleUnfollow}
+              />
+            )}
           </div>
 
           <div className="mt-20 flex flex-col">
@@ -110,11 +139,6 @@ export default function ProfilePage() {
 
           <Tab type="postsLikes" customId={user.customId} />
         </div>
-        {/* <PostItem />
-        <PostItem />
-        <PostItem />
-        <PostItem />
-        <PostItem /> */}
       </div>
     </TabProvider>
   );

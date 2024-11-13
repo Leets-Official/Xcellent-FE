@@ -2,22 +2,43 @@
 
 import { useState } from 'react';
 
-export default function FollowingButton() {
+type FollowingButtonProps = {
+  isFollowing: boolean;
+  onFollow: () => void;
+  onUnfollow: () => void;
+};
+
+export default function FollowingButton({
+  isFollowing,
+  onFollow,
+  onUnfollow,
+}: FollowingButtonProps) {
   const [hover, setHover] = useState(false);
+
+  const handleClick = () => {
+    if (isFollowing) {
+      onUnfollow();
+    } else {
+      onFollow();
+    }
+  };
 
   return (
     <button
       type="button"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={` text-sm  font-bold p-1 rounded-full w-28 ml-auto
+      onClick={handleClick}
+      className={`text-sm font-bold p-1 rounded-full w-28 ml-auto
         ${
-          hover
-            ? ' bg-red-800 text-red-700 border border-red-700 bg-opacity-35'
-            : 'text-white border border-white'
+          isFollowing
+            ? hover
+              ? 'bg-red-800 text-red-700 border border-red-700 bg-opacity-35'
+              : 'text-white border border-white'
+            : 'border border-white text-white '
         }`}
     >
-      {hover ? 'Unfollow' : 'Following'}
+      {isFollowing ? (hover ? 'Unfollow' : 'Following') : 'Follow'}
     </button>
   );
 }
