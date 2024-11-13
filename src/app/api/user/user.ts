@@ -44,3 +44,31 @@ export const getProfileInfo = async (): Promise<ProfileData> => {
     throw error;
   }
 };
+
+export const getOtherUserInfo = async (
+  customId: string,
+): Promise<ProfileData> => {
+  try {
+    const token = localStorage.getItem('accessToken');
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/info?customId=${customId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data.result;
+  } catch (error) {
+    console.error('Error fetching other user profile data: ', error);
+    throw error;
+  }
+};

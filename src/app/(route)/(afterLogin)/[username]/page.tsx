@@ -1,30 +1,44 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getProfileInfo } from '@/app/api/user/user';
+import { getOtherUserInfo, getProfileInfo } from '@/app/api/user/user';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import Tab from './_component/Tab';
 import TabProvider from './_component/TabProvider';
+import Tab from './_component/Tab';
 // import PostItem from '../_component/PostItems';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
+  const [myCustomId, setMyCustomId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await getProfileInfo();
-        setUser(profileData);
+        const pathSegments = pathname.split('/');
+        const customId = pathSegments[1];
+
+        const myProfileData = await getProfileInfo();
+        const myCustomId = myProfileData.customId;
+        setMyCustomId(myCustomId);
+
+        if (customId === myCustomId) {
+          setUser(myProfileData);
+        } else {
+          const otherUserData = await getOtherUserInfo(customId);
+          setUser(otherUserData);
+        }
       } catch (error) {
-        console.error('Error fetching profile data: ', error);
+        console.error('프로필 조회에 오류가 생겼습니다.', error);
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
-  }, []);
+  }, [pathname]);
 
   if (loading) {
     return <div className="text-center text-white font-bold">Loading...</div>;
