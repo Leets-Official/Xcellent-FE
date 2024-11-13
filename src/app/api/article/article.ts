@@ -18,7 +18,10 @@
 //   numberOfElements: number;
 // }
 
-export const createArticleAPI = async (content: string): Promise<any> => {
+export const createArticleAPI = async (
+  content: string,
+  mediaFiles: File[],
+): Promise<any> => {
   try {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -26,13 +29,28 @@ export const createArticleAPI = async (content: string): Promise<any> => {
     }
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/article`;
+    const formData = new FormData();
+
+    // JSON 데이터를 Blob 형태로 추가
+    const articleData = { content }; // content만 포함된 객체
+
+    formData.append(
+      'content', // 백엔드에서 @RequestPart로 받을 이름
+      new Blob([JSON.stringify(articleData)], { type: 'application/json' }),
+    );
+
+    // mediaFiles 추가
+    mediaFiles.forEach(file => {
+      formData.append('mediaFiles', file);
+    });
+
     const res = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
+        // Content-Type을 명시적으로 설정하지 않음 (FormData가 자동으로 설정)
       },
-      body: JSON.stringify({ content }), // 요청 본문에 content 추가
+      body: formData,
     });
 
     console.log('Response status : ', res.status);
@@ -46,11 +64,10 @@ export const createArticleAPI = async (content: string): Promise<any> => {
 
     return data.result;
   } catch (error) {
-    console.error(`Error fetching Article list: `, error);
+    console.error(`Error fetching Article: `, error);
     throw error;
   }
 };
-
 export const getArticleList = async (): Promise<any> => {
   try {
     const token = localStorage.getItem('accessToken');

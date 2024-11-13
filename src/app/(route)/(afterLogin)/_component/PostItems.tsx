@@ -60,16 +60,14 @@ export default function PostItems({
           {/* 작성자 이름 및 아이디 */}
           <p className="font-semibold">{post.writerId}</p>
           <p className="text-gray-400">@{post.writerId}</p>
-
           {/* 게시글 내용 */}
           <p className="mt-2">{post.content}</p>
 
-          {/* 이미지가 있을 경우 출력 */}
-          {/* {post.images.length > 0 && (
+          {post.mediaUrls.length > 0 && (
             <div
-              className={`grid gap-2 mt-2 ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}
+              className={`grid gap-2 mt-2 ${post.mediaUrls.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}
             >
-              {post.images.map((image, index) => (
+              {post.mediaUrls.map((image, index) => (
                 <Image
                   key={index}
                   src={image} // 이미지 경로가 올바른지 확인 필요
@@ -80,8 +78,7 @@ export default function PostItems({
                 />
               ))}
             </div>
-          )} */}
-
+          )}
           {/* 좋아요, 리트윗, 댓글 아이콘 */}
           <div className="flex items-center mt-4 space-x-6 text-gray-500">
             {/* 댓글 아이콘 */}
@@ -122,7 +119,6 @@ export default function PostItems({
               <FiBarChart2 />
             </button>
           </div>
-
           {/* 댓글 섹션 - 클릭 시에만 표시됨 */}
           {isCommentVisible && (
             <div className="mt-4">

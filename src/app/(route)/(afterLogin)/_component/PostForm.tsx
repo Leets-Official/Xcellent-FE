@@ -31,17 +31,15 @@ export default function PostForm() {
         alert('내용 또는 이미지를 입력해주세요.');
         return;
       }
-      const createArticle = async () => {
-        try {
-          await createArticleAPI(content);
-          // console.log('Fetched user info: ', userInfo);
-        } catch (error) {
-          console.error('Error: ', error);
-        }
-      };
-      createArticle();
+      try {
+        await createArticleAPI(content, selectedImages);
+        // console.log('Fetched user info: ', userInfo);
+      } catch (error) {
+        console.error('Error: ', error);
+      }
     }
   };
+
   return (
     <div className="bg-black p-4 border-b border-gray-700 mb-4 w-full mx-auto text-white">
       <div className="flex items-start space-x-3">
@@ -53,7 +51,6 @@ export default function PostForm() {
           ref={textareaRef}
           placeholder="What is happening?!"
           className="w-full p-2 bg-black text-lg placeholder-gray-500 border-none focus:outline-none resize-none"
-          // onInput={handleResize}
           style={{ minHeight: '50px' }}
         />
       </div>
@@ -69,7 +66,6 @@ export default function PostForm() {
                 layout="responsive"
                 width={200}
                 height={200}
-                objectFit="cover"
                 className="rounded-lg"
               />
               <button
@@ -107,8 +103,7 @@ export default function PostForm() {
           onClick={handlePost}
           className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-4 font-semibold flex items-center gap-2"
         >
-          Post
-          <IoMdSend size={20} />
+          <IoMdSend />
         </button>
       </div>
     </div>
