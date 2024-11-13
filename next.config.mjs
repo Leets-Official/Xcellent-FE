@@ -18,6 +18,10 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  // 외부 이미지 도메인 설정 추가
+  images: {
+    domains: ['xcellent-bucket.s3.ap-northeast-2.amazonaws.com'],
+  },
 };
 
 export default nextConfig;

@@ -1,78 +1,80 @@
 'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { FaRegComment, FaRetweet, FaHeart } from 'react-icons/fa';
+import { FaRegComment, FaRetweet } from 'react-icons/fa';
 import { FiBarChart2 } from 'react-icons/fi';
+import { MdDeleteForever } from 'react-icons/md';
+import { removeArticleAPI } from '@/app/api/article/article';
 
-// Post와 Comment 인터페이스 정의
-interface Post {
-  id: number;
-  author: string;
-  authorImage: string;
-  content: string;
-  images: string[];
-  likes: number;
-  retweets: number;
-  comments: Comment[];
-  isLiked: boolean;
-}
-
-interface Comment {
-  id: number;
-  author: string;
-  authorImage: string;
-  content: string;
-  createdAt: string;
-}
-
-// PostItemProps 인터페이스 정의
 interface PostItemProps {
-  post: Post;
-  onLike: (id: number) => void;
-  onRetweet: (id: number) => void;
-  onCommentSubmit: (postId: number, commentContent: string) => void; // 추가
+  post: any;
+  onLike: (id: string) => void;
+  onRetweet: (id: string) => void;
+  onCommentSubmit: (postId: string, commentContent: string) => void;
+  fetchArticleList: () => void; // fetchArticleList 함수 추가
 }
 
-const PostItem: React.FC<PostItemProps> = ({
+export default function PostItems({
   post,
   onLike,
   onRetweet,
   onCommentSubmit,
-}) => {
+  fetchArticleList,
+}: PostItemProps) {
   const [isCommentVisible, setIsCommentVisible] = useState(false);
 
   const toggleCommentVisibility = () => {
     setIsCommentVisible(!isCommentVisible);
   };
 
+  const handleDelete = async () => {
+    try {
+      await removeArticleAPI(post.articleId);
+      alert('게시글이 삭제되었습니다.');
+      fetchArticleList(); // 삭제 후 fetchArticleList 함수 호출
+    } catch (error) {
+      console.error('Error deleting article:', error);
+    }
+  };
+
   return (
-    <div className="bg-black border-b border-gray-800 p-4 max-w-2xl mx-auto text-white">
+    <div className="bg-black border-b border-gray-800 p-4 w-full mx-auto text-white">
       <div className="flex items-start space-x-3">
         {/* 프로필 이미지 */}
-        <Image
-          src={post.authorImage}
-          alt={post.author}
-          width={48}
-          height={48}
-          className="rounded-full"
-        />
-        <div className="flex-grow">
-          {/* 작성자 이름 및 아이디 */}
-          <p className="font-semibold">{post.author}</p>
-          <p className="text-gray-400">@{post.author.toLowerCase()}</p>
-
+        <div className="w-12 h-12 bg-gray-600 rounded-full">
+          <Image
+            src={'/profile.svg'}
+            alt="profile.svg"
+            color="white"
+            width={48}
+            height={48}
+            className="rounded-full"
+          />
+        </div>
+        <div className="flex-auto">
+          <div className="flex justify-between">
+            <div className="font-semibold">{post.userName}</div>
+            {post.owner && (
+              <MdDeleteForever
+                size={24}
+                onClick={handleDelete}
+                className="cursor-pointer"
+              />
+            )}
+          </div>
+          <p className="text-gray-400">@{post.customId}</p>
           {/* 게시글 내용 */}
           <p className="mt-2">{post.content}</p>
 
-          {/* 이미지가 있을 경우 출력 */}
-          {post.images.length > 0 && (
+          {post.mediaUrls.length > 0 && (
             <div
-              className={`grid gap-2 mt-2 ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}
+              className={`grid gap-2 mt-2 ${post.mediaUrls.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}
             >
-              {post.images.map((image, index) => (
+              {post.mediaUrls.map((image, index) => (
                 <Image
                   key={index}
-                  src={image}
+                  src={image} // 이미지 경로가 올바른지 확인 필요
                   alt={`Post image ${index + 1}`}
                   width={200}
                   height={200}
@@ -81,42 +83,46 @@ const PostItem: React.FC<PostItemProps> = ({
               ))}
             </div>
           )}
-
           {/* 좋아요, 리트윗, 댓글 아이콘 */}
           <div className="flex items-center mt-4 space-x-6 text-gray-500">
             {/* 댓글 아이콘 */}
             <button
+              type="button"
               className="hover:text-blue-500 flex items-center space-x-1"
               onClick={toggleCommentVisibility}
             >
               <FaRegComment />
-              <span>{post.comments.length}</span>
+              {/* <span>{post.comments.length}</span> */}
             </button>
 
             {/* 리트윗 아이콘 */}
             <button
+              type="button"
               onClick={() => onRetweet(post.id)}
               className="hover:text-green-500 flex items-center space-x-1"
             >
               <FaRetweet />
-              <span>{post.retweets}</span>
+              {/* <span>{post.retweets}</span> */}
             </button>
 
             {/* 좋아요 아이콘 */}
             <button
+              type="button"
               onClick={() => onLike(post.id)}
               className={`flex items-center space-x-1 ${post.isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
             >
               {post.isLiked ? '❤️' : '♡'}
-              <span>{post.likes}</span>
+              {/* <span>{post.likes}</span> */}
             </button>
 
             {/* 조회수 아이콘 */}
-            <button className="hover:text-gray-400 flex items-center space-x-1">
+            <button
+              type="button"
+              className="hover:text-gray-400 flex items-center space-x-1"
+            >
               <FiBarChart2 />
             </button>
           </div>
-
           {/* 댓글 섹션 - 클릭 시에만 표시됨 */}
           {isCommentVisible && (
             <div className="mt-4">
@@ -145,6 +151,4 @@ const PostItem: React.FC<PostItemProps> = ({
       </div>
     </div>
   );
-};
-
-export default PostItem;
+}

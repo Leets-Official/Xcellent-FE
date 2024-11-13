@@ -1,31 +1,19 @@
 'use client';
+
+import { createArticleAPI } from '@/app/api/article/article';
 import React, { useState, useRef } from 'react';
-import { AiOutlinePicture } from 'react-icons/ai';
-import { FaSmile } from 'react-icons/fa';
 import { BsCardImage } from 'react-icons/bs';
 import { IoMdSend } from 'react-icons/io';
+import Image from 'next/image';
 
-interface PostFormProps {
-  onPostSubmit: (content: string, images: string[]) => void;
-}
-
-const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+export default function PostForm() {
+  const [selectedImages, setSelectedImages] = useState<File[]>([]); // File 객체 배열로 변경
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleResize = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
-
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    const { files } = e.target;
     if (files && selectedImages.length + files.length <= 4) {
-      const newImages = Array.from(files).map(file =>
-        URL.createObjectURL(file),
-      );
+      const newImages = Array.from(files);
       setSelectedImages(prev => [...prev, ...newImages]);
     } else {
       alert('이미지는 최대 4개까지만 업로드할 수 있습니다.');
@@ -36,26 +24,36 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
     setSelectedImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (textareaRef.current) {
-      onPostSubmit(textareaRef.current.value.trim() || '', selectedImages);
-      textareaRef.current.value = ''; // 텍스트 초기화
+      const content = textareaRef.current.value.trim();
+      if (!content && selectedImages.length === 0) {
+        alert('내용 또는 이미지를 입력해주세요.');
+        return;
+      }
+      try {
+        await createArticleAPI(content, selectedImages);
+        // console.log('Fetched user info: ', userInfo);
+      } catch (error) {
+        console.error('Error: ', error);
+      }
+
+      textareaRef.current.value = '';
+      setSelectedImages([]);
     }
-    setSelectedImages([]); // 이미지 초기화
   };
 
   return (
-    <div className="bg-black p-4 border-b border-gray-700 mb-4 max-w-2xl mx-auto text-white">
+    <div className="bg-black p-4 border-b border-gray-700 mb-4 w-full mx-auto text-white">
       <div className="flex items-start space-x-3">
         {/* 프로필 이미지 자리 */}
-        <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
+        <div className="w-12 h-12 bg-gray-600 rounded-full"> 프로필 </div>
 
         {/* 텍스트 입력 필드 */}
         <textarea
           ref={textareaRef}
           placeholder="What is happening?!"
           className="w-full p-2 bg-black text-lg placeholder-gray-500 border-none focus:outline-none resize-none"
-          onInput={handleResize}
           style={{ minHeight: '50px' }}
         />
       </div>
@@ -65,12 +63,16 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
         <div className="grid grid-cols-2 gap-2 mt-3">
           {selectedImages.map((image, index) => (
             <div key={index} className="relative">
-              <img
-                src={image}
+              <Image
+                src={URL.createObjectURL(image)} // 미리보기 URL 생성
                 alt={`Preview ${index + 1}`}
+                layout="responsive"
+                width={200}
+                height={200}
                 className="rounded-lg"
               />
               <button
+                type="button"
                 onClick={() => removeImage(index)}
                 className="absolute top-1 right-1 bg-black rounded-full p-1 text-white"
               >
@@ -96,22 +98,17 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit }) => {
             className="hidden"
             id="image-upload"
           />
-
-          {/* 이모티콘 아이콘 */}
-          <FaSmile size={24} />
         </div>
 
         {/* 게시 버튼 */}
         <button
+          type="button"
           onClick={handlePost}
           className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-4 font-semibold flex items-center gap-2"
         >
-          Post
-          <IoMdSend size={20} />
+          <IoMdSend />
         </button>
       </div>
     </div>
   );
-};
-
-export default PostForm;
+}
