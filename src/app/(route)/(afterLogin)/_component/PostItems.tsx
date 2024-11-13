@@ -20,13 +20,12 @@ export default function PostItems({
   post,
   onLike,
   onRetweet,
-  onCommentSubmit,
   fetchArticleList,
 }: PostItemProps) {
   const [isCommentVisible, setIsCommentVisible] = useState(false);
   const [commentContent, setCommentContent] = useState('');
 
-  const handleCommentChange = e => {
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);
   };
 
@@ -144,21 +143,43 @@ export default function PostItems({
           </div>
           {/* 댓글 섹션 - 클릭 시에만 표시됨 */}
           {isCommentVisible && (
-            <div className="mt-4 flex">
-              <textarea
-                placeholder="댓글을 입력하세요."
-                className="w-full p-2 bg-black text-white border border-gray-700 rounded-md resize-none"
-                rows={2}
-                value={commentContent}
-                onChange={handleCommentChange}
-              />
-              <div className="items-center justify-center flex flex-shrink-0 p-3">
-                <button
-                  onClick={() => submitComment(post.articleId)}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  댓글 작성
-                </button>
+            <div className="mt-4 flex-auto">
+              <div>
+                {post.comments.map((comment: any, index: any) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-600 rounded-full">
+                      <Image
+                        src={'/profile.svg'}
+                        alt="profile.svg"
+                        color="white"
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-semibold">{comment.userName}</div>
+                      <p>{comment.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex">
+                <textarea
+                  placeholder="댓글을 입력하세요."
+                  className="w-full p-2 bg-black text-white border border-gray-700 rounded-md resize-none"
+                  rows={2}
+                  value={commentContent}
+                  onChange={handleCommentChange}
+                />
+                <div className="items-center justify-center flex flex-shrink-0 p-3">
+                  <button
+                    onClick={() => submitComment(post.articleId)}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    댓글 작성
+                  </button>
+                </div>
               </div>
             </div>
           )}
