@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-// import BackButtonImg from '../../../../../public/backButton.svg';
+import BackButtonImg from '../../../../../public/backButton.svg';
 
 export default function BackButton() {
   const router = useRouter();

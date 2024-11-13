@@ -22,8 +22,8 @@ export default function FollowingPage() {
     },
   ];
 
-  const onClickToUserProfile = (userName: string) => {
-    router.push(`/${userName}`);
+  const onClickToUserProfile = () => {
+    router.push(`/${customId}`);
   };
 
   return (
@@ -34,7 +34,7 @@ export default function FollowingPage() {
           {followingList.map(following => (
             <div
               key={following.customId}
-              onClick={() => onClickToUserProfile(following.userName)}
+              onClick={onClickToUserProfile}
               className="flex items-center gap-x-4 mb-4 cursor-pointer"
             >
               <Image
