@@ -6,6 +6,7 @@ import { FaRegComment, FaRetweet } from 'react-icons/fa';
 import { FiBarChart2 } from 'react-icons/fi';
 import { MdDeleteForever } from 'react-icons/md';
 import { removeArticleAPI } from '@/app/api/article/article';
+import { createCommentAPI } from '@/app/api/comment/comment';
 
 interface PostItemProps {
   post: any;
@@ -23,6 +24,11 @@ export default function PostItems({
   fetchArticleList,
 }: PostItemProps) {
   const [isCommentVisible, setIsCommentVisible] = useState(false);
+  const [commentContent, setCommentContent] = useState('');
+
+  const handleCommentChange = e => {
+    setCommentContent(e.target.value);
+  };
 
   const toggleCommentVisibility = () => {
     setIsCommentVisible(!isCommentVisible);
@@ -35,6 +41,19 @@ export default function PostItems({
       fetchArticleList(); // 삭제 후 fetchArticleList 함수 호출
     } catch (error) {
       console.error('Error deleting article:', error);
+    }
+  };
+
+  const submitComment = async (articleId: string) => {
+    if (!commentContent.trim()) {
+      alert('댓글을 입력해주세요.');
+      return;
+    }
+    try {
+      await createCommentAPI(articleId, commentContent);
+      setCommentContent(''); // 입력창 초기화
+    } catch (error) {
+      console.error('Error: ', error);
     }
   };
 
@@ -71,7 +90,7 @@ export default function PostItems({
             <div
               className={`grid gap-2 mt-2 ${post.mediaUrls.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}
             >
-              {post.mediaUrls.map((image, index) => (
+              {post.mediaUrls.map((image: string, index: any) => (
                 <Image
                   key={index}
                   src={image} // 이미지 경로가 올바른지 확인 필요
@@ -125,26 +144,22 @@ export default function PostItems({
           </div>
           {/* 댓글 섹션 - 클릭 시에만 표시됨 */}
           {isCommentVisible && (
-            <div className="mt-4">
-              {/* 댓글 입력창 구현 가능 */}
-              {/* 예시로 간단히 구현 */}
+            <div className="mt-4 flex">
               <textarea
-                placeholder="Write a comment..."
+                placeholder="댓글을 입력하세요."
                 className="w-full p-2 bg-black text-white border border-gray-700 rounded-md resize-none"
                 rows={2}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const commentContent = (
-                      e.target as HTMLTextAreaElement
-                    ).value.trim();
-                    if (commentContent) {
-                      onCommentSubmit(post.id, commentContent);
-                      (e.target as HTMLTextAreaElement).value = ''; // 입력창 초기화
-                    }
-                  }
-                }}
+                value={commentContent}
+                onChange={handleCommentChange}
               />
+              <div className="items-center justify-center flex flex-shrink-0 p-3">
+                <button
+                  onClick={() => submitComment(post.articleId)}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  댓글 작성
+                </button>
+              </div>
             </div>
           )}
         </div>
