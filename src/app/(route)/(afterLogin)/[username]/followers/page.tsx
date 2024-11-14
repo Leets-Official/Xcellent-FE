@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { getFollowersList } from '@/app/api/user/follower';
+import FollowingButton from '../_component/FollowingButton';
 
 export default function FollowersPage() {
   const router = useRouter();
@@ -14,7 +15,6 @@ export default function FollowersPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [pageNo, setPageNo] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -30,22 +30,18 @@ export default function FollowersPage() {
         const data = await getFollowersList(customId, pageNo);
         const newFollowers = data.content || [];
 
-        // 중복된 customId를 가진 데이터 제거
-        const uniqueFollowers = [
-          ...followersList,
+        setFollowersList(prevList => [
+          ...prevList,
           ...newFollowers.filter(
             newFollower =>
-              !followersList.some(
+              !prevList.some(
                 existingFollower =>
                   existingFollower.customId === newFollower.customId,
               ),
           ),
-        ];
+        ]);
 
-        setFollowersList(uniqueFollowers);
-        setTotalPages(data.totalPages || 0);
-
-        if (pageNo >= data.totalPages) {
+        if (data.last) {
           setHasMore(false);
         }
       } catch (err) {
@@ -59,36 +55,31 @@ export default function FollowersPage() {
     fetchData();
   }, [pageNo, customId]);
 
-  useEffect(() => {
-    if (!hasMore || loading) return;
-
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting) {
-          setPageNo(prevPage => prevPage + 1);
-        }
-      },
-      { threshold: 1.0 },
-    );
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
+  const handleFollow = async (customId: string) => {
+    try {
+      await followUser(customId);
+      setFollowersList(prevList =>
+        prevList.map(user =>
+          user.customId === customId ? { ...user, isFollowing: true } : user,
+        ),
+      );
+    } catch (error) {
+      console.error('팔로우 요청 실패:', error);
     }
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [hasMore, loading]);
-
-  const onClickToUserProfile = (followerCustomId: string) => {
-    router.push(`/${followerCustomId}`);
   };
 
-  if (error) {
-    return <div className="text-center text-red-500 font-bold">{error}</div>;
-  }
+  const handleUnfollow = async (customId: string) => {
+    try {
+      await unfollowUser(customId);
+      setFollowersList(prevList =>
+        prevList.map(user =>
+          user.customId === customId ? { ...user, isFollowing: false } : user,
+        ),
+      );
+    } catch (error) {
+      console.error('언팔로우 요청 실패:', error);
+    }
+  };
 
   return (
     <TabProvider>
@@ -99,35 +90,29 @@ export default function FollowersPage() {
             No Followers Found.
           </div>
         ) : (
-          <div className="text-white">
-            {followersList.map(follower => (
-              <div
-                key={follower.customId}
-                onClick={() => onClickToUserProfile(follower.customId)}
-                className="flex items-center gap-x-4 mb-4 cursor-pointer"
-              >
-                <Image
-                  src={follower.profileImage || '/profile.svg'}
-                  alt={follower.customId}
-                  width={40}
-                  height={40}
-                  className="bg-slate-300 w-10 h-10 rounded-full"
-                />
-                <div>
-                  <div className="text-white font-bold hover:underline cursor-pointer">
-                    {follower.userName}
-                  </div>
-                  <div className="text-gray-500">@{follower.customId}</div>
-                </div>
+          followersList.map(follower => (
+            <div
+              key={follower.customId}
+              className="flex items-center gap-x-4 mb-4"
+            >
+              <Image
+                src={follower.profileImage || '/profile.svg'}
+                alt={follower.customId}
+                width={40}
+                height={40}
+                className="bg-slate-300 w-10 h-10 rounded-full"
+              />
+              <div>
+                <div className="text-white font-bold">{follower.userName}</div>
+                <div className="text-gray-500">{follower.customId}</div>
               </div>
-            ))}
-          </div>
-        )}
-        <div ref={observerRef} className="h-10" />
-        {loading && (
-          <div className="text-center text-white font-bold">
-            Loading more...
-          </div>
+              <FollowingButton
+                isFollowing={follower.isFollowing}
+                onFollow={() => handleFollow(follower.customId)}
+                onUnfollow={() => handleUnfollow(follower.customId)}
+              />
+            </div>
+          ))
         )}
       </div>
     </TabProvider>
