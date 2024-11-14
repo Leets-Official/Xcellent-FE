@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { getFollowingList } from '@/app/api/user/following';
 import FollowingButton from '../_component/FollowingButton';
+import { followUser, unfollowUser } from '@/app/api/user/follow';
 
 export default function FollowingPage() {
   const router = useRouter();
