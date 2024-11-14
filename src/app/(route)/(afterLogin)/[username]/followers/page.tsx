@@ -22,6 +22,10 @@ export default function FollowersPage() {
   const pathSegments = pathname.split('/');
   const customId = pathSegments[1];
 
+  const handleClick = (customId: string) => {
+    router.push(`/${customId}`);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (loading || !hasMore) return;
@@ -103,8 +107,11 @@ export default function FollowersPage() {
                 height={40}
                 className="bg-slate-300 w-10 h-10 rounded-full"
               />
-              <div>
-                <div className="text-white font-bold">{follower.userName}</div>
+              <div
+                onClick={() => handleClick(follower.customId)}
+                className="cursor-pointer"
+              >
+                <div className="text-white  font-bold">{follower.userName}</div>
                 <div className="text-gray-500">{follower.customId}</div>
               </div>
               <FollowingButton

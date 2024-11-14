@@ -22,6 +22,10 @@ export default function FollowingPage() {
   const pathSegments = pathname.split('/');
   const customId = pathSegments[1];
 
+  const handleClick = (customId: string) => {
+    router.push(`/${customId}`);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (loading || !hasMore) return;
@@ -103,7 +107,10 @@ export default function FollowingPage() {
                 height={40}
                 className="bg-slate-300 w-10 h-10 rounded-full"
               />
-              <div>
+              <div
+                onClick={() => handleClick(following.customId)}
+                className="cursor-pointer"
+              >
                 <div className="text-white font-bold">{following.userName}</div>
                 <div className="text-gray-500">{following.customId}</div>
               </div>
